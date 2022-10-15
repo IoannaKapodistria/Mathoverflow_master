@@ -1,0 +1,12 @@
+{
+  "name": "types-quill-delta",
+  "version": "1.0.0",
+  "description": "Quill Delta Types",
+  "main": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FoseFx/types-quill-delta.git"
+  },
+  "author": "",
+  "license": "MIT"
+}
