@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "strict": true,
+        "importHelpers": true,
+        "moduleResolution": "node",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "noImplicitReturns": true,
+        "baseUrl": ".",
+        "outDir": "toolchain-cache/ts-output",
+        "lib": ["esnext", "DOM"],
+        "paths": {
+            "~/*": ["src/*"]
+        }
+    },
+    "compileOnSave": true,
+    "include": ["src/**/*.ts", "src/config/extra-setup.js", "src/config/database.js", "src/db_controllers/questionsController.js"],
+    "exclude": ["node_modules"]
+}

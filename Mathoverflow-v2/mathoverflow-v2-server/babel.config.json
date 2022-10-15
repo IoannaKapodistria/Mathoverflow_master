@@ -1,0 +1,14 @@
+{
+    "plugins": [
+        "babel-plugin-add-import-extension",
+        // todo: figure out how to change babel's working directory to avoid ../ in the imports
+        [
+            "babel-plugin-module-resolver",
+            {
+                "alias": {
+                    "~": "./kernel/js"
+                }
+            }
+        ]
+    ]
+}
