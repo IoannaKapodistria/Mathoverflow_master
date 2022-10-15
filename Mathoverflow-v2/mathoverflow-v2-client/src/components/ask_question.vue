@@ -112,6 +112,7 @@ export default Vue.extend({
         //             ]
         //     },
         // });a
+        //!
         //HAHAHHAHHA
         // quill.insertText(1, "sks")//setContents([{ insert: { formula: 'f(x)={\\sum_{i=0}^n\\frac{a_{osnsnsnio}}{2+}}' } },])
     }
