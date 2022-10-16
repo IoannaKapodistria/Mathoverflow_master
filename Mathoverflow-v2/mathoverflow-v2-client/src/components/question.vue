@@ -165,7 +165,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex';
-import { deleteAnswer, getAnswer, getQuestion, getUser, postAnswer, voteQuestion } from './functions';
+import { deleteAnswer, getAnswer, getQuestion, getUser, getUsers, postAnswer, voteAnswer, voteQuestion } from './functions';
 import { question1 } from './types';
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
@@ -335,14 +335,21 @@ export default Vue.extend({
             //     const answerObject = { body: answer.body, user: user.data.username, /*answer_id: answer.answer_id */ };
             //     this.answers.push(answerObject);
             // }
+            const users = await getUsers();
             for (const answer of this.getQuestionData.answers) {
-
                 //
-                const answerObject = {
-                    ...answer,
-                    votes: await this.getAnswerVotes(answer)
+                for (const user of users) {
+                    if (user.user_id === answer.UserUserId) {
+                        // const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, user: user.username, question_id: question.question_id };
+                        // questionsArray.push(questionObject);
+                    }
+                    const answerObject = {
+                        ...answer,
+                        votes: await this.getAnswerVotes(answer),
+                        user: user.username
+                    }
+                    this.answers.push(answerObject)
                 }
-                this.answers.push(answerObject)
             }
             // this.answers = this.getQuestionData.answers;
             console.log(this.answers, "THE ANSWERS1")
@@ -488,10 +495,21 @@ export default Vue.extend({
             this.formulaText = value.target.getValue("latex-unstyled")
         },
         upVoteAnswer(value: any) {
-            console.log(value, "value of up vote answer")
+            console.log(value, "value of up vote answer");
+            const data = { value: 1, AnswerAnswerId: value.answer_id }
+            voteAnswer(data);
+            // 
+            // this.$router.go(0);
+            this.forceUpdateQuestion();
         },
         downVoteAnswer(value: any) {
             console.log(value, "value of down vote answer")
+            // console.log(value, "value of up vote answer");
+            const data = { value: -1, AnswerAnswerId: value.answer_id }
+            voteAnswer(data);
+            // 
+            // this.$router.go(0);
+            this.forceUpdateQuestion();
         }
     },
     mounted() {

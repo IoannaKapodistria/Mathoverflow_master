@@ -111,7 +111,6 @@ export default Vue.extend({
                 const answersNumber = answers.length;
                 for (const user of users) {
                     if (user.user_id === question.UserUserId) {
-
                         const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, user: user.username, question_id: question.question_id };
                         questionsArray.push(questionObject);
                     }

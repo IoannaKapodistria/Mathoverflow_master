@@ -287,3 +287,19 @@ export async function removeUser(id: any) {
             console.log("this is the value:", value);
         });
 }
+
+//upvote question
+export async function voteAnswer(data: any) {
+    let response = await ky
+        .post("http://localhost:3000/answer_vote", {
+            mode: "cors",
+            body: JSON.stringify(data),
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then((value: any) => {
+            console.log("this is the value:", value);
+        });
+}

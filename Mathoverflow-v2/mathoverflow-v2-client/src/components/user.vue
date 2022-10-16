@@ -73,18 +73,30 @@
                 <v-data-table
                     :headers="questionsCols"
                     :items="questions"
-                    @click:row="handleClick"
                     style="cursor: pointer"
                 >
                     <template v-slot:[`item.answers`]="{ item }">
-                        <v-chip color="light-blue lighten-3" dark>
+                        <v-chip
+                            color="light-blue lighten-3"
+                            dark
+                            @click="handleClick(item)"
+                        >
                             {{ item.answers }}
                         </v-chip>
                     </template>
                     <template v-slot:[`item.votes`]="{ item }">
-                        <v-chip color="deep-orange lighten-2" dark>
+                        <v-chip
+                            color="deep-orange lighten-2"
+                            dark
+                            @click="handleClick(item)"
+                        >
                             {{ item.votes }}
                         </v-chip>
+                    </template>
+                    <template v-slot:[`item.title`]="{ item }">
+                        <div @click="handleClick(item)">
+                            {{ item.title }}
+                        </div>
                     </template>
                     <template v-slot:[`item.remove`]="props">
                         <v-icon small @click="removeObject(props.item)"
@@ -103,12 +115,16 @@
                 <v-icon>mdi-database</v-icon>
             </v-toolbar>
             <v-card-text>
-                <v-data-table :headers="answersCols" :items="answers">
+                <v-data-table
+                    :headers="answersCols"
+                    :items="answers"
+                    style="cursor: pointer"
+                >
                     <template v-slot:[`item.body`]="props">
                         <!-- <v-icon small @click="removeObject(props.item)"
                             >mdi-delete</v-icon
                         > -->
-                        <span>
+                        <span @click="clickAnswer(props.item)">
                             <vue-editor
                                 class="kappa"
                                 disabled
@@ -160,7 +176,7 @@ export default Vue.extend({
             { text: "Answers", align: 'start', sortable: true, value: 'answers' },
             { text: "Votes", align: 'start', sortable: true, value: 'votes' },
             { text: "Question", align: 'start', sortable: true, value: 'title' },
-            { text: "Question Id", align: 'start', sortable: true, value: 'question_id' },
+            // { text: "Question Id", align: 'start', sortable: true, value: 'question_id' },
             // {
             //     text: 'User',
             //     align: 'start',
@@ -212,7 +228,18 @@ export default Vue.extend({
                 const questionData = await getQuestion(question.question_id);
                 const answers = questionData.answers;
                 const answersNumber = answers.length;
-                const questionObject = { answers: answersNumber, votes: "12", title: question.title, question_id: question.question_id };
+                //
+                const votes = questionData.votes;
+                const votesArray: any[] = []
+                //calculate votes
+                for (const vote of votes) {
+                    const value = vote.value
+                    votesArray.push(value)
+                }
+                //get the sum
+                const votesSum = votesArray.reduce((a, b) => a + b, 0)
+                //
+                const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, question_id: question.question_id };
                 this.questions.push(questionObject);
             }
         },
@@ -220,6 +247,15 @@ export default Vue.extend({
             // router.push('/question')
             console.log(value, "the value");
             const questionId = value.question_id;
+            this.$router.push('/question');
+            const questionData = await getQuestion(questionId);
+            console.log(questionData, "the row data");
+            store.commit("setQuestionData", questionData)
+        },
+        async clickAnswer(value: any) {
+            console.log(value, "the answer value")
+            //
+            const questionId = value.QuestionQuestionId;
             this.$router.push('/question');
             const questionData = await getQuestion(questionId);
             console.log(questionData, "the row data");
