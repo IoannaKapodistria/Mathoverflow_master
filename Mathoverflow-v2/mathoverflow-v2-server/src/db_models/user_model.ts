@@ -3,6 +3,7 @@ import sequelize_db from "../config/database";
 import { Answer } from "./answer_model";
 import { AnswerVote } from "./answer_vote_model";
 import { Question } from "./question_model";
+import { Reputation } from "./reputation_model";
 import { Vote } from "./vote_model";
 // import { Answer } from "../db_models/answer_model";
 // import { Question } from "../db_models/question_model";
@@ -114,5 +115,13 @@ User.hasMany(AnswerVote, {
     //foreignKey: "answer_id",
 });
 AnswerVote.belongsTo(User, {
+    as: "User",
+});
+//
+User.hasMany(Reputation, {
+    as: "Reputation",
+    //foreignKey: "answer_id",
+});
+Reputation.belongsTo(User, {
     as: "User",
 });
