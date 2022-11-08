@@ -14,14 +14,43 @@
             <v-divider></v-divider>
             <v-card-text>
                 <vue-editor
+                    v-if="!editing"
                     class="kappa2"
                     disabled
                     v-model="this.questionExample.body"
                     :editorOptions="editorOptions"
                 ></vue-editor>
-                <!-- <v-row>
-                    {{ this.questionExample.body }}
-                </v-row> -->
+                <v-card v-if="editing" flat style="border: 1px solid yellow">
+                    <v-card-text>
+                        <vue-editor
+                            class="pt-0"
+                            v-model="editedQuestionBody"
+                            :editorOptions="toolbarOpts_old"
+                        >
+                        </vue-editor>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-row justify="center" align="center">
+                            <v-col justify="center" align="center">
+                                <v-btn
+                                    small
+                                    outlined
+                                    color="teal"
+                                    @click="updateQuestion"
+                                >
+                                    update</v-btn
+                                >
+                            </v-col>
+                        </v-row>
+                    </v-card-actions>
+                </v-card>
+                <!-- <vue-editor
+                    v-if="editing"
+                    class="pt-4"
+                    v-model="editedQuestionBody"
+                    :editorOptions="toolbarOpts_old"
+                >
+                </vue-editor> -->
                 <v-row class="mt-15">
                     <!-- <div> -->
                     <v-btn right x-large icon>
@@ -64,6 +93,25 @@
                         <v-icon> mdi-icon </v-icon>
                     </v-row> -->
         </v-card>
+        <v-dialog v-model="editQuestionForm" width="800">
+            <v-card>
+                <v-card-text>
+                    <vue-editor
+                        class="pt-4"
+                        v-model="editedQuestionBody"
+                        :editorOptions="toolbarOpts_old"
+                    >
+                    </vue-editor>
+                </v-card-text>
+                <v-card-actions>
+                    <v-row justify="center" align="center">
+                        <v-col justify="center" align="center">
+                            <v-btn small outlined color="teal"> update</v-btn>
+                        </v-col>
+                    </v-row>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
         <!-- type an answer-->
         <br />
         <br />
@@ -165,7 +213,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex';
-import { deleteAnswer, getAnswer, getQuestion, getUser, getUsers, postAnswer, voteAnswer, voteQuestion } from './functions';
+import { deleteAnswer, getAnswer, getQuestion, getUser, getUsers, postAnswer, updateQuestion1, voteAnswer, voteQuestion } from './functions';
 import { question1 } from './types';
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
@@ -225,7 +273,7 @@ export default Vue.extend({
 
             { text: "", align: 'center', sortable: true, value: 'remove', width: '1%' }], // na ftiaxtei typos gia tis answers
         answers: [] as any[],
-        questionExample: {}, // na ftiaxtei tupos
+        questionExample: {} as any, // na ftiaxtei tupos
         fuContent: true,
         questionSumVotes: 0,
         editorOptions: {
@@ -298,7 +346,10 @@ export default Vue.extend({
         formulaOn: false,
         formulaText: "",
         formulaText2: "",
-        answerVotes: [] as any[]
+        answerVotes: [] as any[],
+        editQuestionForm: false,
+        editing: false,
+        editedQuestionBody: ""
     }),
     watch: {
         question() {
@@ -476,6 +527,18 @@ export default Vue.extend({
         },
         editQuestion(value: any) {
             console.log(value, "the value of edited question")
+            // this.editQuestionForm = true;
+            this.editing = true
+            this.editedQuestionBody = this.questionExample.body
+        },
+        async updateQuestion() {
+            const value = { body: this.editedQuestionBody, title: this.questionExample.title, }
+            const questionId = this.getQuestionData.data.question_id
+            await updateQuestion1(questionId, value);
+            this.editing = false;
+            // 
+            // this.$router.go(0);
+            this.forceUpdateQuestion();
         },
         formulaOff() {
             this.formulaOn = false;

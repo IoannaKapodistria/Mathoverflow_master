@@ -303,3 +303,18 @@ export async function voteAnswer(data: any) {
             console.log("this is the value:", value);
         });
 }
+
+export async function updateQuestion1(id: number, value: any) {
+    let response = await ky
+        .put(`http://localhost:3000/update_question/${id}`, {
+            mode: "cors",
+            body: JSON.stringify(value),
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then((value: any) => {
+            console.log("this is the value:", value);
+        });
+}
