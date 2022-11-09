@@ -2,15 +2,25 @@
     <v-container fluid>
         <!-- The question -->
         <v-card flat :key="fuContent">
-            <v-toolbar flat class="ps-0">
+            <v-toolbar flat class="ps-0" v-if="!editing">
                 <v-toolbar-title class="ps-0">
-                    {{ this.questionExample.title }}
+                    <span>
+                        {{ this.questionExample.title }}
+                    </span>
                 </v-toolbar-title>
 
                 <v-spacer></v-spacer>
                 <!-- <v-btn small outlined rounded text> Delete Question </v-btn> -->
                 <v-icon>mdi-help</v-icon>
             </v-toolbar>
+            <v-card v-if="editing" flat style="border: 1px solid yellow">
+                <v-card-text v-if="editing" class="pb-0">
+                    <v-textarea
+                        rows="2"
+                        v-model="editedQuestionTitle"
+                    ></v-textarea>
+                </v-card-text>
+            </v-card>
             <v-divider></v-divider>
             <v-card-text>
                 <vue-editor
@@ -32,6 +42,15 @@
                     <v-card-actions>
                         <v-row justify="center" align="center">
                             <v-col justify="center" align="center">
+                                <v-btn
+                                    class="me-3"
+                                    small
+                                    dark
+                                    color="teal"
+                                    @click="editing = false"
+                                >
+                                    cancel
+                                </v-btn>
                                 <v-btn
                                     small
                                     outlined
@@ -93,7 +112,7 @@
                         <v-icon> mdi-icon </v-icon>
                     </v-row> -->
         </v-card>
-        <v-dialog v-model="editQuestionForm" width="800">
+        <!-- <v-dialog v-model="editQuestionForm" width="800">
             <v-card>
                 <v-card-text>
                     <vue-editor
@@ -111,7 +130,7 @@
                     </v-row>
                 </v-card-actions>
             </v-card>
-        </v-dialog>
+        </v-dialog> -->
         <!-- type an answer-->
         <br />
         <br />
@@ -188,7 +207,7 @@
                         <!-- <v-icon small @click="removeObject(props.item)"
                             >mdi-delete</v-icon
                         > -->
-                        <span>
+                        <span v-if="!answerEditing">
                             <vue-editor
                                 class="kappa"
                                 disabled
@@ -198,6 +217,19 @@
                             >
                             </vue-editor>
                         </span>
+                        <span v-if="answerEditing">
+                            <vue-editor
+                                class="kappa2"
+                                v-model="props.item.body"
+                                :editorOptions="editorOptions"
+                                :style="editorStyle"
+                            ></vue-editor>
+                        </span>
+                    </template>
+                    <template v-slot:[`item.edit`]>
+                        <v-icon small @click="answerEditing = true"
+                            >mdi-pencil</v-icon
+                        >
                     </template>
                     <template v-slot:[`item.remove`]="props">
                         <v-icon small @click="removeObject(props.item)"
@@ -271,7 +303,9 @@ export default Vue.extend({
             //     value: 'answer_id'
             // },
 
-            { text: "", align: 'center', sortable: true, value: 'remove', width: '1%' }], // na ftiaxtei typos gia tis answers
+            { text: "", align: 'center', sortable: true, value: 'edit', width: '1%' },
+            { text: "", align: 'center', sortable: true, value: 'remove', width: '1%' }
+        ], // na ftiaxtei typos gia tis answers
         answers: [] as any[],
         questionExample: {} as any, // na ftiaxtei tupos
         fuContent: true,
@@ -349,7 +383,9 @@ export default Vue.extend({
         answerVotes: [] as any[],
         editQuestionForm: false,
         editing: false,
-        editedQuestionBody: ""
+        editedQuestionBody: "",
+        editedQuestionTitle: "",
+        answerEditing: false
     }),
     watch: {
         question() {
@@ -408,6 +444,8 @@ export default Vue.extend({
             const votesSum = this.getVotes()
             //
             this.questionSumVotes = votesSum;
+            //
+            this.editedQuestionTitle = this.questionExample.title
         },
     },
     computed: {
@@ -532,7 +570,7 @@ export default Vue.extend({
             this.editedQuestionBody = this.questionExample.body
         },
         async updateQuestion() {
-            const value = { body: this.editedQuestionBody, title: this.questionExample.title, }
+            const value = { body: this.editedQuestionBody, title: this.editedQuestionTitle, }
             const questionId = this.getQuestionData.data.question_id
             await updateQuestion1(questionId, value);
             this.editing = false;
