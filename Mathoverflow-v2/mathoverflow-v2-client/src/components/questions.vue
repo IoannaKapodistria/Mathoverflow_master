@@ -39,12 +39,14 @@
                     >
                 </template>
             </v-data-table>
+            <v-btn @click="sessionCheck">session check</v-btn>
         </v-card-text>
     </v-card>
 </template>
 <script lang="ts">
 import router from '@/router';
 import store from '@/store';
+import ky from 'ky';
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
 import { deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUsers } from './functions'
@@ -159,9 +161,22 @@ export default Vue.extend({
         forceUpdate2() {
             this.fuContent = !this.fuContent;
         },
+        async sessionCheck() {
+            let response = await ky
+                .post("http://localhost:3000/sessionCheck", {
+                    mode: "cors",
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    timeout: false,
+                })
+                .then((value: any) => {
+                    console.log("this is the value of session check:", value);
+                });
+        }
     },
     async mounted() {
-        getQuestions();
+        await getQuestions();
         this.getQuestions;
         this.getUsers;
         console.log(this.getUsers, "THE USERS")

@@ -161,8 +161,11 @@ export async function isLogged(req: any, res: any) {
 export function sessionChecker(req: any, res: any, next: any) {
     console.log(req.session.user_sid, "the user sid");
     if (req.session.user_sid) {
-        console.log("user is logged in");
-        res.send("user is logged in");
+        console.log("user is logged in", req.session.user);
+        res.send({
+            userSid: req.session.user_sid,
+            message: "user is logged in",
+        });
 
         next();
     } else {

@@ -1,5 +1,6 @@
 import store from "@/store";
 import ky from "ky";
+import { responseTypes } from "ky/distribution/core/constants";
 
 export async function postQuestion(data: any) {
     console.log(data, " these are data");
@@ -177,7 +178,7 @@ export async function isLogged() {
 }
 
 export async function signUp(data: any) {
-    let respone = await ky
+    let response = await ky
         .post("http://localhost:3000/signup", {
             mode: "cors",
             body: JSON.stringify(data),
@@ -188,7 +189,9 @@ export async function signUp(data: any) {
         })
         .then((value: any) => {
             console.log("this is the value:", value);
+            return value;
         });
+    return response;
 }
 
 export async function signIn(data: any) {
@@ -204,6 +207,7 @@ export async function signIn(data: any) {
         .then(async (value: any) => {
             console.log("this is the login value:", value);
             console.log("this is the login response:", response);
+            return value;
             // isLogged();
             //
             // let response = await ky
@@ -219,10 +223,7 @@ export async function signIn(data: any) {
             //         console.log("mathoverflow: error while attempting to get sessionCheck", err);
             //     });
         });
-    // .catch((err) => {
-    //     console.log("something error occured,", err);
-    //     return false;
-    // });
+    return response;
 }
 
 //upvote question
@@ -307,6 +308,21 @@ export async function voteAnswer(data: any) {
 export async function updateQuestion1(id: number, value: any) {
     let response = await ky
         .put(`http://localhost:3000/update_question/${id}`, {
+            mode: "cors",
+            body: JSON.stringify(value),
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then((value: any) => {
+            console.log("this is the value:", value);
+        });
+}
+
+export async function updateAnswer1(id: number, value: any) {
+    let response = await ky
+        .put(`http://localhost:3000/update_answer/${id}`, {
             mode: "cors",
             body: JSON.stringify(value),
             headers: {

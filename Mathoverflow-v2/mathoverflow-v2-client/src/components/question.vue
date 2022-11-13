@@ -207,7 +207,7 @@
                         <!-- <v-icon small @click="removeObject(props.item)"
                             >mdi-delete</v-icon
                         > -->
-                        <span v-if="!answerEditing">
+                        <span>
                             <vue-editor
                                 class="kappa"
                                 disabled
@@ -217,19 +217,57 @@
                             >
                             </vue-editor>
                         </span>
-                        <span v-if="answerEditing">
+                        <!-- <span v-if="answerEditing">
                             <vue-editor
                                 class="kappa2"
                                 v-model="props.item.body"
                                 :editorOptions="editorOptions"
                                 :style="editorStyle"
-                            ></vue-editor>
-                        </span>
+                            ></vue-editor> -->
+                        <!-- </span> -->
                     </template>
-                    <template v-slot:[`item.edit`]>
-                        <v-icon small @click="answerEditing = true"
+                    <template v-slot:[`item.edit`]="props">
+                        <v-icon small @click="showAnswerEdit(props.item)"
                             >mdi-pencil</v-icon
                         >
+                        <v-dialog v-model="answerEditing" height="800">
+                            <v-card>
+                                <v-card-text class="pa-4">
+                                    <vue-editor
+                                        v-model="editedAnswerBody"
+                                        :editorOptions="toolbarOpts_old"
+                                    ></vue-editor>
+                                    <!-- {{ props.item.body }} -->
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-row justify="center" align="center">
+                                        <v-col justify="center" align="center">
+                                            <v-btn
+                                                class="me-3"
+                                                small
+                                                dark
+                                                color="teal"
+                                                @click="answerEditing = false"
+                                            >
+                                                cancel
+                                            </v-btn>
+                                            <v-btn
+                                                small
+                                                outlined
+                                                color="teal"
+                                                @click="
+                                                    updateAnswer(
+                                                        props.item.body
+                                                    )
+                                                "
+                                            >
+                                                update</v-btn
+                                            >
+                                        </v-col>
+                                    </v-row>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                     </template>
                     <template v-slot:[`item.remove`]="props">
                         <v-icon small @click="removeObject(props.item)"
@@ -245,7 +283,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex';
-import { deleteAnswer, getAnswer, getQuestion, getUser, getUsers, postAnswer, updateQuestion1, voteAnswer, voteQuestion } from './functions';
+import { deleteAnswer, getAnswer, getQuestion, getUser, getUsers, postAnswer, updateAnswer1, updateQuestion1, voteAnswer, voteQuestion } from './functions';
 import { question1 } from './types';
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
@@ -385,7 +423,9 @@ export default Vue.extend({
         editing: false,
         editedQuestionBody: "",
         editedQuestionTitle: "",
-        answerEditing: false
+        answerEditing: false,
+        updatedAnswer: {} as any,
+        editedAnswerBody: ''
     }),
     watch: {
         question() {
@@ -441,7 +481,8 @@ export default Vue.extend({
             // this.answers = this.getQuestionData.answers;
             console.log(this.answers, "THE ANSWERS1")
             //
-            const votesSum = this.getVotes()
+            const votesSum = this.getVotes();
+            //console.log('')
             //
             this.questionSumVotes = votesSum;
             //
@@ -595,22 +636,38 @@ export default Vue.extend({
             console.log(value.target.getValue("latex-expanded"))
             this.formulaText = value.target.getValue("latex-unstyled")
         },
-        upVoteAnswer(value: any) {
+        async upVoteAnswer(value: any) {
             console.log(value, "value of up vote answer");
             const data = { value: 1, AnswerAnswerId: value.answer_id }
-            voteAnswer(data);
+            await voteAnswer(data);
             // 
             // this.$router.go(0);
             this.forceUpdateQuestion();
         },
-        downVoteAnswer(value: any) {
+        async downVoteAnswer(value: any) {
             console.log(value, "value of down vote answer")
             // console.log(value, "value of up vote answer");
             const data = { value: -1, AnswerAnswerId: value.answer_id }
-            voteAnswer(data);
+            await voteAnswer(data);
             // 
             // this.$router.go(0);
             this.forceUpdateQuestion();
+        },
+        async updateAnswer(body: any) {
+            console.log(body, 'the body which gonna be updated')
+            const value = { body: this.editedAnswerBody }
+            const answerId = this.updatedAnswer.answer_id
+            await updateAnswer1(answerId, value);
+            this.answerEditing = false;
+            // 
+            // this.$router.go(0);
+            this.forceUpdateQuestion();
+        },
+        showAnswerEdit(value: any) {
+            this.answerEditing = true
+            console.log(value, 'the answer which gonna be updated')
+            this.updatedAnswer = value
+            this.editedAnswerBody = value.body
         }
     },
     mounted() {

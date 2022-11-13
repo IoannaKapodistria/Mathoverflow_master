@@ -344,9 +344,15 @@ export default Vue.extend({
                 }
                 //sign up
                 const signedUp = await signUp(data);
+                console.log(signedUp, "the signed up ")
                 // state bool reset
                 this.loggingIn = false;
-                //this.inSignUp = false;
+                if (signedUp.status === 200) {
+                    this.inSignUp = false;
+                    // this.useSignUp=false;
+                    this.inLogIn = true
+
+                }
             }
         },
         passwordIconClicked() {
