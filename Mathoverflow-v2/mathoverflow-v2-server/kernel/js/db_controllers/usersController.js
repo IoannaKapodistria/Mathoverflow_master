@@ -104,7 +104,10 @@ export function sessionChecker(req, res, next) {
     next();
   } else {
     console.log("user is not logged in");
-    res.send("user is not logged in");
+    res.send({
+      userSid: req.session.user_sid,
+      message: "user is not logged in"
+    });
   }
 }
 export function updateUser(req, res) {

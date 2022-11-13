@@ -170,7 +170,10 @@ export function sessionChecker(req: any, res: any, next: any) {
         next();
     } else {
         console.log("user is not logged in");
-        res.send("user is not logged in");
+        res.send({
+            userSid: req.session.user_sid,
+            message: "user is not logged in",
+        });
         // res.redirect("/login");
     }
 }

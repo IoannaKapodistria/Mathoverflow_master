@@ -95,12 +95,19 @@ export default Vue.extend({
     watch: {
         async getQuestions(value: any) {
             let questionsArray = [] as any[];
+            let answers = [] as any[];
             console.log(value, "value of get questions");
             const users = await getUsers();
             for (const question of value) {
                 const questionData = await getQuestion(question.question_id);
                 console.log(questionData, "THE QUESTION DATA")
-                const answers = questionData.answers;
+                for (const answer of questionData.answers) {
+                    if (answer.UserUserId !== null) {
+                        answers.push(answer)
+                    }
+                }
+                console.log(answers, "the answers222")
+                // const answers = questionData.answers;
                 const votes = questionData.votes;
                 const votesArray: any[] = []
                 //calculate votes
@@ -170,8 +177,8 @@ export default Vue.extend({
                     },
                     timeout: false,
                 })
-                .then((value: any) => {
-                    console.log("this is the value of session check:", value);
+                .then(async (value: any) => {
+                    console.log("this is the value of session check:", await value.text());
                 });
         }
     },

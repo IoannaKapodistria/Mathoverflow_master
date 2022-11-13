@@ -469,13 +469,13 @@ export default Vue.extend({
                     if (user.user_id === answer.UserUserId) {
                         // const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, user: user.username, question_id: question.question_id };
                         // questionsArray.push(questionObject);
+                        const answerObject = {
+                            ...answer,
+                            votes: await this.getAnswerVotes(answer),
+                            user: user.username
+                        }
+                        this.answers.push(answerObject)
                     }
-                    const answerObject = {
-                        ...answer,
-                        votes: await this.getAnswerVotes(answer),
-                        user: user.username
-                    }
-                    this.answers.push(answerObject)
                 }
             }
             // this.answers = this.getQuestionData.answers;
@@ -569,6 +569,7 @@ export default Vue.extend({
             console.log(answerData, "THE ANSWER DATA")
             // const votes = this.getQuestionData.votes
             //calculate votes
+            // if(answerData.UserUserId !==null){}
             for (const vote of answerData.answerVotes) {
                 const value = vote.value;
                 answerVotesArray.push(value)
