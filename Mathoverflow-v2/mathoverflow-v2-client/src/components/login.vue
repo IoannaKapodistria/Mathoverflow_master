@@ -218,7 +218,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import { isLogged, signIn, signUp } from "./functions";
+import { isLogged, postUserReputation, signIn, signUp } from "./functions";
 //import User from "../user/user";
 //import { nullObject, isNullObject, nullObjectConst } from "./null_object";
 //import { storeCredentials, clearCredentials, getCredentials } from "./login";
@@ -351,14 +351,20 @@ export default Vue.extend({
                     this.inSignUp = false;
                     // this.useSignUp=false;
                     this.inLogIn = true
+                    // create first user's reputation
 
+                    await this.createReputation();
                 }
             }
         },
         passwordIconClicked() {
             this.showPassword = !this.showPassword;
         },
-
+        async createReputation() {
+            const initialReputation = 10
+            const data = { value: initialReputation }
+            await postUserReputation(data);
+        },
         rememberMe(remember: boolean) {
             // this.remember = remember;
             //if (remember !== true) clearCredentials();

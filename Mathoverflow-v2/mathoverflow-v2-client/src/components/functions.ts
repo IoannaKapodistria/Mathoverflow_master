@@ -334,3 +334,19 @@ export async function updateAnswer1(id: number, value: any) {
             console.log("this is the value:", value);
         });
 }
+
+export async function postUserReputation(data: any) {
+    console.log(data, " these are data");
+    let respone = await ky
+        .post("http://localhost:3000/create_reputation", {
+            mode: "cors",
+            body: JSON.stringify(data),
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then((value: any) => {
+            console.log("this is the value:", value);
+        });
+}

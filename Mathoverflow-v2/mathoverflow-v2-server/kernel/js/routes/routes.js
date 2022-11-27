@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, deleteUser, getUser, getUsers, isLogged, sessionChecker, signIn, updateUser } from "../../../kernel/js/db_controllers/usersController.js";
+import { createReputation, createUser, deleteUser, getUser, getUsers, isLogged, sessionChecker, signIn, updateUser } from "../../../kernel/js/db_controllers/usersController.js";
 import { createAnswer, createAnswerVote, createQuestion, createVote, deleteAllAnswers, deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getQuestions, updateAnswer, updateQuestion } from "../db_controllers/questionsController.js";
 const mathOverflowRouter = Router();
 mathOverflowRouter.get("/", function (req, res) {
@@ -15,6 +15,7 @@ mathOverflowRouter.get("/users", getUsers);
 mathOverflowRouter.get("/users/:id", getUser);
 mathOverflowRouter.put("/update_user/:id", updateUser);
 mathOverflowRouter.delete("/delete_user/:id", deleteUser);
+mathOverflowRouter.post("/create_reputation", createReputation);
 mathOverflowRouter.post("/answer", createAnswer);
 mathOverflowRouter.delete("/delete_answer/:id", deleteAnswer);
 mathOverflowRouter.delete("/delete_user_answers/:id", deleteAllAnswers);

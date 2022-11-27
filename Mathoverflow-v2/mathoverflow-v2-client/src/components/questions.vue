@@ -88,7 +88,7 @@ export default Vue.extend({
         //     }
         //     return questions;
         // },
-        computedHeaders() {
+        computedHeaders(): any {
             return this.questionsCols.filter(word => word.value !== "question_id")
         }
     },
@@ -99,31 +99,15 @@ export default Vue.extend({
             console.log(value, "value of get questions");
             const users = await getUsers();
             for (const question of value) {
-                const questionData = await getQuestion(question.question_id);
-                console.log(questionData, "THE QUESTION DATA")
-                for (const answer of questionData.answers) {
-                    if (answer.UserUserId !== null) {
-                        answers.push(answer)
-                    }
+                //if user id !== null
+                if (question.UserUserId !== null) {
+                    const questionData = await getQuestion(question.question_id)
+                    console.log(questionData, "value of questionData");
+
+                    const questionObject = { answers: this.getAnswers(questionData), votes: this.getVotes(questionData), title: question.title, user: await this.getUsername(question), question_id: question.question_id };
+                    questionsArray.push(questionObject);
                 }
-                console.log(answers, "the answers222")
-                // const answers = questionData.answers;
-                const votes = questionData.votes;
-                const votesArray: any[] = []
-                //calculate votes
-                for (const vote of votes) {
-                    const value = vote.value
-                    votesArray.push(value)
-                }
-                //get the sum
-                const votesSum = votesArray.reduce((a, b) => a + b, 0)
-                const answersNumber = answers.length;
-                for (const user of users) {
-                    if (user.user_id === question.UserUserId) {
-                        const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, user: user.username, question_id: question.question_id };
-                        questionsArray.push(questionObject);
-                    }
-                }
+                //
             }
             console.log(questionsArray, "this. questionsArray")
             this.questions = questionsArray;
@@ -180,6 +164,43 @@ export default Vue.extend({
                 .then(async (value: any) => {
                     console.log("this is the value of session check:", await value.text());
                 });
+        },
+        getAnswers(questionData: any) {
+            //
+            let answers: any[] = []
+            for (const answer of questionData.answers) {
+                if (answer.UserUserId !== null) {
+                    answers.push(answer)
+                }
+            }
+            console.log(answers, "the answers222")
+            return answers.length;
+        },
+        getVotes(questionData: any) {
+            //
+            const votes = questionData.votes;
+            const votesArray: any[] = []
+            //calculate votes
+            for (const vote of votes) {
+                const value = vote.value
+                votesArray.push(value)
+            }
+            //get the sum
+            const votesSum = votesArray.reduce((a, b) => a + b, 0)
+            return votesSum;
+        },
+        async getUsername(question: any) {
+            //
+            const users = await getUsers()
+            // for (const user of users) {
+            // if (user.user_id === questionData.UserUserId) {
+            const index = users.findIndex((el: any) => el.user_id === question.UserUserId)
+            if (index !== -1) {
+                const username = users[index].username
+                return username
+            }
+            // }
+            // }
         }
     },
     async mounted() {

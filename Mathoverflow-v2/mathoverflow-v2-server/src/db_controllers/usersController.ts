@@ -1,3 +1,4 @@
+import { Reputation } from "~/db_models/reputation_model";
 import { Answer } from "../db_models/answer_model";
 import { Question } from "../db_models/question_model";
 import { User } from "../db_models/user_model";
@@ -240,6 +241,27 @@ export async function deleteAllUsers(req: any, res: any) {
         .catch((err) => {
             res.status(500).send({
                 message: err.message || "Some error occurred while removing all users.",
+            });
+        });
+}
+
+//create Vote
+export async function createReputation(req: any, res: any) {
+    console.log(req.session, "this the req seession in vote");
+    await Reputation.create({
+        // title: req.body.title,
+        value: req.body.value,
+        UserUserId: req.session.user_sid,
+        // QuestionQuestionId: req.body.QuestionQuestionId,
+    })
+        .then((data: any) => {
+            //res.redirect("/questions/" + req.body.QuestionQuestionId);
+
+            res.send(data);
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while creating the Reputation.",
             });
         });
 }
