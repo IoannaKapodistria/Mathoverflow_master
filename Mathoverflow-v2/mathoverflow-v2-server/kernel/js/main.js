@@ -13,7 +13,10 @@ const myStore = new SequelizeStore({
 });
 sequelize_db.authenticate().then(() => console.log("Database connected...")).catch(err => console.log("Error: " + err));
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:8080",
+  credentials: true
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true

@@ -15,7 +15,7 @@ mathOverflowRouter.post("/ask", createQuestion);
 mathOverflowRouter.put("/update_question/:id", updateQuestion);
 mathOverflowRouter.delete("/delete_question/:id", deleteQuestion);
 mathOverflowRouter.get("/questions", /*sessionChecker,*/ getQuestions);
-mathOverflowRouter.post("/sessionCheck/:id", /*sessionChecker,*/ sessionChecker);
+mathOverflowRouter.post("/sessionCheck", /*sessionChecker,*/ sessionChecker);
 mathOverflowRouter.get("/questions/:id", getQuestion);
 // mathOverflowRouter.get("/questions/:id", sessionChecker, getQuestion);
 

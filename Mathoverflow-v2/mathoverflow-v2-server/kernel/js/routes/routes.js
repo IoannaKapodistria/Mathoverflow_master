@@ -9,7 +9,7 @@ mathOverflowRouter.post("/ask", createQuestion);
 mathOverflowRouter.put("/update_question/:id", updateQuestion);
 mathOverflowRouter.delete("/delete_question/:id", deleteQuestion);
 mathOverflowRouter.get("/questions", getQuestions);
-mathOverflowRouter.post("/sessionCheck/:id", sessionChecker);
+mathOverflowRouter.post("/sessionCheck", sessionChecker);
 mathOverflowRouter.get("/questions/:id", getQuestion);
 mathOverflowRouter.get("/users", getUsers);
 mathOverflowRouter.get("/users/:id", getUser);

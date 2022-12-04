@@ -23,6 +23,8 @@ export async function getQuestions() {
         let response = await ky
             .get("http://localhost:3000/questions", {
                 mode: "cors",
+                credentials: "include",
+
                 headers: {
                     "content-type": "application/json",
                 },
@@ -46,6 +48,8 @@ export async function getQuestion(id: any) {
         let response = await ky
             .get(`http://localhost:3000/questions/${id}`, {
                 mode: "cors",
+                credentials: "include",
+
                 headers: {
                     "content-type": "application/json",
                 },
@@ -70,6 +74,8 @@ export async function getAnswer(id: any) {
         let response = await ky
             .get(`http://localhost:3000/answers/${id}`, {
                 mode: "cors",
+                credentials: "include",
+
                 headers: {
                     "content-type": "application/json",
                 },
@@ -110,6 +116,8 @@ export async function getUsers() {
         let response = await ky
             .get("http://localhost:3000/users", {
                 mode: "cors",
+                credentials: "include",
+
                 headers: {
                     "content-type": "application/json",
                 },
@@ -134,6 +142,7 @@ export async function getUser(id: any) {
         let response = await ky
             .get(`http://localhost:3000/users/${id}`, {
                 mode: "cors",
+                credentials: "include",
                 headers: {
                     "content-type": "application/json",
                 },
@@ -158,6 +167,7 @@ export async function isLogged() {
         let response = await ky
             .get("http://localhost:3000/islogged", {
                 mode: "cors",
+                credentials: "include",
                 headers: {
                     "content-type": "application/json",
                 },
@@ -199,7 +209,7 @@ export async function signIn(data: any) {
         .post("http://localhost:3000/signin", {
             mode: "cors",
             body: JSON.stringify(data),
-            // credentials: "same-origin",
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
             },

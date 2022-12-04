@@ -158,6 +158,8 @@ export default Vue.extend({
                 .post("http://localhost:3000/sessionCheck", {
                     mode: "cors",
                     // credentials: "same-origin",
+                    credentials: "include",
+
                     headers: {
                         "content-type": "application/json",
                     },

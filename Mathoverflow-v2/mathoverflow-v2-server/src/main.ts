@@ -47,13 +47,13 @@ sequelize_db
     .catch((err) => console.log("Error: " + err));
 
 const app = express();
-app.use(cors());
-// app.use(
-//     cors({
-//         origin: "http://localhost:3000",
-//         credentials: true,
-//     })
-// );
+// app.use(cors());
+app.use(
+    cors({
+        origin: "http://localhost:8080",
+        credentials: true,
+    })
+);
 
 // app.use(express.static(nodePath.resolve("./public")));
 // parse requests of content-type - application/json
