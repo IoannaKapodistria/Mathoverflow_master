@@ -28,6 +28,7 @@ app.use(session({
         httpOnly: true,
         sameSite: true,
         maxAge: 600000,
+        secure: false,
     },
 }));
 myStore.sync();

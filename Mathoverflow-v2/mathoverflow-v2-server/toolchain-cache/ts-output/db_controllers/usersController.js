@@ -69,6 +69,7 @@ export async function signIn(req, res) {
         else {
             console.log(req.session, "the REQ SESSION ");
             req.session.user_sid = user.get("user_id");
+            console.log(req.session, "the REQ SESSION 2 after user sid is added");
             console.log(req.session.user_sid, "the REQ SESSION 2 ");
             console.log("User is signed in ");
             res.send(req.session);
@@ -77,6 +78,7 @@ export async function signIn(req, res) {
 }
 export async function signOut(req, res) {
     req.session.destroy();
+    res.send({ message: "User signed out successfully" });
     console.log("User is signed out");
 }
 export async function isLogged(req, res) {
@@ -90,6 +92,7 @@ export async function isLogged(req, res) {
 }
 export function sessionChecker(req, res, next) {
     console.log(req.session.user_sid, "the user sid");
+    console.log(req.session, "the req.session in session checker");
     if (req.session.user_sid) {
         console.log("user is logged in", req.session.user);
         res.send({
@@ -177,6 +180,53 @@ export async function createReputation(req, res) {
         .catch((err) => {
         res.status(500).send({
             message: err.message || "Some error occurred while creating the Reputation.",
+        });
+    });
+}
+export function deleteReputation(req, res) {
+    const id = req.params.id;
+    Reputation.destroy({
+        where: { reputation_id: id },
+    })
+        .then((num) => {
+        if (num == 1) {
+            res.send({
+                message: "Reputation was deleted successfully!",
+            });
+        }
+        else {
+            res.send({
+                message: `Cannot delete Reputation with id=${id}. Maybe Reputation was not found!`,
+            });
+        }
+    })
+        .catch((err) => {
+        res.status(500).send({
+            message: "Could not delete Reputation with id=" + id,
+        });
+    });
+}
+export function updateReputation(req, res) {
+    const id = req.params.id;
+    Reputation.update({ value: req.body.value }, {
+        where: { reputation_id: id },
+    })
+        .then(async (data) => {
+        if (data) {
+            res.send({
+                message: "Reputation with id=" + id + " has been updated successfully",
+            });
+        }
+        else {
+            res.status(404).send({
+                message: `Cannot update Reputation with id=${id}.`,
+            });
+        }
+    })
+        .catch((err) => {
+        console.log(err, "this is the error");
+        res.status(500).send({
+            message: "Error retrieving Reputation with id=" + id,
         });
     });
 }

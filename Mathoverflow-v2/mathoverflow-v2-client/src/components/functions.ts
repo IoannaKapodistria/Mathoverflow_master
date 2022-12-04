@@ -199,6 +199,7 @@ export async function signIn(data: any) {
         .post("http://localhost:3000/signin", {
             mode: "cors",
             body: JSON.stringify(data),
+            // credentials: "same-origin",
             headers: {
                 "content-type": "application/json",
             },

@@ -26,7 +26,8 @@ app.use(session({
   cookie: {
     httpOnly: true,
     sameSite: true,
-    maxAge: 600000
+    maxAge: 600000,
+    secure: false
   }
 }));
 myStore.sync();

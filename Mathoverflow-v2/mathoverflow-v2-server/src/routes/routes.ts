@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createReputation, createUser, deleteUser, getUser, getUsers, isLogged, sessionChecker, signIn, updateUser } from "~/db_controllers/usersController";
+import { createReputation, createUser, deleteReputation, deleteUser, getUser, getUsers, isLogged, sessionChecker, signIn, signOut, updateReputation, updateUser } from "~/db_controllers/usersController";
 // import path from "path";
 // import { getSignup, postSignup, getQuestions, getQuestionsbyId, getAskQuestion, postSubmitQuestion, postAnswer, getUserbyId, getUsers, postLogin, getLogin, getLogout } from "../route_controllers/functions";
 // import { sessionChecker } from "../db_controllers/usersController";
@@ -15,7 +15,7 @@ mathOverflowRouter.post("/ask", createQuestion);
 mathOverflowRouter.put("/update_question/:id", updateQuestion);
 mathOverflowRouter.delete("/delete_question/:id", deleteQuestion);
 mathOverflowRouter.get("/questions", /*sessionChecker,*/ getQuestions);
-mathOverflowRouter.post("/sessionCheck", /*sessionChecker,*/ sessionChecker);
+mathOverflowRouter.post("/sessionCheck/:id", /*sessionChecker,*/ sessionChecker);
 mathOverflowRouter.get("/questions/:id", getQuestion);
 // mathOverflowRouter.get("/questions/:id", sessionChecker, getQuestion);
 
@@ -24,7 +24,10 @@ mathOverflowRouter.get("/users/:id", getUser);
 // mathOverflowRouter.get("/users/:id", getUser);
 mathOverflowRouter.put("/update_user/:id", updateUser);
 mathOverflowRouter.delete("/delete_user/:id", deleteUser);
+//
 mathOverflowRouter.post("/create_reputation", createReputation);
+mathOverflowRouter.put("/update_reputation/:id", updateReputation);
+mathOverflowRouter.delete("/delete_reputation/:id", deleteReputation);
 
 mathOverflowRouter.post("/answer", createAnswer);
 mathOverflowRouter.delete("/delete_answer/:id", deleteAnswer);
@@ -39,6 +42,7 @@ mathOverflowRouter.post("/answer_vote", createAnswerVote);
 mathOverflowRouter.delete("/delete_answer_vote/:id", deleteAnswerVote);
 
 mathOverflowRouter.post("/signup", createUser);
+mathOverflowRouter.post("/signout", signOut);
 mathOverflowRouter.post("/signin", signIn);
 mathOverflowRouter.get("/islogged", isLogged);
 

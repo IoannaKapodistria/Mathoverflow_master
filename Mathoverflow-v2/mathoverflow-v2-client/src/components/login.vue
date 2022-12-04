@@ -352,7 +352,6 @@ export default Vue.extend({
                     // this.useSignUp=false;
                     this.inLogIn = true
                     // create first user's reputation
-
                     await this.createReputation();
                 }
             }

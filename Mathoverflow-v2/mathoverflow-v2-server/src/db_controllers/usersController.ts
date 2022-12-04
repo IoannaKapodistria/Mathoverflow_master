@@ -1,4 +1,6 @@
+import { Session } from "express-session";
 import { Reputation } from "~/db_models/reputation_model";
+// import { sessions } from "~/main";
 import { Answer } from "../db_models/answer_model";
 import { Question } from "../db_models/question_model";
 import { User } from "../db_models/user_model";
@@ -130,11 +132,14 @@ export async function signIn(req: any, res: any) {
             } else {
                 console.log(req.session, "the REQ SESSION ");
                 req.session.user_sid = user.get("user_id"); //user.dataValues.user_id //giati to xrisimopoiw meta stis questions and answers san user_id
+                //to be deleted
+                console.log(req.session, "the REQ SESSION 2 after user sid is added");
                 console.log(req.session.user_sid, "the REQ SESSION 2 ");
 
                 // res.redirect("/questions");
                 console.log("User is signed in ");
                 // sessionChecker;
+                // aisLogged(req, res);
                 // res.render("questions");
                 res.send(req.session);
             }
@@ -144,7 +149,8 @@ export async function signIn(req: any, res: any) {
 //sign out
 export async function signOut(req: any, res: any) {
     req.session.destroy();
-    //  res.redirect("/login");
+    // res.redirect("/login");
+    res.send({ message: "User signed out successfully" });
     console.log("User is signed out");
 }
 
@@ -161,6 +167,7 @@ export async function isLogged(req: any, res: any) {
 // sessionChecker,  NA XRISIMOPOIITHEI
 export function sessionChecker(req: any, res: any, next: any) {
     console.log(req.session.user_sid, "the user sid");
+    console.log(req.session, "the req.session in session checker");
     if (req.session.user_sid) {
         console.log("user is logged in", req.session.user);
         res.send({
@@ -178,6 +185,37 @@ export function sessionChecker(req: any, res: any, next: any) {
         // res.redirect("/login");
     }
 }
+
+// export async function sessionChecker(req: any, res: any, next: any) {
+//     //
+//     const id = req.params.id;
+//     // const id = 1;
+//     await sessions
+//         .findOne({ where: { sid: "fSRLbM3bq9gGFA-BoZKCqh-MavOZ7CUE" } }) //findByPk(id)
+//         .then(async (data) => {
+//             if (data) {
+//                 // const answers = await Answer.findAll({ where: { QuestionQuestionId: id } } /*{ include: [{ model: Question, as: "Question", where: { QuestionQuestionId: id } }] }*/);
+//                 // const votes = await Vote.findAll({ where: { QuestionQuestionId: id } });
+
+//                 // const value = {
+//                 //     data,
+//                 //     answers: answers,
+//                 //     votes: votes,
+//                 // };
+//                 res.send(data, "the data from check session");
+//             } else {
+//                 res.status(404).send({
+//                     message: `Session checker Cannot find User with id=${id}.`,
+//                 });
+//             }
+//         })
+//         .catch((err) => {
+//             console.log(err, "this is teh error");
+//             res.status(500).send({
+//                 message: "Error retrieving User with id=" + id,
+//             });
+//         });
+// }
 
 //update user
 export function updateUser(req: any, res: any) {
@@ -262,6 +300,59 @@ export async function createReputation(req: any, res: any) {
         .catch((err: any) => {
             res.status(500).send({
                 message: err.message || "Some error occurred while creating the Reputation.",
+            });
+        });
+}
+
+//delete reputation
+export function deleteReputation(req: any, res: any) {
+    const id = req.params.id;
+    Reputation.destroy({
+        where: { reputation_id: id },
+    })
+        .then((num) => {
+            if (num == 1) {
+                res.send({
+                    message: "Reputation was deleted successfully!",
+                });
+            } else {
+                res.send({
+                    message: `Cannot delete Reputation with id=${id}. Maybe Reputation was not found!`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: "Could not delete Reputation with id=" + id,
+            });
+        });
+}
+
+//update reputation
+export function updateReputation(req: any, res: any) {
+    const id = req.params.id;
+    Reputation.update(
+        { value: req.body.value },
+        // { title: req.body.title },
+        {
+            where: { reputation_id: id },
+        }
+    )
+        .then(async (data) => {
+            if (data) {
+                res.send({
+                    message: "Reputation with id=" + id + " has been updated successfully",
+                });
+            } else {
+                res.status(404).send({
+                    message: `Cannot update Reputation with id=${id}.`,
+                });
+            }
+        })
+        .catch((err) => {
+            console.log(err, "this is the error");
+            res.status(500).send({
+                message: "Error retrieving Reputation with id=" + id,
             });
         });
 }

@@ -39,7 +39,7 @@
                     >
                 </template>
             </v-data-table>
-            <v-btn @click="sessionCheck">session check</v-btn>
+            <v-btn @click="sessionCheck1">session check</v-btn>
         </v-card-text>
     </v-card>
 </template>
@@ -152,13 +152,16 @@ export default Vue.extend({
         forceUpdate2() {
             this.fuContent = !this.fuContent;
         },
-        async sessionCheck() {
+        async sessionCheck1() {
+            console.log(window.sessionStorage.getItem("session"), "the session storage")
             let response = await ky
                 .post("http://localhost:3000/sessionCheck", {
                     mode: "cors",
+                    // credentials: "same-origin",
                     headers: {
                         "content-type": "application/json",
                     },
+
                     timeout: false,
                 })
                 .then(async (value: any) => {

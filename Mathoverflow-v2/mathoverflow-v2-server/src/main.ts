@@ -5,18 +5,41 @@ import bodyParser from "body-parser";
 import mathOverflowRouter from "./routes/routes";
 import session from "express-session";
 import sequelize_db from "./config/database";
-//  import * as session1 from "connect-session-sequelize"
-//  import {session.Store} from "connect-session-sequelize"
-// const SequelizeStore = require("connect-session-sequelize")(session.Store);
 import connectSessionSequelize from "connect-session-sequelize";
+// import { DataTypes } from "sequelize";
 
 const SequelizeStore = connectSessionSequelize(session.Store); //den dimiourgeitai session
 const myStore = new SequelizeStore({
     db: sequelize_db,
     checkExpirationInterval: 15 * 60 * 1000, // The interval at which to cleanup expired sessions in milliseconds. = 15minutes
-    expiration: 60 * 60 * 1000, // The maximum age (in milliseconds) of a valid session. = 1 Hour
+    expiration: 60 * 60 * 1000,
+    // The maximum age (in milliseconds) of a valid session. = 1 Hour
 });
+// export const sessions = sequelize_db.define("Session", {
+//     sid: {
+//         type: DataTypes.STRING,
+//         primaryKey: true,
+//     },
+//     user_id: DataTypes.STRING,
+//     expires: DataTypes.DATE,
+//     data: DataTypes.TEXT,
+// });
 
+// function extendDefaultFields(defaults: any, session: any) {
+//     return {
+//         data: defaults.data,
+//         expires: defaults.expires,
+//         user_id: session.user_id,
+//     };
+// }
+
+// const store = new SequelizeStore({
+//     db: sequelize_db,
+//     table: "Session",
+//     checkExpirationInterval: 15 * 60 * 1000, // The interval at which to cleanup expired sessions in milliseconds. = 15minutes
+//     expiration: 60 * 60 * 1000,
+//     extendDefaultFields: extendDefaultFields,
+// });
 //connection with the database
 sequelize_db
     .authenticate() //eisagw ta stoixeia pu exw dwsei stop config
@@ -25,6 +48,12 @@ sequelize_db
 
 const app = express();
 app.use(cors());
+// app.use(
+//     cors({
+//         origin: "http://localhost:3000",
+//         credentials: true,
+//     })
+// );
 
 // app.use(express.static(nodePath.resolve("./public")));
 // parse requests of content-type - application/json
@@ -40,16 +69,18 @@ app.use(
     session({
         secret: process.env.secret || "PynOjAuHetAuWawtinAytVunarAcjeBlybEshkEjVudyelwa",
         resave: false,
-        store: myStore,
+        store: myStore, //store
         saveUninitialized: false,
         cookie: {
             httpOnly: true,
             sameSite: true,
             maxAge: 600000,
+            secure: false,
         },
     })
 );
 
+// store.sync();
 myStore.sync();
 
 app.use("/", mathOverflowRouter);
