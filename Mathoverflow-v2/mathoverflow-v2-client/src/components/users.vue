@@ -113,13 +113,18 @@ export default Vue.extend({
             this.forceUpdateUsers();
         },
         async forceUpdateUsers() {
-            // const questionId = this.getQuestionData.data.question_id;
+            // this.$router.go(0)
+            // // window.location.reload()
+            // // this.getUsers
+            // await this.$nextTick()
+            // this.$router.push('/').catch((err: any) => {
+            //     console.warn('error in redirect to /users :', err)
+            // });
+
             this.$router.push('/users').catch((err: any) => {
                 console.warn('error in redirect to /users :', err)
             });
-            // const questionData = await getQuestion(questionId);
-            // console.log(questionData, "the row data");
-            // this.$store.commit("setQuestionData", questionData)
+
         },
     },
     mounted() {

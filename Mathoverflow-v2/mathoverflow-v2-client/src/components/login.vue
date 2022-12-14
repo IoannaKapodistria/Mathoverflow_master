@@ -318,6 +318,7 @@ export default Vue.extend({
                 // if (logged in) {
                 //bug me logged in
                 const isLoggedIn = await isLogged();
+                console.log(isLogged, "the is logged")
                 this.$store.commit("setContent", true)
                 this.$router.push('/questions');
                 // }

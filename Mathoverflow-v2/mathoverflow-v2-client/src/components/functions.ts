@@ -7,6 +7,7 @@ export async function postQuestion(data: any) {
     let respone = await ky
         .post("http://localhost:3000/ask", {
             mode: "cors",
+            credentials: "include",
             body: JSON.stringify(data),
             headers: {
                 "content-type": "application/json",
@@ -101,6 +102,7 @@ export async function postAnswer(data: any) {
         .post("http://localhost:3000/answer", {
             mode: "cors",
             body: JSON.stringify(data),
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
             },
@@ -117,7 +119,6 @@ export async function getUsers() {
             .get("http://localhost:3000/users", {
                 mode: "cors",
                 credentials: "include",
-
                 headers: {
                     "content-type": "application/json",
                 },
@@ -192,6 +193,7 @@ export async function signUp(data: any) {
         .post("http://localhost:3000/signup", {
             mode: "cors",
             body: JSON.stringify(data),
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
             },
@@ -243,6 +245,7 @@ export async function voteQuestion(data: any) {
         .post("http://localhost:3000/vote", {
             mode: "cors",
             body: JSON.stringify(data),
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
             },
@@ -260,6 +263,7 @@ export async function deleteQuestion(id: any) {
         .delete(`http://localhost:3000/delete_question/${id}`, {
             mode: "cors",
             // body: JSON.stringify(data),
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
             },
@@ -275,6 +279,7 @@ export async function deleteAnswer(id: any) {
         .delete(`http://localhost:3000/delete_answer/${id}`, {
             mode: "cors",
             // body: JSON.stringify(data),
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
             },
@@ -290,6 +295,7 @@ export async function removeUser(id: any) {
         .delete(`http://localhost:3000/delete_user/${id}`, {
             mode: "cors",
             // body: JSON.stringify(data),
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
             },
@@ -306,6 +312,7 @@ export async function voteAnswer(data: any) {
         .post("http://localhost:3000/answer_vote", {
             mode: "cors",
             body: JSON.stringify(data),
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
             },
@@ -321,6 +328,7 @@ export async function updateQuestion1(id: number, value: any) {
         .put(`http://localhost:3000/update_question/${id}`, {
             mode: "cors",
             body: JSON.stringify(value),
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
             },
@@ -336,6 +344,7 @@ export async function updateAnswer1(id: number, value: any) {
         .put(`http://localhost:3000/update_answer/${id}`, {
             mode: "cors",
             body: JSON.stringify(value),
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
             },
@@ -352,6 +361,7 @@ export async function postUserReputation(data: any) {
         .post("http://localhost:3000/create_reputation", {
             mode: "cors",
             body: JSON.stringify(data),
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
             },
