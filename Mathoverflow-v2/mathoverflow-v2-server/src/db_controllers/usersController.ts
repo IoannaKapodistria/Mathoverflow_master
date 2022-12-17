@@ -182,7 +182,7 @@ export function sessionChecker(req: any, res: any, next: any) {
             userSid: req.session.user_sid,
             message: "user is not logged in",
         });
-        // res.redirect("/login");
+        res.redirect("/login");
     }
 }
 
@@ -289,7 +289,7 @@ export async function createReputation(req: any, res: any) {
     await Reputation.create({
         // title: req.body.title,
         value: req.body.value,
-        UserUserId: req.session.user_sid,
+        UserUserId: req.body.userId, //req.session.user_sid,
         // QuestionQuestionId: req.body.QuestionQuestionId,
     })
         .then((data: any) => {

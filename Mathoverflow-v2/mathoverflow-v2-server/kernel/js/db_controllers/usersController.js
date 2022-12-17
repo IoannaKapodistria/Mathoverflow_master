@@ -114,6 +114,7 @@ export function sessionChecker(req, res, next) {
       userSid: req.session.user_sid,
       message: "user is not logged in"
     });
+    res.redirect("/login");
   }
 }
 export function updateUser(req, res) {
@@ -179,7 +180,7 @@ export async function createReputation(req, res) {
   console.log(req.session, "this the req seession in vote");
   await Reputation.create({
     value: req.body.value,
-    UserUserId: req.session.user_sid
+    UserUserId: req.body.userId
   }).then(data => {
     res.send(data);
   }).catch(err => {

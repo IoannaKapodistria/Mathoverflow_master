@@ -580,24 +580,24 @@ export default Vue.extend({
             // this.answerVotes = votesSum;
             return votesSum;
         },
-        postAnswer1() {
+        async postAnswer1() {
             const data = { body: this.answerBody, QuestionQuestionId: this.getQuestionData.data.question_id }
-            postAnswer(data); // den ananewnetai amesws h selida na fanei h apantish kai stelnei mono periorismeno airthmo leksewn,  vgazei error 500 meta
+            await postAnswer(data); // den ananewnetai amesws h selida na fanei h apantish kai stelnei mono periorismeno airthmo leksewn,  vgazei error 500 meta
             //
             this.forceUpdateQuestion();
             this.answerBody = ""
 
         },
-        upVoteQuestion() {
+        async upVoteQuestion() {
             const data = { value: 1, QuestionQuestionId: this.getQuestionData.data.question_id }
-            voteQuestion(data);
+            await voteQuestion(data);
             // 
             // this.$router.go(0);
             this.forceUpdateQuestion();
         },
-        downVoteQuestion() {
+        async downVoteQuestion() {
             const data = { value: -1, QuestionQuestionId: this.getQuestionData.data.question_id }
-            voteQuestion(data);
+            await voteQuestion(data);
             //
             // this.$router.go(0);
             this.forceUpdateQuestion();

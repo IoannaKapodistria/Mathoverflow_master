@@ -218,7 +218,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import { isLogged, postUserReputation, signIn, signUp } from "./functions";
+import { getUsers, isLogged, postUserReputation, signIn, signUp } from "./functions";
 //import User from "../user/user";
 //import { nullObject, isNullObject, nullObjectConst } from "./null_object";
 //import { storeCredentials, clearCredentials, getCredentials } from "./login";
@@ -353,16 +353,22 @@ export default Vue.extend({
                     // this.useSignUp=false;
                     this.inLogIn = true
                     // create first user's reputation
-                    await this.createReputation();
+                    // logged in the user in order to create the first reputation 
+                    // await this.login()
+                    const users = await getUsers()
+                    console.log(users, 'th eusers in sign up')
+                    const user = users.find((el: any) => el.username === this.username && el.password === this.password)
+                    const userId = user.user_id
+                    await this.createReputation(userId);
                 }
             }
         },
         passwordIconClicked() {
             this.showPassword = !this.showPassword;
         },
-        async createReputation() {
+        async createReputation(userId: number) {
             const initialReputation = 10
-            const data = { value: initialReputation }
+            const data = { value: initialReputation, userId: userId }
             await postUserReputation(data);
         },
         rememberMe(remember: boolean) {

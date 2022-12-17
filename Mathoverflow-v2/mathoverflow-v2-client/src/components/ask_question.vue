@@ -93,9 +93,11 @@ export default Vue.extend({
         }
     },
     methods: {
-        postQuestion() {
+        async postQuestion() {
             const data = { title: this.title, body: this.body }
-            postQuestion(data);
+            await postQuestion(data);
+            //
+            this.$router.push('/questions');
         }
     },
     mounted() {
