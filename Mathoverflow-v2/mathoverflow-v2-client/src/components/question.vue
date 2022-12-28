@@ -1,6 +1,7 @@
 <template>
-    <v-container fluid>
-        <!-- The question -->
+    <!-- <v-container fluid> -->
+    <!-- The question -->
+    <v-card flat>
         <v-card flat :key="fuContent">
             <v-toolbar flat class="ps-0" v-if="!editing">
                 <v-toolbar-title class="ps-0">
@@ -277,7 +278,8 @@
                 </v-data-table>
             </v-card-text>
         </v-card>
-    </v-container>
+    </v-card>
+    <!-- </v-container> -->
 </template>
 
 <script lang="ts">

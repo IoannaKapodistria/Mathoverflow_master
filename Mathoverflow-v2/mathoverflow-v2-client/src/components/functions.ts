@@ -238,6 +238,22 @@ export async function signIn(data: any) {
         });
     return response;
 }
+export async function signOut() {
+    let response = await ky
+        .post("http://localhost:3000/signout", {
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then((value: any) => {
+            console.log("this is the sign out value:", value);
+            return value;
+        });
+    return response.json();
+}
 
 //upvote question
 export async function voteQuestion(data: any) {
