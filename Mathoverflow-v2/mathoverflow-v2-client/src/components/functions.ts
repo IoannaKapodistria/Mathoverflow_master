@@ -255,6 +255,26 @@ export async function signOut() {
     return response.json();
 }
 
+export async function checkSession() {
+    let response = await ky
+        .post("http://localhost:3000/sessionCheck", {
+            mode: "cors",
+            // credentials: "same-origin",
+            credentials: "include",
+
+            headers: {
+                "content-type": "application/json",
+            },
+
+            timeout: false,
+        })
+        .then(async (value: any) => {
+            const a = await value.json();
+            console.log("this is the value of session check:", a);
+            return a;
+        });
+    return response;
+}
 //upvote question
 export async function voteQuestion(data: any) {
     let response = await ky

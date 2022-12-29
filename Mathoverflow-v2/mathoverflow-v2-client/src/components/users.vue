@@ -9,52 +9,58 @@
             <v-divider></v-divider>
             <v-card-text>
                 <v-row class="mt-10">
-                    <v-col
-                        cols="3"
-                        class="mt-6"
-                        v-for="(user, i) in this.getUsers"
-                        :key="i"
-                    >
-                        <v-card flat>
-                            <v-row>
-                                <v-col cols="5" class="pa-0 mb-5">
-                                    <v-img
-                                        contain
-                                        src="/prof_photo.png"
-                                        @click="userProfile(user)"
-                                        style="cursor: pointer"
-                                    ></v-img>
-                                </v-col>
-                                <v-col class="pa-0">
-                                    <!-- <v-card-title> Ioanna </v-card-title> -->
-                                    <v-card-text>
-                                        <h3
-                                            @click="userProfile(user)"
-                                            style="cursor: pointer"
-                                        >
-                                            {{ user.username }}
-                                        </h3>
-                                        <div>Greece</div>
-                                        <span v-if="admin">
-                                            <v-btn
-                                                x-small
-                                                outlined
-                                                rounded
-                                                text
-                                                class="mt-5"
-                                                @click="deleteUser(user)"
-                                            >
-                                                <!-- <v-icon>mdi-delete</v-icon> -->
-                                                Delete User
-                                            </v-btn>
-                                        </span>
-                                    </v-card-text>
+                    <v-col cols="12">
+                        <v-row>
+                            <v-col
+                                cols="3"
+                                class="mt-6"
+                                v-for="(user, i) in this.getUsers"
+                                :key="i"
+                            >
+                                <v-card flat>
+                                    <v-row>
+                                        <v-col cols="5" class="pa-0 mb-5">
+                                            <v-img
+                                                contain
+                                                src="/prof_photo.png"
+                                                @click="userProfile(user)"
+                                                style="cursor: pointer"
+                                            ></v-img>
+                                        </v-col>
+                                        <v-col class="pa-0">
+                                            <!-- <v-card-title> Ioanna </v-card-title> -->
+                                            <v-card-text>
+                                                <h3
+                                                    @click="userProfile(user)"
+                                                    style="cursor: pointer"
+                                                >
+                                                    {{ user.username }}
+                                                </h3>
+                                                <div>Greece</div>
+                                                <span v-if="admin">
+                                                    <v-btn
+                                                        x-small
+                                                        outlined
+                                                        rounded
+                                                        text
+                                                        class="mt-5"
+                                                        @click="
+                                                            deleteUser(user)
+                                                        "
+                                                    >
+                                                        <!-- <v-icon>mdi-delete</v-icon> -->
+                                                        Delete User
+                                                    </v-btn>
+                                                </span>
+                                            </v-card-text>
 
-                                    <!-- <v-card-actions> -->
-                                    <!-- </v-card-actions> -->
-                                </v-col>
-                            </v-row>
-                        </v-card>
+                                            <!-- <v-card-actions> -->
+                                            <!-- </v-card-actions> -->
+                                        </v-col>
+                                    </v-row>
+                                </v-card>
+                            </v-col>
+                        </v-row>
                     </v-col>
                 </v-row>
             </v-card-text>

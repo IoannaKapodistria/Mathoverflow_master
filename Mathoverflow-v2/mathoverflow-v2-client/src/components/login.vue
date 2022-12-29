@@ -217,7 +217,9 @@
 </template>
 
 <script lang="ts">
+import router from "@/router";
 import Vue, { PropType } from "vue";
+import VueRouter from "vue-router";
 import { getUsers, isLogged, postUserReputation, signIn, signUp } from "./functions";
 //import User from "../user/user";
 //import { nullObject, isNullObject, nullObjectConst } from "./null_object";
@@ -264,6 +266,7 @@ export default Vue.extend({
         inSignUp: false,
         inLogIn: true,
         snackbar: false,
+        routerPath: '' as any
     }),
     watch: {
         useSignUp() {
@@ -275,7 +278,19 @@ export default Vue.extend({
         showSnackbar() {
             this.snackbar = this.showSnackbar;
             console.log(this.snackbar, "this is the value of snackbar")
+        },
+
+        $route(value: any) {
+            console.log(value, "the router value")
+            if (value.path === '/login') {
+                this.inLogIn = true;
+                this.inSignUp = false;
+            } else if (value.path === '/signup') {
+                this.inLogIn = false;
+                this.inSignUp = true;
+            }
         }
+
     },
     computed: {
         formIsValid(): string | false {
@@ -399,11 +414,16 @@ export default Vue.extend({
         changeToSignUp() {
             this.inLogIn = false;
             this.inSignUp = true;
+            //
+            this.$router.push('/signup');
 
         },
         changeToLogIn() {
             this.inSignUp = false;
             this.inLogIn = true;
+            //
+            this.$router.push('/login');
+            // console.log(this.$router.match(), 'router matching')
         },
 
         clickSnackbar() {
@@ -413,6 +433,15 @@ export default Vue.extend({
     },
     mounted() {
         //this.init();
+        this.routerPath = this.$router.currentRoute.path
+        if (this.$router.currentRoute.path === '/signup') {
+            this.inLogIn = false;
+            this.inSignUp = true;
+        } else if (this.$router.currentRoute.path === '/login') {
+            this.inLogIn = true;
+            this.inSignUp = false;
+        }
+
     }
 });
 </script>

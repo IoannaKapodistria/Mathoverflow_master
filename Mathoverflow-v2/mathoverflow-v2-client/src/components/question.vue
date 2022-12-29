@@ -1,7 +1,7 @@
 <template>
     <!-- <v-container fluid> -->
     <!-- The question -->
-    <v-card flat>
+    <v-card flat class="questionCard">
         <v-card flat :key="fuContent">
             <v-toolbar flat class="ps-0" v-if="!editing">
                 <v-toolbar-title class="ps-0">
@@ -704,4 +704,7 @@ export default Vue.extend({
     border: solid red !important;
     border-radius: 100% !important;
 }
+/* .questionCard {
+    top: 80% !important;
+} */
 </style>

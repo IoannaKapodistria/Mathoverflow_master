@@ -49,7 +49,7 @@ import store from '@/store';
 import ky from 'ky';
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
-import { deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUsers } from './functions'
+import { checkSession, deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUsers } from './functions'
 export default Vue.extend({
     data: () => ({
         admin: true,
@@ -154,21 +154,10 @@ export default Vue.extend({
         },
         async sessionCheck1() {
             console.log(window.sessionStorage.getItem("session"), "the session storage")
-            let response = await ky
-                .post("http://localhost:3000/sessionCheck", {
-                    mode: "cors",
-                    // credentials: "same-origin",
-                    credentials: "include",
+            // console.log(, "the session storage")
+            const a = await checkSession()
+            console.log(a, 'the a!!!')
 
-                    headers: {
-                        "content-type": "application/json",
-                    },
-
-                    timeout: false,
-                })
-                .then(async (value: any) => {
-                    console.log("this is the value of session check:", await value.text());
-                });
         },
         getAnswers(questionData: any) {
             //

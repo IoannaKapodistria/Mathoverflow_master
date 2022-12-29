@@ -7,6 +7,7 @@
                 :username="username"
                 @loginClicked="loginClicked"
                 @logout="logout"
+                @signup="signup"
             ></mo-header>
             <!-- the login/signup page -->
             <!-- <login></login> -->
@@ -22,6 +23,7 @@
                 </v-col>
             </v-row> -->
             <v-card
+                flat
                 rounded="lg"
                 style="z-index: 20345"
                 class="contentCard pa-3"
@@ -120,114 +122,10 @@ export default Vue.extend({
             this.$store.commit("setContent", false)
             this.$router.push('/login');
         },
-        // initParticles() {
-
-        //     window.particlesJS("particles-js", {
-        //         particles: {
-        //             number: {
-        //                 value: 80,
-        //                 density: {
-        //                     enable: true,
-        //                     value_area: 700,
-        //                 },
-        //             },
-        //             color: {
-        //                 value: "#ffffff",
-        //             },
-        //             shape: {
-        //                 type: "circle",
-        //                 stroke: {
-        //                     width: 0,
-        //                     color: "#000000",
-        //                 },
-        //                 polygon: {
-        //                     nb_sides: 5,
-        //                 },
-        //             },
-        //             opacity: {
-        //                 value: 0.5,
-        //                 random: false,
-        //                 anim: {
-        //                     enable: false,
-        //                     speed: 1,
-        //                     opacity_min: 0.1,
-        //                     sync: false,
-        //                 },
-        //             },
-        //             size: {
-        //                 value: 3,
-        //                 random: true,
-        //                 anim: {
-        //                     enable: false,
-        //                     speed: 40,
-        //                     size_min: 0.1,
-        //                     sync: false,
-        //                 },
-        //             },
-        //             line_linked: {
-        //                 enable: true,
-        //                 distance: 150,
-        //                 color: "#ffffff",
-        //                 opacity: 0.4,
-        //                 width: 1,
-        //             },
-        //             move: {
-        //                 enable: true,
-        //                 speed: 1,
-        //                 direction: "none",
-        //                 random: false,
-        //                 straight: false,
-        //                 out_mode: "out",
-        //                 bounce: false,
-        //                 attract: {
-        //                     enable: false,
-        //                     rotateX: 600,
-        //                     rotateY: 1200,
-        //                 },
-        //             },
-        //         },
-        //         interactivity: {
-        //             detect_on: "canvas",
-        //             events: {
-        //                 onhover: {
-        //                     enable: true,
-        //                     mode: "grab",
-        //                 },
-        //                 onclick: {
-        //                     enable: true,
-        //                     mode: "push",
-        //                 },
-        //                 resize: true,
-        //             },
-        //             modes: {
-        //                 grab: {
-        //                     distance: 140,
-        //                     line_linked: {
-        //                         opacity: 1,
-        //                     },
-        //                 },
-        //                 bubble: {
-        //                     distance: 400,
-        //                     size: 40,
-        //                     duration: 2,
-        //                     opacity: 8,
-        //                     speed: 3,
-        //                 },
-        //                 repulse: {
-        //                     distance: 200,
-        //                     duration: 0.4,
-        //                 },
-        //                 push: {
-        //                     particles_nb: 4,
-        //                 },
-        //                 remove: {
-        //                     particles_nb: 2,
-        //                 },
-        //             },
-        //         },
-        //         retina_detect: true,
-        //     });
-        // },
+        signup() {
+            this.$store.commit("setContent", false)
+            this.$router.push('/signup');
+        }
     },
     mounted() {
         this.buttonObjects = [{ uid: "", title: "Home", icon: "mdi-home", url: "/" },
@@ -238,8 +136,12 @@ export default Vue.extend({
 });
 </script>
 <style>
+.v-application {
+    /* font-family: Arial, Helvetica, sans-serif !important; */
+    /* background-color: rgb(250, 250, 250) !important; */
+}
 #particles-js {
-    background: rgb(152, 203, 236);
+    background: #98cbec;
     height: 100%;
     width: 100%;
 }
@@ -265,10 +167,13 @@ export default Vue.extend({
     font-size: 4rem;
 }
 .contentCard {
-    top: -7%;
-    position: relative;
-    margin-left: 20px;
-    margin-right: 20px;
+    top: -8%;
+    /* top: 18%; */
+    /* position: absolute; */
+    margin-left: 40px;
+    margin-right: 40px;
+    /* margin-bottom: 30px; */
+    /* bottom: 5%; */
 }
 </style>
 
