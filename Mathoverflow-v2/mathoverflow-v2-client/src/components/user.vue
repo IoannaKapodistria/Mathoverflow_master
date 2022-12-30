@@ -247,7 +247,8 @@ export default Vue.extend({
             // router.push('/question')
             console.log(value, "the value");
             const questionId = value.question_id;
-            this.$router.push('/question');
+            // this.$router.push('/question');
+            this.$router.push(`/questions/${questionId}`);
             const questionData = await getQuestion(questionId);
             console.log(questionData, "the row data");
             store.commit("setQuestionData", questionData)
@@ -256,7 +257,8 @@ export default Vue.extend({
             console.log(value, "the answer value")
             //
             const questionId = value.QuestionQuestionId;
-            this.$router.push('/question');
+            // this.$router.push('/question');
+            this.$router.push(`/questions/${questionId}`);
             const questionData = await getQuestion(questionId);
             console.log(questionData, "the row data");
             store.commit("setQuestionData", questionData)

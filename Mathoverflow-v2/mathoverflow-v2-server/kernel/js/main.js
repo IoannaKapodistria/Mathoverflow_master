@@ -9,7 +9,7 @@ const SequelizeStore = connectSessionSequelize(session.Store);
 const myStore = new SequelizeStore({
   db: sequelize_db,
   checkExpirationInterval: 15 * 60 * 1000,
-  expiration: 60 * 60 * 1000
+  expiration: 86400 * 1000
 });
 sequelize_db.authenticate().then(() => console.log("Database connected...")).catch(err => console.log("Error: " + err));
 const app = express();
@@ -29,7 +29,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     sameSite: true,
-    maxAge: 600000,
+    maxAge: 86400 * 1000,
     secure: false
   }
 }));

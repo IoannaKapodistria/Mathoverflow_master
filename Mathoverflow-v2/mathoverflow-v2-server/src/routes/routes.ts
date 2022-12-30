@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createReputation, createUser, deleteReputation, deleteUser, getUser, getUsers, isLogged, sessionChecker, signIn, signOut, updateReputation, updateUser } from "~/db_controllers/usersController";
+import { createReputation, createUser, deleteReputation, deleteUser, getReputation, getUser, getUsers, isLogged, sessionChecker, signIn, signOut, updateReputation, updateUser } from "~/db_controllers/usersController";
 // import path from "path";
 // import { getSignup, postSignup, getQuestions, getQuestionsbyId, getAskQuestion, postSubmitQuestion, postAnswer, getUserbyId, getUsers, postLogin, getLogin, getLogout } from "../route_controllers/functions";
 // import { sessionChecker } from "../db_controllers/usersController";
@@ -28,6 +28,7 @@ mathOverflowRouter.delete("/delete_user/:id", deleteUser);
 mathOverflowRouter.post("/create_reputation", createReputation);
 mathOverflowRouter.put("/update_reputation/:id", updateReputation);
 mathOverflowRouter.delete("/delete_reputation/:id", deleteReputation);
+mathOverflowRouter.get("/get_reputation/:id", getReputation);
 
 mathOverflowRouter.post("/answer", createAnswer);
 mathOverflowRouter.delete("/delete_answer/:id", deleteAnswer);

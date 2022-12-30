@@ -1,117 +1,4 @@
 <template>
-    <!-- <v-container>
-        <v-col cols="12" align="center">
-            <v-card
-                class="elevation-4"
-                width="500"
-                :disabled="loggingIn"
-                :flat="flat"
-            >
-                <v-toolbar dense :flat="flat">
-                    <v-toolbar-title>{{ logInText }}</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-icon> {{ icon }} </v-icon>
-                </v-toolbar>
-                <v-card-text>
-                    <v-form v-model="loginFormValid" @submit="login">
-                        <v-text-field
-                            name="username"
-                            label="Username"
-                            dense
-                            prepend-icon="mdi-account"
-                            type="username"
-                            outlined
-                            v-model="username"
-                            :rules="usernameRules"
-                            v-on:keyup.enter="login"
-                        >
-                        </v-text-field>
-                        <v-text-field
-                            name="email"
-                            label="Email"
-                            dense
-                            prepend-icon="mdi-email"
-                            type="text"
-                            outlined
-                            v-model="email"
-                            :rules="emailRules"
-                            v-on:keyup.enter="login"
-                            v-if="inSignUp"
-                        >
-                        </v-text-field>
-                        <v-text-field
-                            name="password"
-                            label="Password"
-                            dense
-                            prepend-icon="mdi-lock"
-                            :type="passwordText"
-                            outlined
-                            v-model="password"
-                            :rules="passwordRules"
-                            :append-icon="passwordIcon"
-                            @click:append="passwordIconClicked"
-                            v-on:keyup.enter="login"
-                        >
-                        </v-text-field>
-                    </v-form>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-progress-circular
-                        class="mr-4"
-                        v-if="loggingIn"
-                        indeterminate
-                    ></v-progress-circular>
-                    <span v-else>
-                        <v-btn
-                            class="mr-3"
-                            v-if="inLogIn"
-                            @click="login"
-                            depressed
-                            rounded
-                        >
-                            Login
-                        </v-btn>
-                        <v-btn
-                            class="mr-3"
-                            v-else-if="inSignUp"
-                            @click="signUp"
-                            depressed
-                            rounded
-                        >
-                            Sign Up
-                        </v-btn>
-                    </span>
-                </v-card-actions>
-                <v-row>
-                    <v-col class="text-body-2">
-                        <span v-if="inLogIn">
-                            Don't have an account?
-                            <span class="blue--text" @click="changeToSignUp"
-                                >Sign Up</span
-                            >
-                        </span>
-                        <span v-else-if="inSignUp">
-                            Already have an account?
-                            <span class="blue--text" @click="changeToLogIn"
-                                >Login</span
-                            >
-                            &nbsp;
-                        </span>
-                    </v-col>
-                </v-row>
-            </v-card>
-        </v-col>
-        <v-snackbar v-model="snackbar" :timeout="-1" :value="true">
-            User is successfully signed up and will be confirmed in a few
-            minutes.
-            <template v-slot:action="{ attrs }">
-                <v-btn color="white" icon v-bind="attrs" @click="clickSnackbar">
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
-            </template>
-        </v-snackbar>
-    </v-container> -->
     <v-container fill-height>
         <v-row justify="center" align="center">
             <v-col justify="center" align="center">
@@ -197,13 +84,19 @@
                         <v-col class="text-body-2">
                             <span v-if="inLogIn">
                                 Don't have an account?
-                                <span class="blue--text" @click="changeToSignUp"
+                                <span
+                                    class="blue--text"
+                                    style="cursor: pointer"
+                                    @click="changeToSignUp"
                                     >Sign Up</span
                                 >
                             </span>
                             <span v-else-if="inSignUp">
                                 Already have an account?
-                                <span class="blue--text" @click="changeToLogIn"
+                                <span
+                                    class="blue--text"
+                                    style="cursor: pointer"
+                                    @click="changeToLogIn"
                                     >Login</span
                                 >
                                 &nbsp;
@@ -445,3 +338,9 @@ export default Vue.extend({
     }
 });
 </script>
+<style>
+/* .v-input__slot::before {
+    border-style: initial !important;
+} */
+</style>
+

@@ -1,4 +1,5 @@
 <template>
+    <!-- <v-app style="background-color: #fafafa"> -->
     <v-app>
         <v-main>
             <mo-header
@@ -26,17 +27,17 @@
                 flat
                 rounded="lg"
                 style="z-index: 20345"
-                class="contentCard pa-3"
+                class="contentCard pa-0 mx-11"
             >
                 <v-card-text>
-                    <v-row>
+                    <v-row justify="center">
                         <!-- na ftiaxtei n amn einai hardcoded 3 ta cols g na mn exei toso keno ta votes tis erwthshs me to menu aristera -->
                         <v-col cols="3" v-if="getContent">
                             <mo-content
                                 :buttonObjects="buttonObjects"
                             ></mo-content>
                         </v-col>
-                        <v-col>
+                        <v-col cols="9">
                             <router-view></router-view>
                             <!-- ask a question page NA MPEI PADOU ENA BUTTON ASK QUESTION-->
                             <!-- <ask-question></ask-question> -->
@@ -169,7 +170,8 @@ export default Vue.extend({
 .contentCard {
     top: -8%;
     /* top: 18%; */
-    /* position: absolute; */
+    position: relative;
+    display: flex;
     margin-left: 40px;
     margin-right: 40px;
     /* margin-bottom: 30px; */

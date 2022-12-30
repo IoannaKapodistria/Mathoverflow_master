@@ -1,22 +1,36 @@
 <template>
-    <!-- <v-container fluid> -->
     <!-- The question -->
     <v-card flat class="questionCard">
         <v-card flat :key="fuContent">
-            <v-toolbar flat class="ps-0" v-if="!editing">
-                <v-toolbar-title class="ps-0">
-                    <span>
-                        {{ this.questionExample.title }}
-                    </span>
-                </v-toolbar-title>
-
-                <v-spacer></v-spacer>
-                <!-- <v-btn small outlined rounded text> Delete Question </v-btn> -->
-                <v-icon>mdi-help</v-icon>
-            </v-toolbar>
-            <v-card v-if="editing" flat style="border: 1px solid yellow">
+            <v-card flat v-if="!editing">
+                <v-card-text>
+                    <v-row>
+                        <v-col cols="10" class="pb-0">
+                            <span
+                                class="qTittle2 text-body-1 font-weight-medium"
+                            >
+                                {{ this.questionExample.title }}
+                            </span>
+                        </v-col>
+                        <v-col cols="2">
+                            <v-btn
+                                dark
+                                color="#FFA726"
+                                depressed
+                                elevation="1"
+                                small
+                                class="mt-3 py-4"
+                                @click="ask"
+                                >Ask Question</v-btn
+                            >
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+            </v-card>
+            <v-card v-if="editing" flat style="border: 2px dashed #b39ddb">
                 <v-card-text v-if="editing" class="pb-0">
                     <v-textarea
+                        color="#b39ddb"
                         rows="2"
                         v-model="editedQuestionTitle"
                     ></v-textarea>
@@ -24,94 +38,110 @@
             </v-card>
             <v-divider></v-divider>
             <v-card-text>
-                <vue-editor
-                    v-if="!editing"
-                    class="kappa2"
-                    disabled
-                    v-model="this.questionExample.body"
-                    :editorOptions="editorOptions"
-                ></vue-editor>
-                <v-card v-if="editing" flat style="border: 1px solid yellow">
-                    <v-card-text>
+                <v-row>
+                    <v-col v-if="!editing" cols="1" class="mt-0">
+                        <v-btn right x-large icon>
+                            <v-icon
+                                size="45px"
+                                @click="upVoteQuestion"
+                                color="#78909C"
+                                >mdi-menu-up</v-icon
+                            >
+                        </v-btn>
+                        <span class="d-flex">
+                            <v-chip dark color="#26A69A" class="ms-2">
+                                {{ this.questionSumVotes }}
+                            </v-chip>
+                        </span>
+                        <v-btn right x-large icon>
+                            <v-icon
+                                size="45px"
+                                @click="downVoteQuestion"
+                                color="#78909C"
+                                >mdi-menu-down</v-icon
+                            >
+                        </v-btn>
+                    </v-col>
+                    <v-col :cols="editing ? 12 : 11" class="mt-2">
                         <vue-editor
-                            class="pt-0"
-                            v-model="editedQuestionBody"
-                            :editorOptions="toolbarOpts_old"
+                            v-if="!editing"
+                            class="kappa2"
+                            disabled
+                            v-model="this.questionExample.body"
+                            :editorOptions="editorOptions"
+                        ></vue-editor>
+                        <v-card
+                            v-if="editing"
+                            flat
+                            style="border: 2px dashed #b39ddb"
                         >
-                        </vue-editor>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-row justify="center" align="center">
-                            <v-col justify="center" align="center">
-                                <v-btn
-                                    class="me-3"
-                                    small
-                                    dark
-                                    color="teal"
-                                    @click="editing = false"
+                            <v-card-text>
+                                <vue-editor
+                                    class="pt-0"
+                                    v-model="editedQuestionBody"
+                                    :editorOptions="toolbarOpts_old"
                                 >
-                                    cancel
-                                </v-btn>
+                                </vue-editor>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-row justify="center" align="center">
+                                    <v-col justify="center" align="center">
+                                        <v-btn
+                                            class="me-3"
+                                            small
+                                            dark
+                                            color="#b39ddb"
+                                            @click="editing = false"
+                                        >
+                                            cancel
+                                        </v-btn>
+                                        <v-btn
+                                            small
+                                            outlined
+                                            color="#b39ddb"
+                                            @click="updateQuestion"
+                                        >
+                                            save</v-btn
+                                        >
+                                    </v-col>
+                                </v-row>
+                            </v-card-actions>
+                        </v-card>
+                        <v-row class="mt-15">
+                            <!-- <v-btn right x-large icon>
+                                <v-icon @click="upVoteQuestion"
+                                    >mdi-menu-up</v-icon
+                                >
+                            </v-btn>
+                            <v-chip color="deep-orange lighten-2" class="mt-3">
+                                {{ this.questionSumVotes }}
+                            </v-chip>
+                            <v-btn right x-large icon>
+                                <v-icon @click="downVoteQuestion"
+                                    >mdi-menu-down</v-icon
+                                >
+                            </v-btn> -->
+                            <v-spacer></v-spacer>
+                            <span class="me-9">
                                 <v-btn
                                     small
                                     outlined
-                                    color="teal"
-                                    @click="updateQuestion"
+                                    rounded
+                                    text
+                                    @click="editQuestion"
                                 >
-                                    update</v-btn
-                                >
-                            </v-col>
+                                    EDIT Question
+                                </v-btn>
+                            </span>
+                            <span class="me-9" v-if="admin">
+                                <v-btn small outlined rounded text>
+                                    Delete Question
+                                </v-btn>
+                            </span>
                         </v-row>
-                    </v-card-actions>
-                </v-card>
-                <!-- <vue-editor
-                    v-if="editing"
-                    class="pt-4"
-                    v-model="editedQuestionBody"
-                    :editorOptions="toolbarOpts_old"
-                >
-                </vue-editor> -->
-                <v-row class="mt-15">
-                    <!-- <div> -->
-                    <v-btn right x-large icon>
-                        <v-icon @click="upVoteQuestion">mdi-menu-up</v-icon>
-                    </v-btn>
-                    <v-chip color="deep-orange lighten-2" class="mt-3">
-                        {{ this.questionSumVotes }}
-                    </v-chip>
-                    <!-- </div> -->
-                    <v-btn right x-large icon>
-                        <v-icon @click="downVoteQuestion">mdi-menu-down</v-icon>
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <span class="me-9">
-                        <v-btn
-                            small
-                            outlined
-                            rounded
-                            text
-                            @click="editQuestion"
-                        >
-                            EDIT Question
-                        </v-btn>
-                    </span>
-                    <span class="me-9" v-if="admin">
-                        <v-btn small outlined rounded text>
-                            Delete Question
-                        </v-btn>
-                    </span>
+                    </v-col>
                 </v-row>
             </v-card-text>
-            <!-- <v-row>
-                        <div>
-                            <v-chip> 12 </v-chip>
-                            <v-btn right large icon>
-                                <v-icon>mdi-chevron-up</v-icon>
-                            </v-btn>
-                        </div>
-                        <v-spacer></v-spacer>
-                        <v-icon> mdi-icon </v-icon>
-                    </v-row> -->
         </v-card>
         <!-- <v-dialog v-model="editQuestionForm" width="800">
             <v-card>
@@ -185,47 +215,56 @@
                     :headers="answersCols"
                     :items="this.answers"
                     v-if="admin"
+                    sort-by="votes"
+                    :sort-desc="true"
                 >
                     <template v-slot:[`item.votes`]="props">
                         <v-btn right x-large icon>
-                            <v-icon @click="upVoteAnswer(props.item)"
-                                >mdi-menu-up</v-icon
+                            <v-icon
+                                size="26px"
+                                color="#78909C"
+                                @click="upVoteAnswer(props.item)"
+                                class="mt-3"
+                                >mdi-plus</v-icon
                             >
                         </v-btn>
-                        <v-chip color="deep-orange lighten-2" class="mt-3">
-                            <!-- {{ this.answerSumVotes }} -->{{
-                                props.item.votes
-                            }}
+                        <v-chip color="teal" dark class="mt-3">
+                            {{ props.item.votes }}
                         </v-chip>
                         <!-- </div> -->
                         <v-btn right x-large icon>
-                            <v-icon @click="downVoteAnswer(props.item)"
-                                >mdi-menu-down</v-icon
+                            <v-icon
+                                @click="downVoteAnswer(props.item)"
+                                color="#78909C"
+                                dark
+                                size="26px"
+                                class="mt-3"
+                                >mdi-minus</v-icon
                             >
                         </v-btn>
                     </template>
                     <template v-slot:[`item.body`]="props">
-                        <!-- <v-icon small @click="removeObject(props.item)"
-                            >mdi-delete</v-icon
-                        > -->
-                        <span>
-                            <vue-editor
-                                class="kappa"
-                                disabled
-                                v-model="props.item.body"
-                                :editorOptions="editorOptions"
-                                :style="editorStyle"
-                            >
-                            </vue-editor>
-                        </span>
-                        <!-- <span v-if="answerEditing">
-                            <vue-editor
-                                class="kappa2"
-                                v-model="props.item.body"
-                                :editorOptions="editorOptions"
-                                :style="editorStyle"
-                            ></vue-editor> -->
-                        <!-- </span> -->
+                        <v-card
+                            flat
+                            class="py-5 px-0"
+                            color="transparent"
+                            width="400px"
+                            height="250px"
+                        >
+                            <!-- <v-card-text class="text-truncate"> -->
+                            <v-card-text class="answerBody pa-0 ms-3">
+                                <!-- <span> -->
+                                <vue-editor
+                                    class="kappa"
+                                    disabled
+                                    v-model="props.item.body"
+                                    :editorOptions="editorOptions"
+                                    :style="editorStyle"
+                                >
+                                </vue-editor>
+                                <!-- </span> -->
+                            </v-card-text>
+                        </v-card>
                     </template>
                     <template v-slot:[`item.edit`]="props">
                         <v-icon small @click="showAnswerEdit(props.item)"
@@ -243,7 +282,7 @@
                                 <v-card-actions>
                                     <v-row justify="center" align="center">
                                         <v-col justify="center" align="center">
-                                            <v-btn
+                                            <!-- <v-btn
                                                 class="me-3"
                                                 small
                                                 dark
@@ -251,18 +290,27 @@
                                                 @click="answerEditing = false"
                                             >
                                                 cancel
+                                            </v-btn> -->
+                                            <v-btn
+                                                class="me-3"
+                                                small
+                                                dark
+                                                color="#b39ddb"
+                                                @click="answerEditing = false"
+                                            >
+                                                cancel
                                             </v-btn>
                                             <v-btn
                                                 small
                                                 outlined
-                                                color="teal"
+                                                color="#b39ddb"
                                                 @click="
                                                     updateAnswer(
                                                         props.item.body
                                                     )
                                                 "
                                             >
-                                                update</v-btn
+                                                save</v-btn
                                             >
                                         </v-col>
                                     </v-row>
@@ -292,6 +340,7 @@ import katex from 'katex';
 import 'katex/dist/katex.min.css';
 // import * as mathLive from "mathlive"
 import Quill from 'quill';
+import dayjs from 'dayjs';
 // Vue.use(mathLive);
 //declaration for katex
 declare global {
@@ -319,22 +368,25 @@ export default Vue.extend({
         answersCols: [
             {
                 text: 'Votes',
-                align: 'start',
+                align: 'center',
                 sortable: true,
-                value: 'votes'
+                value: 'votes',
+                class: 'title text-caption font-weight-medium'
             },
             {
                 text: 'Answer',
                 align: 'start',
                 sortable: true,
                 value: 'body',
-                height: "20%"
+                height: "20%",
+                class: 'title text-caption font-weight-medium'
             },
             {
                 text: 'User',
                 align: 'start',
                 sortable: true,
-                value: 'user'
+                value: 'user',
+                class: 'title text-caption font-weight-medium'
             },
             //  {
             //     text: 'Id',
@@ -342,9 +394,9 @@ export default Vue.extend({
             //     sortable: true,
             //     value: 'answer_id'
             // },
-
-            { text: "", align: 'center', sortable: true, value: 'edit', width: '1%' },
-            { text: "", align: 'center', sortable: true, value: 'remove', width: '1%' }
+            { text: "Timestamp", align: 'center', sortable: true, value: 'created', class: 'title text-caption font-weight-medium' },
+            { text: "", align: 'center', sortable: true, value: 'edit', width: '1%', class: 'title text-caption font-weight-medium' },
+            { text: "", align: 'center', sortable: true, value: 'remove', width: '1%', class: 'title text-caption font-weight-medium' }
         ], // na ftiaxtei typos gia tis answers
         answers: [] as any[],
         questionExample: {} as any, // na ftiaxtei tupos
@@ -474,7 +526,8 @@ export default Vue.extend({
                         const answerObject = {
                             ...answer,
                             votes: await this.getAnswerVotes(answer),
-                            user: user.username
+                            user: user.username,
+                            created: dayjs(answer.createdAt).format("DD MMM. YYYY | HH:mm:ss")
                         }
                         this.answers.push(answerObject)
                     }
@@ -540,8 +593,11 @@ export default Vue.extend({
         },
         async forceUpdateQuestion() {
             const questionId = this.getQuestionData.data.question_id;
-            this.$router.push('/question').catch((err: any) => {
-                console.warn('error in redirect to /question :', err)
+            // this.$router.push('/question').catch((err: any) => {
+            //     console.warn('error in redirect to /question :', err)
+            // });
+            this.$router.push(`/questions/${questionId}`).catch((err: any) => {
+                console.warn('error in redirect to /questions/${questionId} :', err)
             });
             const questionData = await getQuestion(questionId);
             console.log(questionData, "the row data");
@@ -656,6 +712,9 @@ export default Vue.extend({
             // this.$router.go(0);
             this.forceUpdateQuestion();
         },
+        ask() {
+            this.$router.push('/ask')
+        },
         async updateAnswer(body: any) {
             console.log(body, 'the body which gonna be updated')
             const value = { body: this.editedAnswerBody }
@@ -677,17 +736,6 @@ export default Vue.extend({
         window.katex = katex;
         this.getQuestionData;
         console.log(this.getQuestionData);
-        // const quill = new Quill('#editor', {
-        //     modules: {
-        //         toolbar:
-        //             [
-        //                 [{ header: [1, 2, false] }],
-        //                 ['bold', 'italic', 'underline'],
-        //                 ['image', 'code-block']
-        //             ]
-        //     },
-
-        // });
     }
 })
 </script>
@@ -707,4 +755,11 @@ export default Vue.extend({
 /* .questionCard {
     top: 80% !important;
 } */
+.qTittle2 {
+    white-space: pre-line !important;
+    /* color: #166ac2; */
+}
+.answerBody {
+    white-space: pre-line !important;
+}
 </style>

@@ -9,6 +9,7 @@
     "dependencies": {
         "@types/quill": "^2.0.9",
         "core-js": "^3.6.5",
+        "dayjs": "^1.11.7",
         "katex": "^0.16.0",
         "ky": "^0.28.7",
         "mathlive": "^0.78.2",

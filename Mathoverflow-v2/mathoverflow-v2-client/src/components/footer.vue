@@ -67,4 +67,8 @@ export default Vue.extend({
     /* background: linear-gradient(to right, #85c4ec, #95ccf1) !important; */
     /* color: #e2e2e2; */
 }
+.footerSection {
+    /* position: fixed !important; */
+    bottom: 0 !important;
+}
 </style>

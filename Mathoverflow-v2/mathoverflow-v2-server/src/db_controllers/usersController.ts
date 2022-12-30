@@ -327,6 +327,32 @@ export function deleteReputation(req: any, res: any) {
             });
         });
 }
+export async function getReputation(req: any, res: any) {
+    const id = req.params.id;
+    await Reputation.findOne({ where: { UserUserId: id } })
+        // await Reputation.findByPk(id)
+        .then(async (data) => {
+            if (data) {
+                // const answers = await Answer.findAll({ where: { QuestionQuestionId: id } } /*{ include: [{ model: Question, as: "Question", where: { QuestionQuestionId: id } }] }*/);
+                // const votes = await Vote.findAll({ where: { QuestionQuestionId: id } });
+
+                // na ftiaxtei na epistrefetai kai to athroisma twn votes
+                // const value = {
+                //     data,
+                // };
+                res.send(data);
+            } else {
+                res.status(404).send({
+                    message: `Cannot find Reputation with id=${id}.`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: "Could not find Reputation with id=" + id,
+            });
+        });
+}
 
 //update reputation
 export function updateReputation(req: any, res: any) {

@@ -12,7 +12,7 @@ const SequelizeStore = connectSessionSequelize(session.Store); //den dimiourgeit
 const myStore = new SequelizeStore({
     db: sequelize_db,
     checkExpirationInterval: 15 * 60 * 1000, // The interval at which to cleanup expired sessions in milliseconds. = 15minutes
-    expiration: 60 * 60 * 1000,
+    expiration: 86400 * 1000, //60 * 60 * 1000, //86400*1000
     // The maximum age (in milliseconds) of a valid session. = 1 Hour
 });
 // export const sessions = sequelize_db.define("Session", {
@@ -74,7 +74,7 @@ app.use(
         cookie: {
             httpOnly: true,
             sameSite: true,
-            maxAge: 600000,
+            maxAge: 86400 * 1000, // 600000,
             secure: false,
         },
     })

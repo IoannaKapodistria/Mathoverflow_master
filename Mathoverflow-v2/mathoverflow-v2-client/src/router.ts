@@ -36,7 +36,7 @@ const router = new Router({
             component: TopVotedQuestions,
         },
         {
-            path: "/question",
+            path: "/questions/:id",
             name: "Question",
             component: Question,
         },
@@ -46,7 +46,7 @@ const router = new Router({
             component: Users,
         },
         {
-            path: "/user",
+            path: "/users/:id",
             name: "User",
             component: User,
         },

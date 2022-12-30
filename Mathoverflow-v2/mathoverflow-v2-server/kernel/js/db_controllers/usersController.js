@@ -211,6 +211,26 @@ export function deleteReputation(req, res) {
     });
   });
 }
+export async function getReputation(req, res) {
+  const id = req.params.id;
+  await Reputation.findOne({
+    where: {
+      UserUserId: id
+    }
+  }).then(async data => {
+    if (data) {
+      res.send(data);
+    } else {
+      res.status(404).send({
+        message: `Cannot find Reputation with id=${id}.`
+      });
+    }
+  }).catch(err => {
+    res.status(500).send({
+      message: "Could not find Reputation with id=" + id
+    });
+  });
+}
 export function updateReputation(req, res) {
   const id = req.params.id;
   Reputation.update({

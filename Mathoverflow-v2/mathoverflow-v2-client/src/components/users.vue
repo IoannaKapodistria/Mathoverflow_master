@@ -1,23 +1,43 @@
 <template>
     <v-container fluid>
-        <v-card flat>
-            <v-toolbar flat>
+        <v-card
+            color="#B388FF"
+            rounded="md"
+            elevation="3"
+            width="30%"
+            style="z-index: 20001"
+            class="overlayUsers"
+            dark
+        >
+            <v-card-text
+                class="text-overline font-weight-bold d-flex justify-center py-2"
+                style="color: white"
+            >
+                <v-icon class="me-2">mdi-account-group</v-icon>Users
+            </v-card-text>
+        </v-card>
+        <v-card flat style="border-top: 2px solid #b39ddb" rounded="sm">
+            <!-- <v-toolbar flat>
                 <v-toolbar-title> Users </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-icon>mdi-account-group</v-icon>
             </v-toolbar>
-            <v-divider></v-divider>
-            <v-card-text>
+            <v-divider></v-divider> -->
+            <v-card-text class="pt-8">
                 <v-row class="mt-10">
                     <v-col cols="12">
                         <v-row>
                             <v-col
                                 cols="3"
                                 class="mt-6"
-                                v-for="(user, i) in this.getUsers"
+                                v-for="(user, i) in this.users"
                                 :key="i"
                             >
-                                <v-card flat>
+                                <v-card
+                                    rounded="lg"
+                                    style="border: 2px solid #f8bbd0"
+                                    class="pb-4 pe-4"
+                                >
                                     <v-row>
                                         <v-col cols="5" class="pa-0 mb-5">
                                             <v-img
@@ -30,13 +50,24 @@
                                         <v-col class="pa-0">
                                             <!-- <v-card-title> Ioanna </v-card-title> -->
                                             <v-card-text>
-                                                <h3
+                                                <span
                                                     @click="userProfile(user)"
                                                     style="cursor: pointer"
+                                                    class="blue--text text-overline"
                                                 >
                                                     {{ user.username }}
-                                                </h3>
+                                                </span>
                                                 <div>Greece</div>
+                                                <div
+                                                    class="text-caption mt-2 grey--text"
+                                                >
+                                                    Total Reputation:<span
+                                                        class="text-caption mt-2 black--text ms-2"
+                                                        >{{
+                                                            user.reputation
+                                                        }}</span
+                                                    >
+                                                </div>
                                                 <span v-if="admin">
                                                     <v-btn
                                                         x-small
@@ -72,10 +103,12 @@
 import store from '@/store';
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
-import { deleteAnswer, deleteQuestion, getQuestion, getUser, removeUser } from './functions';
+import { deleteAnswer, deleteQuestion, getQuestion, getUser, getUserReputation, removeUser } from './functions';
 export default Vue.extend({
     data: () => ({
-        users: [{ name: "ioanna" }, { name: "tolis" }, { name: "ioanna" }, { name: "tolis" }, { name: "ioanna" }, { name: "tolis" }],
+        users: [
+            // { name: "ioanna" }, { name: "tolis" }, { name: "ioanna" }, { name: "tolis" }, { name: "ioanna" }, { name: "tolis" }
+        ] as any[],
         admin: true
     }),
     watch: {
@@ -93,7 +126,7 @@ export default Vue.extend({
             const userData = await getUser(userId);
             console.log(userData, "the card data");
             store.commit("setUserData", userData);
-            this.$router.push('/user');
+            this.$router.push(`/users/${userId}`);
         },
         async deleteUser(value: any) {
             console.log(value, "the value of delete user")
@@ -132,9 +165,35 @@ export default Vue.extend({
             });
 
         },
+        async fetchUsers() {
+            for (const user of this.getUsers) {
+                const userObject = {
+                    ...user,
+                    reputation: await this.getUserRep(user.user_id)
+                }
+                this.users.push(userObject)
+            }
+        },
+        async getUserRep(userId: number) {
+            const userRep = await getUserReputation(userId)
+            console.log(userRep, 'the user reputation')
+            return userRep.value;
+        }
     },
-    mounted() {
+    async mounted() {
         this.getUsers;
+        await this.fetchUsers()
     }
 }) // na mpei pagination katw katw se periptwsh pollwn users
 </script>
+<style>
+.qTittle {
+    white-space: pre-line !important;
+    color: #166ac2;
+}
+
+.overlayUsers {
+    top: 16px;
+    left: 10px;
+}
+</style>

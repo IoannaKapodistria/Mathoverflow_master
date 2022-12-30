@@ -407,3 +407,21 @@ export async function postUserReputation(data: any) {
             console.log("this is the value:", value);
         });
 }
+
+export async function getUserReputation(id: number) {
+    let response = await ky
+        .get(`http://localhost:3000/get_reputation/${id}`, {
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then(async (value: any) => {
+            const a = await value;
+            console.log("this is the value:", a);
+            return a.json();
+        });
+    return response;
+}
