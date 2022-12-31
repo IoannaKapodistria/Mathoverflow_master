@@ -82,7 +82,7 @@
                         dark
                         @click="sortQuestions(1)"
                         :outlined="questionsSortType === 'votes' ? false : true"
-                        class="mt-1 mb-2"
+                        class="ml-2 mt-1 mb-2"
                         >Score
                     </v-btn>
                     <v-btn
