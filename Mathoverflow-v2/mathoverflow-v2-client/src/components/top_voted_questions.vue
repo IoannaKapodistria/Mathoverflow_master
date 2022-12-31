@@ -121,14 +121,6 @@ export default Vue.extend({
         admin: true,
         search: "",
         questionsCols: [
-            //     { text: "Answers", align: 'start', sortable: true, value: 'answers' }, { text: "Votes", align: 'start', sortable: true, value: 'votes' }, { text: "Question", align: 'start', sortable: true, value: 'title' }, {
-            //     text: 'User',
-            //     align: 'start',
-            //     sortable: true,
-            //     value: 'user'
-            // }, 
-            // { text: "id", align: 'd-none', sortable: false, value: 'question_id' }, 
-            // { text: "", align: 'center', sortable: false, value: 'remove' }
             { text: "Votes", align: 'center', sortable: true, value: 'votes', class: 'title text-caption font-weight-medium' },
             { text: "Question", align: 'center', sortable: true, value: 'title', class: 'title text-caption font-weight-medium' },
             { text: "Answers", align: 'center', sortable: true, value: 'answers', class: 'title text-caption font-weight-medium' },
@@ -144,16 +136,7 @@ export default Vue.extend({
             { text: "", align: 'center', sortable: false, value: 'remove' }
 
         ],
-        questions: [
-            // { answers: "13", votes: "50", question: "What's an intuitive way to think about the determinant?", user: "Ioanna96" },
-            // { answers: "5", votes: "28", question: "Why is a ring that has only one prime helpful?", user: "Tolis90" },
-            // { answers: "13", votes: "50", question: "What's an intuitive way to think about the determinant?", user: "Ioanna96" },
-            // { answers: "13", votes: "50", question: "What's an intuitive way to think about the determinant?", user: "Ioanna96" },
-            // { answers: "13", votes: "50", question: "What's an intuitive way to think about the determinant?", user: "Ioanna96" },
-            // { answers: "13", votes: "50", question: "What's an intuitive way to think about the determinant?", user: "Ioanna96" },
-            // { answers: "13", votes: "50", question: "What's an intuitive way to think about the determinant?", user: "Ioanna96" },
-            // { answers: "13", votes: "50", question: "What's an intuitive way to think about the determinant?", user: "Ioanna96" },
-        ] as any[],
+        questions: [] as any[],
     }),
     computed: {
         ...mapGetters(["getQuestions", "getUsers"]),
@@ -186,15 +169,15 @@ export default Vue.extend({
                 const answersNumber = answers.length;
                 const votes = questionData.votes
                 const votesNumber = votes.length;
-                if (votesNumber !== 0 && votesNumber > 0) {
-                    const votesArray: any[] = []
+                const votesArray: any[] = []
+                for (const vote of votes) {
+                    const value = vote.value
+                    votesArray.push(value)
+                }
+                //get the sum
+                const votesSum = votesArray.reduce((a, b) => a + b, 0)
+                if (/*votesNumber !== 0 &&*/ votesSum > 0) {
                     //calculate votes
-                    for (const vote of votes) {
-                        const value = vote.value
-                        votesArray.push(value)
-                    }
-                    //get the sum
-                    const votesSum = votesArray.reduce((a, b) => a + b, 0)
                     for (const user of users) {
                         if (user.user_id === question.UserUserId) {
                             const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, created: dayjs(question.createdAt).format("DD MMM. YYYY | HH:mm:ss"), user: user.username, question_id: question.question_id };
@@ -202,18 +185,10 @@ export default Vue.extend({
                         }
                     }
                 }
-                // for (const user of users) {
-                //     if (user.user_id === question.UserUserId) {
-
-                //         const questionObject = { answers: answersNumber, votes: "12", title: question.title, user: user.username, question_id: question.question_id };
-                //         questionsArray.push(questionObject);
-                //     }
-                // }
-
             }
-            console.log(questionsArray, "this. questionsArray")
+            // console.log(questionsArray, "this. questionsArray")
             this.questions = questionsArray;
-            console.log(this.questions, "this. questions")
+            // console.log(this.questions, "this. questions")
         },
         getUsers(value: any) {
             console.log(value, "these are the users");
