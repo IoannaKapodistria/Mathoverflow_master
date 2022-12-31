@@ -16,7 +16,7 @@
                     <!-- </span> -->
                 </v-chip>
             </v-col>
-            <v-col cols="2">
+            <v-col cols="2" sm="3" md="3" lg="2">
                 <v-btn
                     dark
                     color="#FFA726"
@@ -33,7 +33,7 @@
             color="#B388FF"
             rounded="md"
             elevation="3"
-            width="30%"
+            :width="$vuetify.breakpoint.smAndDown ? '70%' : '35%'"
             style="z-index: 20001"
             class="overlayUnQues"
             dark
@@ -46,18 +46,6 @@
             </v-card-text>
         </v-card>
         <v-card flat style="border-top: 2px solid #b39ddb" rounded="sm">
-            <!-- <v-toolbar flat>
-            <v-toolbar-title> Unanswered Questions </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-icon>mdi-help</v-icon>
-        </v-toolbar> -->
-            <!-- <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-        ></v-text-field> -->
             <!-- na mpei search stis erwthseis -->
             <v-card-text class="pt-8">
                 <v-data-table

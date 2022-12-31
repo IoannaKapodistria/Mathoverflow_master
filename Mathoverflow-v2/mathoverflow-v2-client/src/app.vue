@@ -129,9 +129,13 @@ export default Vue.extend({
         }
     },
     mounted() {
-        this.buttonObjects = [{ uid: "", title: "Home", icon: "mdi-home", url: "/" },
-        { uid: "", title: "Questions", icon: "mdi-earth", url: "/questions", content: [{ uid: "", title: "Top Voted", icon: "mdi-trophy", url: "/top_voted_questions" }, { uid: "", title: "Unanswered", icon: "mdi-help", url: "/unanswered_questions" }, /*{ uid: "", title: "All Questions", icon: "mdi-web", url: "/" }*/] },
-        { uid: "", title: "Users", icon: "mdi-account-multiple", url: "/users" }]
+        this.buttonObjects = [
+            { uid: "", title: "Home", icon: "mdi-earth", url: "/" },
+            // { uid: "", title: "Questions", icon: "mdi-earth", url: "/questions", content: [{ uid: "", title: "Top Voted", icon: "mdi-trophy", url: "/top_voted_questions" }, { uid: "", title: "Unanswered", icon: "mdi-help", url: "/unanswered_questions" }, /*{ uid: "", title: "All Questions", icon: "mdi-web", url: "/" }*/] },
+            { uid: "", title: "Top Voted", icon: "mdi-trophy", url: "/top_voted_questions" },
+            { uid: "", title: "Unanswered", icon: "mdi-help", url: "/unanswered_questions" },
+            { uid: "", title: "Users", icon: "mdi-account-multiple", url: "/users" },
+        ]
         // this.initParticles()
     }
 });

@@ -4,7 +4,10 @@
             <!-- <v-row>
                 <v-col cols="12"> -->
             <!-- den vgainei to marin deksia tn listas -->
-            <v-navigation-drawer permanent>
+            <v-navigation-drawer
+                permanent
+                :expand-on-hover="$vuetify.breakpoint.smAndDown"
+            >
                 <v-row class="mt-3 mb-7 me-8" justify="center" align="center">
                     <user-avatar></user-avatar>
                     <span class="blue--text text-body-1 mt-1"

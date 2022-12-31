@@ -16,7 +16,7 @@
                     <!-- </span> -->
                 </v-chip>
             </v-col>
-            <v-col cols="2">
+            <v-col cols="2" sm="3" md="3" lg="2">
                 <v-btn
                     dark
                     color="#FFA726"
@@ -33,7 +33,7 @@
             color="#B388FF"
             rounded="md"
             elevation="3"
-            width="30%"
+            :width="$vuetify.breakpoint.smAndDown ? '70%' : '30%'"
             style="z-index: 20001"
             class="overlayTopQues"
             dark
@@ -46,13 +46,6 @@
             </v-card-text>
         </v-card>
         <v-card flat rounded="sm" style="border-top: 2px solid #b39ddb">
-            <!-- <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-            ></v-text-field> -->
             <v-card-text class="pt-8">
                 <v-data-table
                     :headers="computedHeaders"

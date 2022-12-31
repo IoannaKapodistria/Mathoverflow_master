@@ -16,7 +16,7 @@
                     <!-- </span> -->
                 </v-chip>
             </v-col>
-            <v-col cols="2">
+            <v-col cols="2" sm="3" md="3" lg="2">
                 <v-btn
                     dark
                     color="#FFA726"
@@ -29,21 +29,11 @@
                 >
             </v-col>
         </v-row>
-
-        <!-- <v-card
-            color="#B39DDB"
-            rounded="md"
-            elevation="3"
-            width="30%"
-            style="z-index: 20001"
-            class="overlayQues"
-            dark
-        > -->
         <v-card
             color="#B388FF"
             rounded="md"
             elevation="3"
-            width="30%"
+            :width="$vuetify.breakpoint.smAndDown ? '70%' : '35%'"
             style="z-index: 20001"
             class="overlayQues"
             dark
@@ -72,12 +62,47 @@
         > -->
             <!-- na mpei search stis erwthseis -->
             <v-card-text class="pt-8">
+                <v-row class="mb-3">
+                    <v-icon>mdi-icon</v-icon>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        x-small
+                        color="#26C6DA"
+                        dark
+                        :outlined="
+                            questionsSortType === 'created' ? false : true
+                        "
+                        @click="sortQuestions(2)"
+                        class="mt-1 mb-2 ml-2"
+                        >Newest
+                    </v-btn>
+                    <v-btn
+                        x-small
+                        color="#26C6DA"
+                        dark
+                        @click="sortQuestions(1)"
+                        :outlined="questionsSortType === 'votes' ? false : true"
+                        class="mt-1 mb-2"
+                        >Score
+                    </v-btn>
+                    <v-btn
+                        x-small
+                        color="#26C6DA"
+                        dark
+                        :outlined="
+                            questionsSortType === 'answers' ? false : true
+                        "
+                        @click="sortQuestions(3)"
+                        class="mt-1 mb-2 ml-2"
+                        >Answers
+                    </v-btn>
+                </v-row>
                 <v-data-table
                     :headers="computedHeaders"
                     :items="this.questions"
                     :search="search"
                     style="cursor: pointer"
-                    sort-by="created"
+                    :sort-by="questionsSortType"
                     :sort-desc="true"
                 >
                     <template v-slot:[`item.title`]="{ item }">
@@ -147,7 +172,8 @@ export default Vue.extend({
             // { answers: "13", votes: "50", question: "What's an intuitive way to think about the determinant?", user: "Ioanna96" },
             // { answers: "5", votes: "28", question: "Why is a ring that has only one prime helpful?", user: "Tolis90" },\
         ] as any[],
-        fuContent: false
+        fuContent: false,
+        questionsSortType: ''
     }),
     computed: {
         ...mapGetters(["getQuestions", "getUsers", "getQuestionData"]),
@@ -199,6 +225,15 @@ export default Vue.extend({
 
 
     methods: {
+        sortQuestions(value: number) {
+            if (value === 1) {
+                this.questionsSortType = 'votes'
+            } else if (value === 2) {
+                this.questionsSortType = 'created'
+            } else if (value === 3) {
+                this.questionsSortType = 'answers'
+            }
+        },
         async handleClick(value: any) {
             // router.push('/question')
             console.log(value, "the value");
@@ -284,6 +319,7 @@ export default Vue.extend({
         }
     },
     async mounted() {
+        this.questionsSortType = 'created'
         await getQuestions();
         this.getQuestions;
         this.getUsers;

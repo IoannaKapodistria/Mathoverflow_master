@@ -12,7 +12,7 @@
                                 {{ this.questionExample.title }}
                             </span>
                         </v-col>
-                        <v-col cols="2">
+                        <v-col cols="2" sm="3" md="3" lg="2">
                             <v-btn
                                 dark
                                 color="#FFA726"
