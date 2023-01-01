@@ -87,7 +87,7 @@
             elevation="3"
             width="35%"
             style="z-index: 20001"
-            class="overlayQues"
+            class="overlayUserQues"
             dark
         >
             <v-card-text
@@ -203,6 +203,11 @@
                             {{ item.votes }}
                         </v-chip>
                     </template>
+                    <template v-slot:[`item.created`]="{ item }">
+                        <!-- <v-chip color="grey" class="px-4" dark> -->
+                        {{ getCreationDate(item.created) }}
+                        <!-- </v-chip> -->
+                    </template>
                     <template v-slot:[`item.remove`]="props" v-if="admin">
                         <v-icon @click="removeObject(props.item)"
                             >mdi-delete</v-icon
@@ -218,7 +223,7 @@
             elevation="3"
             width="35%"
             style="z-index: 20001"
-            class="overlayQues"
+            class="overlayUserQues"
             dark
         >
             <v-card-text
@@ -322,6 +327,11 @@
                                 <!-- </span> -->
                             </v-card-text>
                         </v-card>
+                    </template>
+                    <template v-slot:[`item.created`]="{ item }">
+                        <!-- <v-chip color="grey" class="px-4" dark> -->
+                        {{ getCreationDate(item.created) }}
+                        <!-- </v-chip> -->
                     </template>
                     <template v-slot:[`item.remove`]="props">
                         <v-icon @click="removeObject(props.item)"
@@ -453,6 +463,9 @@ export default Vue.extend({
                 this.questionsSortType = 'created'
             }
         },
+        getCreationDate(value: string) {
+            return dayjs(value).format("DD MMM. YYYY | HH:mm:ss")
+        },
         sortUserAnswers(value: number) {
             if (value === 1) {
                 this.answersSortType = 'votes'
@@ -480,7 +493,7 @@ export default Vue.extend({
                 //get the sum
                 const votesSum = votesArray.reduce((a, b) => a + b, 0)
                 //
-                const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, created: dayjs(question.createdAt).format("DD MMM. YYYY | HH:mm:ss"), question_id: question.question_id };
+                const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, created: question.createdAt, question_id: question.question_id };
                 this.questions.push(questionObject);
             }
         },
@@ -534,7 +547,7 @@ export default Vue.extend({
                 const answerObject = {
                     ...answer,
                     votes: await this.getAnswerVotes(answer),
-                    created: dayjs(answer.createdAt).format("DD MMM. YYYY | HH:mm:ss")
+                    created: answer.createdAt//).format("DD MMM. YYYY | HH:mm:ss")
                 }
                 this.answerObjects.push(answerObject)
             }
@@ -578,5 +591,9 @@ export default Vue.extend({
 .kappa > .ql-container.ql-snow {
     /* border: 1px solid white !important; */
     border-style: none !important;
+}
+.overlayUserQues {
+    top: 16px;
+    left: 10px;
 }
 </style>

@@ -133,6 +133,11 @@
                             {{ item.votes }}
                         </v-chip>
                     </template>
+                    <template v-slot:[`item.created`]="{ item }">
+                        <!-- <v-chip color="grey" class="px-4" dark> -->
+                        {{ getCreationDate(item.created) }}
+                        <!-- </v-chip> -->
+                    </template>
                     <template v-slot:[`item.remove`]="props" v-if="admin">
                         <v-icon @click="removeObject(props.item)"
                             >mdi-delete</v-icon
@@ -208,7 +213,7 @@ export default Vue.extend({
                     console.log(questionData, "value of questionData");
                     console.log(question, "value of que");
 
-                    const questionObject = { answers: this.getAnswers(questionData), votes: this.getVotes(questionData), title: question.title, created: dayjs(question.createdAt).format("DD MMM. YYYY | HH:mm:ss"), user: await this.getUsername(question), question_id: question.question_id };
+                    const questionObject = { answers: this.getAnswers(questionData), votes: this.getVotes(questionData), title: question.title, created: question.createdAt/*dayjs(question.createdAt).format("DD MMM. YYYY | HH:mm:ss")*/, user: await this.getUsername(question), question_id: question.question_id };
                     questionsArray.push(questionObject);
                 }
                 //
@@ -233,6 +238,9 @@ export default Vue.extend({
             } else if (value === 3) {
                 this.questionsSortType = 'answers'
             }
+        },
+        getCreationDate(value: string) {
+            return dayjs(value).format("DD MMM. YYYY | HH:mm:ss")
         },
         async handleClick(value: any) {
             // router.push('/question')

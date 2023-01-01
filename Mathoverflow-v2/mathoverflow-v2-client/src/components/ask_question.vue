@@ -1,50 +1,94 @@
 <template>
     <v-container fluid>
-        <v-card flat>
-            <v-toolbar flat>
+        <v-card
+            color="#FFA726"
+            rounded="md"
+            elevation="3"
+            :width="$vuetify.breakpoint.smAndDown ? '70%' : '35%'"
+            style="z-index: 20001"
+            class="overlayAsk"
+            dark
+        >
+            <v-card-text
+                class="text-overline font-weight-bold d-flex justify-center py-2"
+                style="color: white"
+            >
+                <v-icon class="me-2">mdi-lightbulb-question</v-icon>
+                <span class="mt-1"> Ask a Question</span>
+            </v-card-text>
+        </v-card>
+        <!-- <v-icon color="#FFA726">mdi-rocket-launch</v-icon
+        ><span class="text-overline orange--text"> Ask a Question </span> -->
+        <v-card
+            flat
+            style="border-top: 2px solid #ffa726"
+            class="px-4"
+            rounded="sm"
+        >
+            <!-- <v-toolbar flat>
                 <v-toolbar-title> Ask a Question </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-icon>mdi-help</v-icon>
-            </v-toolbar>
-        </v-card>
-        <v-card-text>
-            <h4>
-                Be specific and imagine you’re asking a question to another
-                person
-            </h4>
-            <br />
-            <v-form>
-                <h3>Title</h3>
-                <v-text-field
-                    outlined
-                    label="Title"
-                    v-model="title"
-                ></v-text-field>
+            </v-toolbar> -->
+            <!-- </v-card> -->
+            <v-card-text class="pt-7">
                 <br />
-                <h3>Body</h3>
-                <!-- <quill-editor v-model="quillContent" /> -->
-                <vue-editor
-                    class="mt-3"
-                    v-model="body"
-                    :editorToolbar="customToolbar"
-                ></vue-editor>
-            </v-form>
-
-            <!-- <div id="editor-container"></div> -->
-            <v-row>
-                <v-icon> mdi-icon </v-icon>
-                <v-spacer></v-spacer>
-                <div class="mt-8 me-4">
-                    <!-- <span class="text-body-1"><strong>Submit</strong></span>
-                    <v-btn right large icon @click="postQuestion"
-                        ><v-icon>mdi-playlist-plus</v-icon></v-btn
-                    > -->
-                    <v-btn small outlined text @click="postQuestion">
+                <v-form>
+                    <h3>Title</h3>
+                    <div
+                        class="d-flex justify-start my-0 text-caption -darken-1--text"
+                    >
+                        Be specific and imagine you’re asking a question to
+                        another person
+                    </div>
+                    <v-text-field
+                        outlined
+                        label="What's your mathematics question? Be specific."
+                        v-model="title"
+                    ></v-text-field>
+                    <br />
+                    <h3>Body</h3>
+                    <div
+                        class="d-flex justify-start my-0 text-caption -darken-1--text"
+                    >
+                        Include all the information someone would need to answer
+                        your question
+                    </div>
+                    <vue-editor
+                        class="mt-2"
+                        v-model="body"
+                        :editorToolbar="customToolbar"
+                    ></vue-editor>
+                </v-form>
+                <v-row>
+                    <v-icon> mdi-icon </v-icon>
+                    <v-spacer></v-spacer>
+                    <!-- <div class="mt-8 me-4"> -->
+                    <v-btn
+                        small
+                        dark
+                        color="#FFA726"
+                        depressed
+                        elevation="1"
+                        @click="postQuestion"
+                        class="mt-8 me-4"
+                    >
                         Post Your Question
                     </v-btn>
-                </div>
-            </v-row>
-        </v-card-text>
+                    <!-- <v-btn
+                    dark
+                    color="#FFA726"
+                    depressed
+                    elevation="1"
+                    small
+                    class="mt-3 py-4"
+                    @click="ask"
+                    >Ask Question</v-btn
+                > -->
+                    <!-- </div> -->
+                </v-row>
+            </v-card-text>
+        </v-card>
     </v-container>
 </template>
 
@@ -102,7 +146,7 @@ export default Vue.extend({
     },
     mounted() {
         window.katex = katex;
-        this.quillContent = "<p><sub><strong><em><u>ceceecec2</u></em></strong></sub><sup><strong><em><u>2</u></em></strong></sup><strong><em><u>+4</u></em></strong><sub><strong><em><u>ww</u></em></strong></sub>wwww</p>"
+        // this.quillContent = "<p><sub><strong><em><u>ceceecec2</u></em></strong></sub><sup><strong><em><u>2</u></em></strong></sup><strong><em><u>+4</u></em></strong><sub><strong><em><u>ww</u></em></strong></sub>wwww</p>"
 
         // const quill = new Quill('#editor-container', {
         //     modules: {
@@ -120,3 +164,9 @@ export default Vue.extend({
     }
 })
 </script>
+<style>
+.overlayAsk {
+    top: 16px;
+    left: 10px;
+}
+</style>

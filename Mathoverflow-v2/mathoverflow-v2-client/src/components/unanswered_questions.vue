@@ -48,13 +48,38 @@
         <v-card flat style="border-top: 2px solid #b39ddb" rounded="sm">
             <!-- na mpei search stis erwthseis -->
             <v-card-text class="pt-8">
+                <v-row class="mb-3">
+                    <v-icon>mdi-icon</v-icon>
+                    <v-spacer></v-spacer>
+
+                    <v-btn
+                        x-small
+                        color="#26C6DA"
+                        dark
+                        :outlined="
+                            questionsSortType === 'created' ? false : true
+                        "
+                        @click="sortQuestions(2)"
+                        class="mt-1 mb-2 ml-2"
+                        >Newest
+                    </v-btn>
+                    <v-btn
+                        x-small
+                        color="#26C6DA"
+                        dark
+                        @click="sortQuestions(1)"
+                        :outlined="questionsSortType === 'votes' ? false : true"
+                        class="ml-2 mt-1 mb-2"
+                        >Score
+                    </v-btn>
+                </v-row>
                 <v-data-table
                     :headers="computedHeaders"
                     :items="this.questions"
                     :search="search"
                     @click:row="handleClick"
                     style="cursor: pointer"
-                    sort-by="created"
+                    :sort-by="questionsSortType"
                     :sort-desc="true"
                 >
                     <!-- <template v-slot:[`item.answers`]="{ item }">
@@ -99,6 +124,11 @@
                         <v-chip color="#26A69A" class="px-4" dark>
                             {{ item.votes }}
                         </v-chip>
+                    </template>
+                    <template v-slot:[`item.created`]="{ item }">
+                        <!-- <v-chip color="grey" class="px-4" dark> -->
+                        {{ getCreationDate(item.created) }}
+                        <!-- </v-chip> -->
                     </template>
                     <template v-slot:[`item.remove`]="props" v-if="admin">
                         <v-icon @click="removeObject(props.item)"
@@ -147,6 +177,7 @@ export default Vue.extend({
 
         ],
         questions: [] as any[],
+        questionsSortType: ''
     }),
     computed: {
         ...mapGetters(["getQuestions", "getUsers"]),
@@ -198,7 +229,7 @@ export default Vue.extend({
                     for (const user of users) {
                         if (user.user_id === question.UserUserId) {
 
-                            const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, created: dayjs(question.createdAt).format("DD MMM. YYYY | HH:mm:ss"), user: user.username, question_id: question.question_id };
+                            const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, created: question.createdAt, user: user.username, question_id: question.question_id };
                             unansweredQuestionsArray.push(questionObject);
                         }
                     }
@@ -215,6 +246,18 @@ export default Vue.extend({
     },
 
     methods: {
+        sortQuestions(value: number) {
+            if (value === 1) {
+                this.questionsSortType = 'votes'
+            } else if (value === 2) {
+                this.questionsSortType = 'created'
+            } else if (value === 3) {
+                this.questionsSortType = 'answers'
+            }
+        },
+        getCreationDate(value: string) {
+            return dayjs(value).format("DD MMM. YYYY | HH:mm:ss")
+        },
         async handleClick(value: any) {
             // router.push('/question')
             console.log(value, "the value");
@@ -234,6 +277,7 @@ export default Vue.extend({
     },
 
     async mounted() {
+        this.questionsSortType = 'created'
         getQuestions();
         this.getQuestions;
         this.getUsers;
