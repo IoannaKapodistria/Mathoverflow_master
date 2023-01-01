@@ -351,10 +351,6 @@
                                         </v-row>
                                     </v-col>
                                 </v-row>
-                                <!-- <v-row class="ms-3">
-                            <v-icon class="me-3">mdi-trophy</v-icon>
-                            <span>{{ props.item.user.reputation }}</span>
-                        </v-row> -->
                             </v-card-text>
                         </v-card>
                     </template>
@@ -596,18 +592,6 @@ export default Vue.extend({
                 body: this.getQuestionData.data.body,
                 userId: this.getQuestionData.data.UserUserId
             }
-            // TO BE FIXED THE NAME OF USER IN ANSWERS
-
-            // for (const answer of this.getQuestionData.answers) {
-            //     console.log(answer, "THE ANSWER")
-
-            //     const userId = answer.UserUserId
-            //     console.log(userId, "THE USER ID")
-            //     const user = await getUser(userId);
-            //     console.log(user, "THE USER")
-            //     const answerObject = { body: answer.body, user: user.data.username, /*answer_id: answer.answer_id */ };
-            //     this.answers.push(answerObject);
-            // }
             const users = await getUsers();
             for (const answer of this.getQuestionData.answers) {
                 //

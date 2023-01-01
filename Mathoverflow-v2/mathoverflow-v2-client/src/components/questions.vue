@@ -138,6 +138,63 @@
                         {{ getCreationDate(item.created) }}
                         <!-- </v-chip> -->
                     </template>
+                    <template v-slot:[`item.user`]="props">
+                        <v-card
+                            flat
+                            class="py-0 px-0"
+                            color="transparent"
+                            width="100px"
+                        >
+                            <v-card-text class="pa-0">
+                                <v-row justify="center" align="center">
+                                    <v-col
+                                        cols="5"
+                                        class="pa-0"
+                                        justify="center"
+                                        align="center"
+                                    >
+                                        <v-img
+                                            contain
+                                            src="/prof_photo.png"
+                                            height="40"
+                                        ></v-img>
+                                    </v-col>
+                                    <!-- <v-icon>mdi-account</v-icon> -->
+                                    <v-col
+                                        cols="7"
+                                        class="pa-0"
+                                        justify="center"
+                                        align="center"
+                                    >
+                                        <v-row
+                                            class="ms-0 me-0"
+                                            justify="center"
+                                            align="center"
+                                        >
+                                            <span>{{
+                                                props.item.user.username
+                                            }}</span>
+                                        </v-row>
+                                        <v-row
+                                            class="ms-1"
+                                            justify="center"
+                                            align="center"
+                                        >
+                                            <span class="font-weight-medium">{{
+                                                props.item.user.reputation
+                                            }}</span>
+                                            <v-icon
+                                                size="20px"
+                                                color="#FBC02D"
+                                                class="ms-1"
+                                                >mdi-trophy</v-icon
+                                            >
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </template>
                     <template v-slot:[`item.remove`]="props" v-if="admin">
                         <v-icon @click="removeObject(props.item)"
                             >mdi-delete</v-icon
@@ -153,7 +210,7 @@
 import dayjs from 'dayjs'
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
-import { checkSession, deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUsers } from './functions'
+import { checkSession, deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
 export default Vue.extend({
     data: () => ({
         admin: true,
@@ -213,6 +270,19 @@ export default Vue.extend({
 
 
     methods: {
+        async getUserObject(user: any) {
+            const userObject = {
+                ...user,
+                reputation: await this.getUserRep(user.user_id)
+            }
+            console.log(userObject, 'the user object')
+            return userObject;
+        },
+        async getUserRep(userId: number) {
+            const userRep = await getUserReputation(userId)
+            console.log(userRep, 'the user reputation')
+            return userRep.value;
+        },
         sortQuestions(value: number) {
             if (value === 1) {
                 this.questionsSortType = 'votes'
@@ -302,11 +372,12 @@ export default Vue.extend({
             // if (user.user_id === questionData.UserUserId) {
             const index = users.findIndex((el: any) => el.user_id === question.UserUserId)
             if (index !== -1) {
-                const username = users[index].username
-                return username
+                //
+                const user = await this.getUserObject(users[index])
+                //
+                // const username = users[index].username
+                return user;
             }
-            // }
-            // }
         }
     },
     async mounted() {
