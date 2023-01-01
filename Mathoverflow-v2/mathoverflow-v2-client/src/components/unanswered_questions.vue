@@ -259,10 +259,8 @@ export default Vue.extend({
             return dayjs(value).format("DD MMM. YYYY | HH:mm:ss")
         },
         async handleClick(value: any) {
-            // router.push('/question')
             console.log(value, "the value");
             const questionId = value.question_id;
-            // this.$router.push('/question');
             this.$router.push(`questions/${questionId}`);
             const questionData = await getQuestion(questionId);
             console.log(questionData, "the row data");
