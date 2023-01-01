@@ -1,9 +1,6 @@
 <template>
     <v-container fluid>
         <v-card class="d-flex justify-start float-left" width="300" flat>
-            <!-- <v-row>
-                <v-col cols="12"> -->
-            <!-- den vgainei to marin deksia tn listas -->
             <v-navigation-drawer
                 permanent
                 :expand-on-hover="$vuetify.breakpoint.smAndDown"

@@ -17,20 +17,12 @@
                 <span class="mt-1"> Ask a Question</span>
             </v-card-text>
         </v-card>
-        <!-- <v-icon color="#FFA726">mdi-rocket-launch</v-icon
-        ><span class="text-overline orange--text"> Ask a Question </span> -->
         <v-card
             flat
             style="border-top: 2px solid #ffa726"
             class="px-4"
             rounded="sm"
         >
-            <!-- <v-toolbar flat>
-                <v-toolbar-title> Ask a Question </v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-icon>mdi-help</v-icon>
-            </v-toolbar> -->
-            <!-- </v-card> -->
             <v-card-text class="pt-7">
                 <br />
                 <v-form>
@@ -75,17 +67,6 @@
                     >
                         Post Your Question
                     </v-btn>
-                    <!-- <v-btn
-                    dark
-                    color="#FFA726"
-                    depressed
-                    elevation="1"
-                    small
-                    class="mt-3 py-4"
-                    @click="ask"
-                    >Ask Question</v-btn
-                > -->
-                    <!-- </div> -->
                 </v-row>
             </v-card-text>
         </v-card>
@@ -106,13 +87,6 @@ export default Vue.extend({
     data: () => ({
         title: "",
         body: "",
-        // quillConfig: {
-        //     theme: "snow",
-        //     placeholder: "",
-        //     modules: {
-        //         toolbar: ["bold", "italic", "underline", "link", "clean"]
-        //     }
-        // },
         quillContent: '',
         customToolbar: [
             [{ 'font': [] }],
@@ -146,21 +120,6 @@ export default Vue.extend({
     },
     mounted() {
         window.katex = katex;
-        // this.quillContent = "<p><sub><strong><em><u>ceceecec2</u></em></strong></sub><sup><strong><em><u>2</u></em></strong></sup><strong><em><u>+4</u></em></strong><sub><strong><em><u>ww</u></em></strong></sub>wwww</p>"
-
-        // const quill = new Quill('#editor-container', {
-        //     modules: {
-        //         toolbar:
-        //             [
-        //                 [{ header: [1, 2, false] }],
-        //                 ['bold', 'italic', 'underline'],
-        //                 ['image', 'code-block']
-        //             ]
-        //     },
-        // });a
-        //!
-        //HAHAHHAHHA
-        // quill.insertText(1, "sks")//setContents([{ insert: { formula: 'f(x)={\\sum_{i=0}^n\\frac{a_{osnsnsnio}}{2+}}' } },])
     }
 })
 </script>

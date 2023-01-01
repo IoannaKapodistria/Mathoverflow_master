@@ -92,21 +92,6 @@
                     :sort-by="questionsSortType"
                     :sort-desc="true"
                 >
-                    <!-- <template v-slot:[`item.answers`]="{ item }">
-                    <v-chip color="light-blue lighten-3" dark>
-                        {{ item.answers }}
-                    </v-chip>
-                </template>
-                <template v-slot:[`item.votes`]="{ item }">
-                    <v-chip color="deep-orange lighten-2" dark>
-                        {{ item.votes }}
-                    </v-chip>
-                </template>
-                <template v-slot:[`item.remove`]="props" v-if="admin">
-                    <v-icon small @click="removeObject(props.item)"
-                        >mdi-delete</v-icon
-                    >
-                </template> -->
                     <template v-slot:[`item.title`]="{ item }">
                         <v-card
                             flat
@@ -182,20 +167,6 @@ export default Vue.extend({
     }),
     computed: {
         ...mapGetters(["getQuestions", "getUsers"]),
-
-        // async questionsItems() {
-        //     let questions = [] as any[];
-        //     // console.log(value, "value of get questions");
-        //     for (const question of this.getQuestions) {
-        //         const questionData = await getQuestion(question.question_id);
-        //         const answers = questionData.answers;
-        //         const answersNumber = answers.length;
-        //         const questionObject = { answers: answersNumber, votes: "10", title: question.title, user: "Ioanna", question_id:question.question_id };
-        //         questions.push(questionObject);
-        //         console.log(questions, "these are questions")
-        //     }
-        //     return questions;
-        // },
         computedHeaders() {
             return this.questionsCols.filter(word => word.value !== "question_id")
         }

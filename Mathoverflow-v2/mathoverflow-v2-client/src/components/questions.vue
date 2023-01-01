@@ -173,29 +173,12 @@ export default Vue.extend({
             { text: "id", align: 'd-none', sortable: false, value: 'question_id' },
             { text: "", align: 'center', sortable: false, value: 'remove' }
         ],
-        questions: [
-            // { answers: "13", votes: "50", question: "What's an intuitive way to think about the determinant?", user: "Ioanna96" },
-            // { answers: "5", votes: "28", question: "Why is a ring that has only one prime helpful?", user: "Tolis90" },\
-        ] as any[],
+        questions: [] as any[],
         fuContent: false,
         questionsSortType: ''
     }),
     computed: {
         ...mapGetters(["getQuestions", "getUsers", "getQuestionData"]),
-
-        // async questionsItems() {
-        //     let questions = [] as any[];
-        //     // console.log(value, "value of get questions");
-        //     for (const question of this.getQuestions) {
-        //         const questionData = await getQuestion(question.question_id);
-        //         const answers = questionData.answers;
-        //         const answersNumber = answers.length;
-        //         const questionObject = { answers: answersNumber, votes: "10", title: question.title, user: "Ioanna", question_id:question.question_id };
-        //         questions.push(questionObject);
-        //         console.log(questions, "these are questions")
-        //     }
-        //     return questions;
-        // },
         computedHeaders(): any {
             return this.questionsCols.filter(word => word.value !== "question_id")
         }

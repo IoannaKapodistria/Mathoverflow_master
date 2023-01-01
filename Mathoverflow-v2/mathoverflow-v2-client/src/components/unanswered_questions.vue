@@ -141,7 +141,6 @@
     </v-container>
 </template>
 <script lang="ts">
-import router from '@/router';
 import store from '@/store';
 import dayjs from 'dayjs';
 import Vue from 'vue'
@@ -152,15 +151,6 @@ export default Vue.extend({
         admin: true,
         search: "",
         questionsCols: [
-            //     { text: "Answers", align: 'start', sortable: true, value: 'answers' }, { text: "Votes", align: 'start', sortable: true, value: 'votes' }, { text: "Question", align: 'start', sortable: true, value: 'title' }, {
-            //     text: 'User',
-            //     align: 'start',
-            //     sortable: true,
-            //     value: 'user'
-            // },
-            //  { text: "id", align: 'd-none', sortable: false, value: 'question_id' }, 
-            //  { text: "", align: 'center', sortable: false, value: 'remove' }
-            //
             { text: "Votes", align: 'center', sortable: true, value: 'votes', class: 'title text-caption font-weight-medium' },
             { text: "Question", align: 'center', sortable: true, value: 'title', class: 'title text-caption font-weight-medium' },
             { text: "Answers", align: 'center', sortable: true, value: 'answers', class: 'title text-caption font-weight-medium' },
@@ -181,20 +171,6 @@ export default Vue.extend({
     }),
     computed: {
         ...mapGetters(["getQuestions", "getUsers"]),
-
-        // async questionsItems() {
-        //     let questions = [] as any[];
-        //     // console.log(value, "value of get questions");
-        //     for (const question of this.getQuestions) {
-        //         const questionData = await getQuestion(question.question_id);
-        //         const answers = questionData.answers;
-        //         const answersNumber = answers.length;
-        //         const questionObject = { answers: answersNumber, votes: "10", title: question.title, user: "Ioanna", question_id:question.question_id };
-        //         questions.push(questionObject);
-        //         console.log(questions, "these are questions")
-        //     }
-        //     return questions;
-        // },
         computedHeaders() {
             return this.questionsCols.filter(word => word.value !== "question_id")
         }
@@ -209,13 +185,6 @@ export default Vue.extend({
                 const answers = questionData.answers;
                 const answersNumber = answers.length;
                 if (answersNumber === 0) {
-                    // for (const user of users) {
-                    //     if (user.user_id === question.UserUserId) {
-
-                    //         const questionObject = { answers: answersNumber, votes: "12", title: question.title, user: user.username, question_id: question.question_id };
-                    //         unansweredQuestionsArray.push(questionObject);
-                    //     }
-                    // }
                     const votes = questionData.votes;
                     const votesArray: any[] = []
                     //calculate votes
