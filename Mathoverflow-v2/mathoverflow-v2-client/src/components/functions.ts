@@ -221,20 +221,6 @@ export async function signIn(data: any) {
             console.log("this is the login value:", value);
             console.log("this is the login response:", response);
             return value;
-            // isLogged();
-            //
-            // let response = await ky
-            //     .post("http://localhost:3000/sessionCheck", {
-            //         mode: "cors",
-            //         body: JSON.stringify(value),
-            //         headers: {
-            //             "content-type": "application/json",
-            //         },
-            //         timeout: false,
-            //     })
-            //     .catch((err: any) => {
-            //         console.log("mathoverflow: error while attempting to get sessionCheck", err);
-            //     });
         });
     return response;
 }
