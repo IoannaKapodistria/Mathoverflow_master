@@ -47,7 +47,7 @@
                         your question
                     </div>
                     <vue-editor
-                        class="mt-2"
+                        class="mt-1"
                         v-model="body"
                         :editorToolbar="customToolbar"
                     ></vue-editor>

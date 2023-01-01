@@ -359,7 +359,7 @@
                         </v-card>
                     </template>
                     <template v-slot:[`item.edit`]="props">
-                        <v-icon small @click="showAnswerEdit(props.item)"
+                        <v-icon @click="showAnswerEdit(props.item)"
                             >mdi-pencil</v-icon
                         >
                         <v-dialog v-model="answerEditing" height="800">
