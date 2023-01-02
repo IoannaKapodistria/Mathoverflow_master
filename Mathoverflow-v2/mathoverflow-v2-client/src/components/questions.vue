@@ -108,7 +108,7 @@
                     <template v-slot:[`item.title`]="{ item }">
                         <v-card
                             flat
-                            class="py-11 px-0"
+                            class="pt-11 pb-3 px-0"
                             color="transparent"
                             width="370px"
                         >
@@ -118,8 +118,53 @@
                                     @click="handleClick(item)"
                                     class="qTittle"
                                 >
-                                    {{ item.title }}
+                                    {{ item.title.title }}
                                 </span>
+                                <!-- <span
+                                    @click="handleClick(item)"
+                                    class="d-flex text-truncate"
+                                >
+                                    {{ item.title.body }}
+                                </span> -->
+                            </v-card-text>
+                        </v-card>
+                        <!-- <v-card
+                            flat
+                            class="pb-2 px-0"
+                            color="transparent"
+                            width="370px"
+                        >
+                            <v-card-text class="pa-0 ms-3 text-truncate">
+                                <span
+                                    @click="handleClick(item)"
+                                    class="text-truncate"
+                                >
+                                    {{ item.title.body }}
+                                </span>
+                            </v-card-text>
+                        </v-card> -->
+                        <v-card
+                            flat
+                            class="pb-2 px-0"
+                            color="transparent"
+                            :width="
+                                $vuetify.breakpoint.mdAndDown
+                                    ? '200px'
+                                    : '360px'
+                            "
+                        >
+                            <v-card-text
+                                class="answerBody pa-0 ms-7 text-truncate"
+                                @click="handleClick(item)"
+                            >
+                                <vue-editor
+                                    class="kappa"
+                                    disabled
+                                    v-model="item.title.body"
+                                    :editorOptions="editorOptions"
+                                    :style="editorStyle"
+                                >
+                                </vue-editor>
                             </v-card-text>
                         </v-card>
                     </template>
@@ -210,8 +255,11 @@
 import dayjs from 'dayjs'
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
+import { VueEditor } from "vue2-editor";
+
 import { checkSession, deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
 export default Vue.extend({
+    components: { VueEditor },
     data: () => ({
         admin: true,
         search: "",
@@ -232,7 +280,18 @@ export default Vue.extend({
         ],
         questions: [] as any[],
         fuContent: false,
-        questionsSortType: ''
+        questionsSortType: '',
+        editorOptions: {
+            modules: {
+                toolbar: false,
+            },
+        },
+        editorStyle: {
+            "height": '60px',
+
+            // "border": "1px solid transparent"
+
+        },
     }),
     computed: {
         ...mapGetters(["getQuestions", "getUsers", "getQuestionData"]),
@@ -252,8 +311,8 @@ export default Vue.extend({
                     const questionData = await getQuestion(question.question_id)
                     console.log(questionData, "value of questionData");
                     console.log(question, "value of que");
-
-                    const questionObject = { answers: this.getAnswers(questionData), votes: this.getVotes(questionData), title: question.title, created: question.createdAt/*dayjs(question.createdAt).format("DD MMM. YYYY | HH:mm:ss")*/, user: await this.getUsername(question), question_id: question.question_id };
+                    const titleAndBody = { title: question.title, body: question.body }
+                    const questionObject = { answers: this.getAnswers(questionData), votes: this.getVotes(questionData), title: titleAndBody, created: question.createdAt/*dayjs(question.createdAt).format("DD MMM. YYYY | HH:mm:ss")*/, user: await this.getUsername(question), question_id: question.question_id };
                     questionsArray.push(questionObject);
                 }
                 //
@@ -293,7 +352,7 @@ export default Vue.extend({
             }
         },
         getCreationDate(value: string) {
-            return dayjs(value).format("DD MMM. YYYY | HH:mm:ss")
+            return dayjs(value).format("MMM DD, YYYY | HH:mm:ss")
         },
         async handleClick(value: any) {
             // router.push('/question')

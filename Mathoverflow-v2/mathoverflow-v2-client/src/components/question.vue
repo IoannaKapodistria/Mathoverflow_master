@@ -358,7 +358,11 @@
                         <v-icon @click="showAnswerEdit(props.item)"
                             >mdi-pencil</v-icon
                         >
-                        <v-dialog v-model="answerEditing" height="800">
+                        <v-dialog
+                            v-model="answerEditing"
+                            width="850"
+                            height="auto"
+                        >
                             <v-card>
                                 <v-card-text class="pa-4">
                                     <vue-editor

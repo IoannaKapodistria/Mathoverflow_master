@@ -293,7 +293,7 @@ export default Vue.extend({
             }
         },
         getCreationDate(value: string) {
-            return dayjs(value).format("DD MMM. YYYY | HH:mm:ss")
+            return dayjs(value).format("MMM DD, YYYY | HH:mm:ss")
         },
         async handleClick(value: any) {
             console.log(value, "the value");
