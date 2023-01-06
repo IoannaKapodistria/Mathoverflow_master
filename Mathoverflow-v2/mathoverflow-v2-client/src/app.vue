@@ -121,6 +121,8 @@ export default Vue.extend({
             console.log(a, 'the sign out')
             //wait to login
             this.$store.commit("setContent", false)
+            this.$store.commit("setUserData", {})
+            this.$store.commit("setLoggedUser", {})
             this.$router.push('/login');
         },
         signup() {
