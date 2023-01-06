@@ -123,6 +123,7 @@ export async function signIn(req: any, res: any) {
             if (!user) {
                 // res.redirect("/login");
                 console.log("User doesn't exist");
+                // res.send("User doesn't exist");
             } else if (password !== user.get("password")) {
                 /*get('password') */ console.log(user, "the user");
                 console.log(username, "this is the username");
@@ -158,9 +159,9 @@ export async function signOut(req: any, res: any) {
 export async function isLogged(req: any, res: any) {
     if (req.session.user_sid) {
         console.log("user is logged in");
-        res.send(JSON.stringify({ islogged: "true", userId: req.session.user_sid }));
+        res.send(JSON.stringify({ islogged: true, userId: req.session.user_sid }));
     } else {
-        res.send(JSON.stringify({ islogged: "false" }));
+        res.send(JSON.stringify({ islogged: false }));
     }
 }
 

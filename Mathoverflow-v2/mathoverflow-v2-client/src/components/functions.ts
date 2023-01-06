@@ -176,12 +176,14 @@ export async function isLogged() {
             })
             .catch((err: any) => {
                 console.log("mathoverflow: error while attempting to get isLogged", err);
+            })
+            .then(async (value: any) => {
+                const a = await value.json();
+                console.log("this is the value of is logges", a);
+                return a;
             });
         if (response !== undefined) {
-            const value = await response.json();
-            console.log(value, "this is the ISLOGGED");
-            // store.commit("setUsers", value);
-            return value;
+            return response;
         }
     } catch (error) {
         console.log(error);

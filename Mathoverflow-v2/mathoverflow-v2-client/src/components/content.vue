@@ -6,13 +6,12 @@
                 :expand-on-hover="$vuetify.breakpoint.smAndDown"
             >
                 <v-row class="mt-3 mb-7 me-8" justify="center" align="center">
-                    <user-avatar></user-avatar>
-                    <span class="blue--text text-body-1 mt-1"
-                        >Ioanna{{ username }}</span
-                    >
+                    <user-avatar @profileClicked="profileClicked"></user-avatar>
+                    <span class="blue--text text-body-1 mt-1">{{
+                        this.getLoggedUser.username
+                    }}</span>
                 </v-row>
                 <v-list flat>
-                    <!-- <router-link> -->
                     <v-list-item-group
                         color="primary"
                         v-for="(buttonObject, i) in buttonObjects"
@@ -22,22 +21,17 @@
                         <v-list-group
                             v-if="buttonObject.content !== undefined"
                             :value="true"
-                            @click="clicked(buttonObject)"
+                            @click="clicked2(buttonObject)"
                             :to="buttonObject.url"
                         >
                             <template v-slot:activator>
-                                <!-- <v-list-item-content> -->
                                 <v-list-item-icon>
                                     <v-icon>{{ buttonObject.icon }}</v-icon>
                                 </v-list-item-icon>
-                                <v-list-item-title>
-                                    eee{{
-                                        buttonObject.title
-                                    }}</v-list-item-title
+                                <v-list-item-title :to="buttonObject.url">
+                                    {{ buttonObject.title }}</v-list-item-title
                                 >
-                                <!-- </v-list-item-content> -->
                             </template>
-                            <!-- -->
                             <div
                                 v-for="(item, j) in buttonObject.content"
                                 :key="j"
@@ -78,16 +72,12 @@
                                     <v-list-item-icon>
                                         <v-icon>{{ item.icon }}</v-icon>
                                     </v-list-item-icon>
-                                    <!-- <v-list-item-content> -->
                                     <v-list-item-title>
                                         {{ item.title }}
                                     </v-list-item-title>
-                                    <!-- </v-list-item-content> -->
                                 </v-list-item>
                             </div>
-                            <!-- -->
                         </v-list-group>
-                        <!-- else-->
                         <v-list-item
                             v-else
                             @click="clicked(buttonObject)"
@@ -103,19 +93,19 @@
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-item-group>
-                    <!-- </router-link> -->
                 </v-list>
             </v-navigation-drawer>
-            <!-- </v-col>
-            </v-row> -->
         </v-card>
     </v-container>
 </template>
     
 <script lang="ts">
 import { buttonObj, buttons } from '@/components/types'
+import store from '@/store';
 import Vue, { PropType } from 'vue'
+import { mapGetters } from 'vuex';
 import userAvatar from '../tools/user_avatar/user_avatar.vue'
+import { getUser } from './functions';
 export default Vue.extend({
     components: { userAvatar },
     props: {
@@ -131,18 +121,32 @@ export default Vue.extend({
         selectedItem: 1,
         buttonObject1: {}
     }),
+    computed: {
+        ...mapGetters(["getLoggedUser"])
+    },
     methods: {
         clicked(value: buttonObj) {
-            console.log(value, "the value")
+            console.log(value, "the value of button")
             this.$emit("buttonClicked", value);
         },
         clicked2(buttonObject: buttonObj) {
             console.log(buttonObject, "the item1")
-
+            this.$router.push(buttonObject.url).catch((err: any) => {
+                console.warn(`error in redirect to ${buttonObject.url} :`, err)
+            });
             this.$emit("buttonClicked2", buttonObject);
         },
+        async profileClicked() {
+            console.log(this.getLoggedUser, "the value of click user");
+            const userId = this.getLoggedUser.user_id;
+            const userData = await getUser(userId);
+            console.log(userData, "the card data");
+            store.commit("setUserData", userData);
+            this.$router.push(`/users/${userId}`);
+        }
     },
     mounted() {
+        console.log(this.getLoggedUser, "the logged user")
     }
 })
 </script>

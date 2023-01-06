@@ -35,7 +35,7 @@
                     </v-chip>
                 </div>
                 <v-divider class="my-3"></v-divider>
-                <!-- <v-hover v-slot="{ hover }">
+                <v-hover v-slot="{ hover }">
                     <div
                         class="text-subtitle-1"
                         style="cursor: pointer"
@@ -54,7 +54,7 @@
                         &nbsp;Profile
                     </div>
                 </v-hover>
-                <v-divider class="my-2"></v-divider> -->
+                <v-divider class="my-2"></v-divider>
                 <!-- <div
                     v-if="getAdmin"
                     class="text-subtitle-1"

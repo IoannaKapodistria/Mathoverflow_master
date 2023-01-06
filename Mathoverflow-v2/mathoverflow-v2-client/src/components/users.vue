@@ -106,9 +106,7 @@ import { mapGetters } from 'vuex';
 import { deleteAnswer, deleteQuestion, getQuestion, getUser, getUserReputation, removeUser } from './functions';
 export default Vue.extend({
     data: () => ({
-        users: [
-            // { name: "ioanna" }, { name: "tolis" }, { name: "ioanna" }, { name: "tolis" }, { name: "ioanna" }, { name: "tolis" }
-        ] as any[],
+        users: [] as any[],
         admin: true
     }),
     watch: {

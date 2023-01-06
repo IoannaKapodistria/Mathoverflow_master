@@ -10,6 +10,7 @@ export default new Vuex.Store({
         users: [] as any[],
         userData: {},
         content: true,
+        loggedUser: {},
     },
     mutations: {
         setQuestions(state, value) {
@@ -30,6 +31,9 @@ export default new Vuex.Store({
         setContent(state, value) {
             state.content = value;
         },
+        setLoggedUser(state, value) {
+            state.loggedUser = value;
+        },
     },
     actions: {},
     getters: {
@@ -47,6 +51,9 @@ export default new Vuex.Store({
         },
         getContent(state) {
             return state.content;
+        },
+        getLoggedUser(state, value) {
+            return state.loggedUser;
         },
     },
     modules: {},

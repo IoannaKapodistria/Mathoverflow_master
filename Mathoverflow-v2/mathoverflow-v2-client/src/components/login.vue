@@ -111,9 +111,10 @@
 
 <script lang="ts">
 import router from "@/router";
+import store from "@/store";
 import Vue, { PropType } from "vue";
 import VueRouter from "vue-router";
-import { getUsers, isLogged, postUserReputation, signIn, signUp } from "./functions";
+import { getUser, getUsers, isLogged, postUserReputation, signIn, signUp } from "./functions";
 //import User from "../user/user";
 //import { nullObject, isNullObject, nullObjectConst } from "./null_object";
 //import { storeCredentials, clearCredentials, getCredentials } from "./login";
@@ -226,15 +227,18 @@ export default Vue.extend({
                 // if (logged in) {
                 //bug me logged in
                 const isLoggedIn = await isLogged();
-                console.log(isLogged, "the is logged")
-                this.$store.commit("setContent", true)
-                this.$router.push('/questions');
-                // }
+                console.log(isLoggedIn.islogged, "the is logged")
+                if (isLoggedIn.islogged === true) {
+                    const userId = isLoggedIn.userId
+                    const userData = await getUser(userId);
+                    console.log(userData, 'the user data in login')
+                    store.commit("setLoggedUser", userData.data);
+                    this.$store.commit("setContent", true)
+                    this.$router.push('/questions');
+                } else {
+                    console.log('please try again')
+                }
 
-                // if (signedIn.status === 200) console.log("user is signed in")
-                //  //store creds
-                //  if (signedIn && this.remember) storeCredentials(this.username, this.password);
-                //  //this.inLogIn = false;
             }
         },
         async signUp() {

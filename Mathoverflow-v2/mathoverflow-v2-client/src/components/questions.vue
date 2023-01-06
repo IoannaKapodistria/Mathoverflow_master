@@ -42,8 +42,7 @@
                 class="text-overline font-weight-bold d-flex justify-center py-2"
                 style="color: white"
             >
-                <v-icon class="me-2">mdi-rocket-launch</v-icon> Explore our
-                Questions
+                <v-icon class="me-2">mdi-earth</v-icon> All Questions
             </v-card-text>
         </v-card>
         <v-card
@@ -53,14 +52,6 @@
             class="px-4"
             rounded="sm"
         >
-            <!-- <v-card
-            :key="fuContent"
-            elevation="1"
-            style="border: 2px solid #e0e0e0"
-            class="px-4"
-            rounded="lg"
-        > -->
-            <!-- na mpei search stis erwthseis -->
             <v-card-text class="pt-8">
                 <v-row class="mb-3">
                     <v-icon>mdi-icon</v-icon>
@@ -104,6 +95,7 @@
                     style="cursor: pointer"
                     :sort-by="questionsSortType"
                     :sort-desc="true"
+                    :items-per-page="5"
                 >
                     <template v-slot:[`item.title`]="{ item }">
                         <v-card

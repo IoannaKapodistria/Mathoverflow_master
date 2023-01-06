@@ -84,10 +84,10 @@ export async function signOut(req, res) {
 export async function isLogged(req, res) {
     if (req.session.user_sid) {
         console.log("user is logged in");
-        res.send(JSON.stringify({ islogged: "true", userId: req.session.user_sid }));
+        res.send(JSON.stringify({ islogged: true, userId: req.session.user_sid }));
     }
     else {
-        res.send(JSON.stringify({ islogged: "false" }));
+        res.send(JSON.stringify({ islogged: false }));
     }
 }
 export function sessionChecker(req, res, next) {

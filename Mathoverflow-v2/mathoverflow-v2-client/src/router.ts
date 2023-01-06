@@ -8,6 +8,7 @@ import Users from "./components/users.vue";
 import User from "./components/user.vue";
 import AskQuestion from "./components/ask_question.vue";
 import Login from "./components/login.vue";
+import Home from "./components/home.vue";
 
 Vue.use(Router);
 
@@ -18,7 +19,7 @@ const router = new Router({
         {
             path: "/",
             name: "home",
-            component: Questions,
+            component: Home,
         },
         {
             path: "/questions",

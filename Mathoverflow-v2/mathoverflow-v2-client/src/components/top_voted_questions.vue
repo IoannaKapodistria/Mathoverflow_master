@@ -92,14 +92,13 @@
                     :sort-by="questionsSortType"
                     :sort-desc="true"
                 >
-                    <template v-slot:[`item.title`]="{ item }">
+                    <!-- <template v-slot:[`item.title`]="{ item }">
                         <v-card
                             flat
                             class="py-11 px-0"
                             color="transparent"
                             width="370px"
                         >
-                            <!-- <v-card-text class="text-truncate"> -->
                             <v-card-text class="pa-0 ms-3">
                                 <span
                                     @click="handleClick(item)"
@@ -121,9 +120,7 @@
                         </v-chip>
                     </template>
                     <template v-slot:[`item.created`]="{ item }">
-                        <!-- <v-chip color="grey" class="px-4" dark> -->
                         {{ getCreationDate(item.created) }}
-                        <!-- </v-chip> -->
                     </template>
                     <template v-slot:[`item.user`]="props">
                         <v-card
@@ -146,7 +143,121 @@
                                             height="40"
                                         ></v-img>
                                     </v-col>
-                                    <!-- <v-icon>mdi-account</v-icon> -->
+                                    <v-col
+                                        cols="7"
+                                        class="pa-0"
+                                        justify="center"
+                                        align="center"
+                                    >
+                                        <v-row
+                                            class="ms-0 me-0"
+                                            justify="center"
+                                            align="center"
+                                        >
+                                            <span>{{
+                                                props.item.user.username
+                                            }}</span>
+                                        </v-row>
+                                        <v-row
+                                            class="ms-1"
+                                            justify="center"
+                                            align="center"
+                                        >
+                                            <span class="font-weight-medium">{{
+                                                props.item.user.reputation
+                                            }}</span>
+                                            <v-icon
+                                                size="20px"
+                                                color="#FBC02D"
+                                                class="ms-1"
+                                                >mdi-trophy</v-icon
+                                            >
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </template>
+                    <template v-slot:[`item.remove`]="props" v-if="admin">
+                        <v-icon @click="removeObject(props.item)"
+                            >mdi-delete</v-icon
+                        >
+                    </template> -->
+                    <template v-slot:[`item.title`]="{ item }">
+                        <v-card
+                            flat
+                            class="pt-11 pb-3 px-0"
+                            color="transparent"
+                            width="370px"
+                        >
+                            <v-card-text class="pa-0 ms-3">
+                                <span
+                                    @click="handleClick(item)"
+                                    class="qTittle"
+                                >
+                                    {{ item.title.title }}
+                                </span>
+                            </v-card-text>
+                        </v-card>
+                        <v-card
+                            flat
+                            class="pb-2 px-0"
+                            color="transparent"
+                            :width="
+                                $vuetify.breakpoint.mdAndDown
+                                    ? '200px'
+                                    : '360px'
+                            "
+                        >
+                            <v-card-text
+                                class="answerBody pa-0 ms-7 text-truncate"
+                                @click="handleClick(item)"
+                            >
+                                <vue-editor
+                                    class="kappa"
+                                    disabled
+                                    v-model="item.title.body"
+                                    :editorOptions="editorOptions"
+                                    :style="editorStyle"
+                                >
+                                </vue-editor>
+                            </v-card-text>
+                        </v-card>
+                    </template>
+                    <template v-slot:[`item.answers`]="{ item }">
+                        <v-chip color="#F06292" class="px-4" dark>
+                            {{ item.answers }}
+                        </v-chip>
+                    </template>
+                    <template v-slot:[`item.votes`]="{ item }">
+                        <v-chip color="#26A69A" class="px-4" dark>
+                            {{ item.votes }}
+                        </v-chip>
+                    </template>
+                    <template v-slot:[`item.created`]="{ item }">
+                        {{ getCreationDate(item.created) }}
+                    </template>
+                    <template v-slot:[`item.user`]="props">
+                        <v-card
+                            flat
+                            class="py-0 px-0"
+                            color="transparent"
+                            width="100px"
+                        >
+                            <v-card-text class="pa-0">
+                                <v-row justify="center" align="center">
+                                    <v-col
+                                        cols="5"
+                                        class="pa-0"
+                                        justify="center"
+                                        align="center"
+                                    >
+                                        <v-img
+                                            contain
+                                            src="/prof_photo.png"
+                                            height="40"
+                                        ></v-img>
+                                    </v-col>
                                     <v-col
                                         cols="7"
                                         class="pa-0"
@@ -198,8 +309,10 @@ import store from '@/store';
 import dayjs from 'dayjs';
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
+import { VueEditor } from "vue2-editor";
 import { getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
 export default Vue.extend({
+    components: { VueEditor },
     data: () => ({
         admin: true,
         search: "",
@@ -220,7 +333,15 @@ export default Vue.extend({
 
         ],
         questions: [] as any[],
-        questionsSortType: ''
+        questionsSortType: '',
+        editorOptions: {
+            modules: {
+                toolbar: false,
+            },
+        },
+        editorStyle: {
+            "height": '60px',
+        },
     }),
     computed: {
         ...mapGetters(["getQuestions", "getUsers"]),
@@ -250,7 +371,8 @@ export default Vue.extend({
                     //calculate votes
                     for (const user of users) {
                         if (user.user_id === question.UserUserId) {
-                            const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, created: question.createdAt, user: await this.getUserObject(user) /*user.username*/, question_id: question.question_id };
+                            const titleAndBody = { title: question.title, body: question.body }
+                            const questionObject = { answers: answersNumber, votes: votesSum, title: titleAndBody, created: question.createdAt, user: await this.getUserObject(user) /*user.username*/, question_id: question.question_id };
                             questionsArray.push(questionObject);
                         }
                     }
