@@ -206,6 +206,9 @@
                 >
             </v-card-actions>
         </v-card>
+        <progress-circular
+            :progressCircular="progressCircular"
+        ></progress-circular>
     </v-container>
 </template>
 <script lang="ts">
@@ -213,10 +216,10 @@ import dayjs from 'dayjs'
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
 import { VueEditor } from "vue2-editor";
-
+import progressCircular from "@/tools/circular_loading/circular_loading.vue"
 import { checkSession, deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
 export default Vue.extend({
-    components: { VueEditor },
+    components: { VueEditor, progressCircular },
     data: () => ({
         admin: true,
         search: "",
@@ -246,6 +249,7 @@ export default Vue.extend({
         editorStyle: {
             "height": '60px',
         },
+        progressCircular: false
     }),
     computed: {
         ...mapGetters(["getQuestions", "getUsers", "getQuestionData"]),
@@ -255,6 +259,7 @@ export default Vue.extend({
     },
     watch: {
         async getQuestions(value: any) {
+            this.progressCircular = true
             let questionsArray = [] as any[];
             let answers = [] as any[];
             console.log(value, "value of get questions");
@@ -272,6 +277,7 @@ export default Vue.extend({
             console.log(questionsArray, "this. questionsArray")
             this.questions = questionsArray;
             console.log(this.questions, "this. questions")
+            this.progressCircular = false
         },
         getUsers(value: any) {
             console.log(value, "these are the users");

@@ -81,6 +81,7 @@
                     style="cursor: pointer"
                     :sort-by="questionsSortType"
                     :sort-desc="true"
+                    :custom-filter="customSearch"
                 >
                     <!-- <template v-slot:[`item.title`]="{ item }">
                         <v-card
@@ -291,6 +292,9 @@
                 </v-data-table>
             </v-card-text>
         </v-card>
+        <progress-circular
+            :progressCircular="progressCircular"
+        ></progress-circular>
     </v-container>
 </template>
 <script lang="ts">
@@ -299,9 +303,10 @@ import dayjs from 'dayjs';
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
 import { getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
+import progressCircular from "@/tools/circular_loading/circular_loading.vue"
 import { VueEditor } from "vue2-editor";
 export default Vue.extend({
-    components: { VueEditor },
+    components: { VueEditor, progressCircular },
     data: () => ({
         admin: true,
         search: "",
@@ -331,6 +336,8 @@ export default Vue.extend({
         editorStyle: {
             "height": '60px',
         },
+        progressCircular: false
+
     }),
     computed: {
         ...mapGetters(["getQuestions", "getUsers"]),
@@ -340,6 +347,7 @@ export default Vue.extend({
     },
     watch: {
         async getQuestions(value: any) {
+            this.progressCircular = true
             let unansweredQuestionsArray = [] as any[];
             console.log(value, "value of get questions");
             const users = await getUsers();
@@ -370,6 +378,7 @@ export default Vue.extend({
             console.log(unansweredQuestionsArray, "this. questionsArray")
             this.questions = unansweredQuestionsArray;
             console.log(this.questions, "this. questions")
+            this.progressCircular = false
         },
         getUsers(value: any) {
             console.log(value, "these are the users");
@@ -378,6 +387,11 @@ export default Vue.extend({
     },
 
     methods: {
+        customSearch(value: any, search: any, item: any) {
+            console.log(Object.values(item), 'the object values')
+            console.log(value, 'the  value in serach')
+            return Object.values(item).some((v: any) => typeof v === 'object' && v.title !== undefined ? v.title.includes(search) || v.body.includes(search) : false)
+        },
         async getUserObject(user: any) {
             const userObject = {
                 ...user,

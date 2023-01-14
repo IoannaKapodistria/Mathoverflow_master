@@ -59,7 +59,7 @@
                     <v-btn
                         small
                         dark
-                        color="#FFA726"
+                        color="#FB8C00"
                         depressed
                         elevation="1"
                         @click="postQuestion"

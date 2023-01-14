@@ -96,6 +96,7 @@
                     :sort-by="questionsSortType"
                     :sort-desc="true"
                     :items-per-page="5"
+                    :custom-filter="customSearch"
                 >
                     <template v-slot:[`item.title`]="{ item }">
                         <v-card
@@ -241,6 +242,9 @@
                 <v-btn @click="sessionCheck1">session check</v-btn>
             </v-card-text>
         </v-card>
+        <progress-circular
+            :progressCircular="progressCircular"
+        ></progress-circular>
     </v-container>
 </template>
 <script lang="ts">
@@ -248,10 +252,10 @@ import dayjs from 'dayjs'
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
 import { VueEditor } from "vue2-editor";
-
+import progressCircular from "@/tools/circular_loading/circular_loading.vue"
 import { checkSession, deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
 export default Vue.extend({
-    components: { VueEditor },
+    components: { VueEditor, progressCircular },
     data: () => ({
         admin: true,
         search: "",
@@ -280,10 +284,10 @@ export default Vue.extend({
         },
         editorStyle: {
             "height": '60px',
-
             // "border": "1px solid transparent"
-
         },
+        progressCircular: false
+
     }),
     computed: {
         ...mapGetters(["getQuestions", "getUsers", "getQuestionData"]),
@@ -293,6 +297,7 @@ export default Vue.extend({
     },
     watch: {
         async getQuestions(value: any) {
+            this.progressCircular = true;
             let questionsArray = [] as any[];
             let answers = [] as any[];
             console.log(value, "value of get questions");
@@ -312,6 +317,7 @@ export default Vue.extend({
             console.log(questionsArray, "this. questionsArray")
             this.questions = questionsArray;
             console.log(this.questions, "this. questions")
+            this.progressCircular = false
         },
         getUsers(value: any) {
             console.log(value, "these are the users");
@@ -321,6 +327,11 @@ export default Vue.extend({
 
 
     methods: {
+        customSearch(value: any, search: any, item: any) {
+            console.log(Object.values(item), 'the object values')
+            console.log(value, 'the  value in serach')
+            return Object.values(item).some((v: any) => typeof v === 'object' && v.title !== undefined ? v.title.includes(search) || v.body.includes(search) : false)
+        },
         async getUserObject(user: any) {
             const userObject = {
                 ...user,
@@ -361,16 +372,18 @@ export default Vue.extend({
         },
         async removeObject(value: any) {
             console.log(value, "the value of remove object")
+            console.log(this.getQuestionData, "the question data2")
             //when delete question delete all its answers
             const answers = value.answers
             if (answers !== 0) {
                 console.log('skata mpika edw')
-
-                for (const answer of this.getQuestionData.answers) {
+                const question = await getQuestion(value.question_id)
+                console.log(question, 'the clicked question')
+                // for (const answer of this.getQuestionData.answers) {
+                for (const answer of question.answers) {
                     const deleteAnswerObject = await deleteAnswer(answer.answer_id);
                 }
                 const deleteQuestionObject = await deleteQuestion(value.question_id);
-
             } else {
                 console.log('mpika edw')
                 const deleteQuestionObject = await deleteQuestion(value.question_id);
@@ -432,11 +445,15 @@ export default Vue.extend({
         }
     },
     async mounted() {
+        // this.progressCircular = true;
         this.questionsSortType = 'created'
         await getQuestions();
         this.getQuestions;
         this.getUsers;
         console.log(this.getUsers, "THE USERS")
+        // this.progressCircular = false;
+
+
     }
 })
 </script>
