@@ -29,6 +29,10 @@
                         <v-row>
                             <v-col
                                 cols="3"
+                                xs="12"
+                                sm="12"
+                                md="6"
+                                lg="3"
                                 class="mt-6"
                                 v-for="(user, i) in this.users"
                                 :key="i"

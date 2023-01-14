@@ -234,7 +234,7 @@ export default Vue.extend({
                     console.log(userData, 'the user data in login')
                     store.commit("setLoggedUser", userData.data);
                     this.$store.commit("setContent", true)
-                    this.$router.push('/questions');
+                    this.$router.push('/');
                 } else {
                     console.log('please try again')
                 }
