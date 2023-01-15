@@ -296,7 +296,6 @@ export async function createReputation(req: any, res: any) {
     })
         .then((data: any) => {
             //res.redirect("/questions/" + req.body.QuestionQuestionId);
-
             res.send(data);
         })
         .catch((err: any) => {
