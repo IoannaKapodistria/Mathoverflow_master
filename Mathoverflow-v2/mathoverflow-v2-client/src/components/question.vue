@@ -683,10 +683,10 @@ export default Vue.extend({
             const deleteAnswerObject = await deleteAnswer(value.answer_id);
             //
             const historicalData = {
-                    action: 'delete-answer',
-                    data: value
-                }
-                await createHistorical(historicalData)
+                action: 'delete-answer',
+                data: value
+            }
+            await createHistorical(historicalData)
             //
             // this.$router.go(0);
             this.forceUpdateQuestion();
