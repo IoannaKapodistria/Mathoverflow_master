@@ -2,6 +2,7 @@ import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 import sequelize_db from "../config/database";
 import { Answer } from "./answer_model";
 import { AnswerVote } from "./answer_vote_model";
+import { HistoricalData } from "./historical_data_model";
 import { Question } from "./question_model";
 import { Reputation } from "./reputation_model";
 import { Vote } from "./vote_model";
@@ -88,7 +89,6 @@ User.init(
 
 User.hasMany(Question, {
     as: "Question",
-    //foreignKey: "answer_id",
 });
 Question.belongsTo(User, {
     as: "User",
@@ -96,15 +96,12 @@ Question.belongsTo(User, {
 
 User.hasMany(Answer, {
     as: "Answer",
-    //foreignKey: "answer_id",
 });
 Answer.belongsTo(User, {
     as: "User",
 });
-// answer belongs to user ktlp ktlp.. logika
 User.hasMany(Vote, {
     as: "Vote",
-    //foreignKey: "answer_id",
 });
 Vote.belongsTo(User, {
     as: "User",
@@ -112,7 +109,6 @@ Vote.belongsTo(User, {
 //
 User.hasMany(AnswerVote, {
     as: "AnswerVote",
-    //foreignKey: "answer_id",
 });
 AnswerVote.belongsTo(User, {
     as: "User",
@@ -120,8 +116,15 @@ AnswerVote.belongsTo(User, {
 //
 User.hasMany(Reputation, {
     as: "Reputation",
-    //foreignKey: "answer_id",
 });
 Reputation.belongsTo(User, {
     as: "User",
+});
+
+HistoricalData.belongsTo(User, {
+    as: "User",
+});
+
+User.hasMany(HistoricalData, {
+    as: "HistoricalData",
 });

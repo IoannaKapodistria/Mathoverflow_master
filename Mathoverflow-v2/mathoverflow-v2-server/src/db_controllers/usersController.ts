@@ -1,4 +1,5 @@
 import { Session } from "express-session";
+import { HistoricalData } from "~/db_models/historical_data_model";
 import { Reputation } from "~/db_models/reputation_model";
 // import { sessions } from "~/main";
 import { Answer } from "../db_models/answer_model";
@@ -380,6 +381,46 @@ export function updateReputation(req: any, res: any) {
             console.log(err, "this is the error");
             res.status(500).send({
                 message: "Error retrieving Reputation with id=" + id,
+            });
+        });
+}
+//create Historical Data
+export async function createHistorical(req: any, res: any) {
+    console.log(req.session, "this the req seession in vote");
+    await HistoricalData.create({
+        // title: req.body.title,
+        action: req.body.action,
+        data: req.body.data,
+        UserUserId: req.session.user_sid,
+        // QuestionQuestionId: req.body.QuestionQuestionId,
+    })
+        .then((data: any) => {
+            //res.redirect("/questions/" + req.body.QuestionQuestionId);
+
+            res.send(data);
+        })
+        .catch((err: any) => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while creating the Historical Data.",
+            });
+        });
+}
+
+export async function getHistorical(req: any, res: any) {
+    const id = req.params.id;
+    await HistoricalData.findAll({ where: { UserUserId: id } })
+        .then(async (data) => {
+            if (data) {
+                res.send(data);
+            } else {
+                res.status(404).send({
+                    message: `Cannot find Historical Data with user-id=${id}.`,
+                });
+            }
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: "Could not find Historical Data with user-id=" + id,
             });
         });
 }

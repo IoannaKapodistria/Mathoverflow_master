@@ -425,7 +425,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex';
-import { deleteAnswer, getAnswer, getQuestion, getUser, getUserReputation, getUsers, postAnswer, updateAnswer1, updateQuestion1, voteAnswer, voteQuestion } from './functions';
+import { createHistorical, deleteAnswer, getAnswer, getQuestion, getUser, getUserReputation, getUsers, postAnswer, updateAnswer1, updateQuestion1, voteAnswer, voteQuestion } from './functions';
 import { question1 } from './types';
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
@@ -682,6 +682,12 @@ export default Vue.extend({
             console.log(value, "the value of remove object")
             const deleteAnswerObject = await deleteAnswer(value.answer_id);
             //
+            const historicalData = {
+                    action: 'delete-answer',
+                    data: value
+                }
+                await createHistorical(historicalData)
+            //
             // this.$router.go(0);
             this.forceUpdateQuestion();
         },
@@ -736,6 +742,12 @@ export default Vue.extend({
             const data = { body: this.answerBody, QuestionQuestionId: this.getQuestionData.data.question_id }
             await postAnswer(data); // den ananewnetai amesws h selida na fanei h apantish kai stelnei mono periorismeno airthmo leksewn,  vgazei error 500 meta
             //
+            const historicalData = {
+                action: 'answer',
+                data: data
+            }
+            await createHistorical(historicalData)
+            //
             this.forceUpdateQuestion();
             this.answerBody = ""
 
@@ -744,6 +756,11 @@ export default Vue.extend({
             const data = { value: 1, QuestionQuestionId: this.getQuestionData.data.question_id }
             await voteQuestion(data);
             // 
+            const historicalData = {
+                action: 'vote-question',
+                data: data
+            }
+            await createHistorical(historicalData)
             // this.$router.go(0);
             this.forceUpdateQuestion();
         },
@@ -751,6 +768,11 @@ export default Vue.extend({
             const data = { value: -1, QuestionQuestionId: this.getQuestionData.data.question_id }
             await voteQuestion(data);
             //
+            const historicalData = {
+                action: 'vote-question',
+                data: data
+            }
+            await createHistorical(historicalData)
             // this.$router.go(0);
             this.forceUpdateQuestion();
         },
@@ -767,6 +789,13 @@ export default Vue.extend({
             const value = { body: this.editedQuestionBody, title: this.editedQuestionTitle, }
             const questionId = this.getQuestionData.data.question_id
             await updateQuestion1(questionId, value);
+            //
+            const historicalData = {
+                action: 'update-question',
+                data: value
+            }
+            await createHistorical(historicalData)
+            //
             this.editing = false;
             // 
             // this.$router.go(0);
@@ -794,6 +823,11 @@ export default Vue.extend({
             const data = { value: 1, AnswerAnswerId: value.answer_id }
             await voteAnswer(data);
             // 
+            const historicalData = {
+                action: 'vote-answer',
+                data: data
+            }
+            await createHistorical(historicalData)
             // this.$router.go(0);
             this.forceUpdateQuestion();
         },
@@ -803,6 +837,11 @@ export default Vue.extend({
             const data = { value: -1, AnswerAnswerId: value.answer_id }
             await voteAnswer(data);
             // 
+            const historicalData = {
+                action: 'vote-answer',
+                data: data
+            }
+            await createHistorical(historicalData)
             // this.$router.go(0);
             this.forceUpdateQuestion();
         },
@@ -814,6 +853,13 @@ export default Vue.extend({
             const value = { body: this.editedAnswerBody }
             const answerId = this.updatedAnswer.answer_id
             await updateAnswer1(answerId, value);
+            //
+            const historicalData = {
+                action: 'update-answer',
+                data: value
+            }
+            await createHistorical(historicalData)
+            //
             this.answerEditing = false;
             // 
             // this.$router.go(0);

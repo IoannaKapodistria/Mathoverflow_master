@@ -34,7 +34,7 @@
                                 md="6"
                                 lg="3"
                                 class="mt-6"
-                                v-for="(user, i) in this.users"
+                                v-for="(user, i) in historyList"
                                 :key="i"
                             >
                                 <v-card
@@ -98,6 +98,14 @@
                         </v-row>
                     </v-col>
                 </v-row>
+                <v-pagination
+                    class="mt-8"
+                    v-model="page"
+                    :length="pages"
+                    @input="updatePage"
+                    circle
+                    color="purple"
+                ></v-pagination>
             </v-card-text>
         </v-card>
     </v-container>
@@ -107,11 +115,15 @@
 import store from '@/store';
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
-import { deleteAnswer, deleteQuestion, getQuestion, getUser, getUserReputation, removeUser } from './functions';
+import { deleteAnswer, deleteQuestion, getQuestion, getUser, getUserReputation, getUsers, removeUser } from './functions';
 export default Vue.extend({
     data: () => ({
         users: [] as any[],
-        admin: true
+        admin: true,
+        page: 1,
+        pageSize: 4,
+        listCount: 0,
+        historyList: [] as any[]
     }),
     watch: {
         getUsers() {
@@ -120,8 +132,26 @@ export default Vue.extend({
     },
     computed: {
         ...mapGetters(["getQuestions", "getUsers"]),
+        pages(): number {
+            if (this.pageSize == null || this.listCount == null) return 0;
+            return Math.ceil(this.listCount / this.pageSize);
+        }
     },
     methods: {
+        initPage() {
+            this.listCount = this.users.length;
+            if (this.listCount < this.pageSize) {
+                this.historyList = this.users;
+            } else {
+                this.historyList = this.users.slice(0, this.pageSize);
+            }
+        },
+        updatePage(pageIndex: any) {
+            let start = (pageIndex - 1) * this.pageSize;
+            let end = pageIndex * this.pageSize;
+            this.historyList = this.users.slice(start, end);
+            this.page = pageIndex;
+        },
         async userProfile(user: any) {
             console.log(user, "the value of click user");
             const userId = user.user_id;
@@ -183,8 +213,12 @@ export default Vue.extend({
         }
     },
     async mounted() {
-        this.getUsers;
+        await getUsers()
+        // this.getUsers;
         await this.fetchUsers()
+        //
+        this.initPage();
+        this.updatePage(this.page);
     }
 }) // na mpei pagination katw katw se periptwsh pollwn users
 </script>

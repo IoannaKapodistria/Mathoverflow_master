@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createReputation, createUser, deleteReputation, deleteUser, getReputation, getUser, getUsers, isLogged, sessionChecker, signIn, signOut, updateReputation, updateUser } from "~/db_controllers/usersController";
+import { createHistorical, createReputation, createUser, deleteReputation, deleteUser, getHistorical, getReputation, getUser, getUsers, isLogged, sessionChecker, signIn, signOut, updateReputation, updateUser } from "~/db_controllers/usersController";
 import { createAnswer, createAnswerVote, createQuestion, createVote, deleteAllAnswers, deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getQuestions, updateAnswer, updateQuestion } from "../db_controllers/questionsController";
 const mathOverflowRouter = Router();
 mathOverflowRouter.get("/", function (req, res) {
@@ -32,5 +32,7 @@ mathOverflowRouter.post("/signup", createUser);
 mathOverflowRouter.post("/signout", signOut);
 mathOverflowRouter.post("/signin", signIn);
 mathOverflowRouter.get("/islogged", isLogged);
+mathOverflowRouter.post("/create_historical", createHistorical);
+mathOverflowRouter.get("/get_historical/:id", getHistorical);
 export default mathOverflowRouter;
 //# sourceMappingURL=routes.js.map

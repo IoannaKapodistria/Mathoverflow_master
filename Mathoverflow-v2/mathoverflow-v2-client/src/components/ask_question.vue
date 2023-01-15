@@ -75,7 +75,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { postQuestion } from "../components/functions";
+import { createHistorical, postQuestion } from "../components/functions";
 // import VueQuillEditor from 'vue-quill-editor'
 import Quill from "quill"
 // import Delta from "quill-delta"
@@ -114,6 +114,11 @@ export default Vue.extend({
         async postQuestion() {
             const data = { title: this.title, body: this.body }
             await postQuestion(data);
+            const historicalData = {
+                action: 'ask',
+                data: data
+            }
+            await createHistorical(historicalData)
             //
             this.$router.push('/questions');
         }

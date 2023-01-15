@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createReputation, createUser, deleteReputation, deleteUser, getReputation, getUser, getUsers, isLogged, sessionChecker, signIn, signOut, updateReputation, updateUser } from "~/db_controllers/usersController";
+import { createHistorical, createReputation, createUser, deleteReputation, deleteUser, getHistorical, getReputation, getUser, getUsers, isLogged, sessionChecker, signIn, signOut, updateReputation, updateUser } from "~/db_controllers/usersController";
 // import path from "path";
 // import { getSignup, postSignup, getQuestions, getQuestionsbyId, getAskQuestion, postSubmitQuestion, postAnswer, getUserbyId, getUsers, postLogin, getLogin, getLogout } from "../route_controllers/functions";
 // import { sessionChecker } from "../db_controllers/usersController";
@@ -17,11 +17,9 @@ mathOverflowRouter.delete("/delete_question/:id", deleteQuestion);
 mathOverflowRouter.get("/questions", /*sessionChecker,*/ getQuestions);
 mathOverflowRouter.post("/sessionCheck", /*sessionChecker,*/ sessionChecker);
 mathOverflowRouter.get("/questions/:id", getQuestion);
-// mathOverflowRouter.get("/questions/:id", sessionChecker, getQuestion);
 
 mathOverflowRouter.get("/users", getUsers);
 mathOverflowRouter.get("/users/:id", getUser);
-// mathOverflowRouter.get("/users/:id", getUser);
 mathOverflowRouter.put("/update_user/:id", updateUser);
 mathOverflowRouter.delete("/delete_user/:id", deleteUser);
 //
@@ -47,49 +45,9 @@ mathOverflowRouter.post("/signout", signOut);
 mathOverflowRouter.post("/signin", signIn);
 mathOverflowRouter.get("/islogged", isLogged);
 
-// mathOverflowRouter.get("/questions", getQuestions);
-// router.get("/", function (req, res) {
-//     res.redirect("/questions");
-// });
+mathOverflowRouter.post("/create_historical", createHistorical);
+mathOverflowRouter.get("/get_historical/:id", getHistorical);
 
-// router.get("/signup", getSignup);
-// router.post("/signup", postSignup);
-
-// //router.get("/login", route_functions.getlogin);
-
-// //router.post("/login", route_functions.postlogin);
-
-// router.get(
-//     "/questions",
-//     //route_functions.checkAuthenticated,
-//     getQuestions
-// );
-
-// router.get("/questions/:id", sessionChecker, getQuestionsbyId);
-
-// router.get("/ask", sessionChecker, getAskQuestion);
-
-// router.post("/questions", postSubmitQuestion);
-
-// router.post("/answer", postAnswer);
-
-// router.get("/users/:id", getUserbyId);
-
-// router.get("/users", getUsers);
-
-// //router.get("/login", route_functions.getSessionChecker);
-// router.post("/login", postLogin);
-// router.get("/login", getLogin);
-
-// router.get("/logout", getLogout);
-
-// router.get("/islogged", function (req, res) {
-//     //mono g tobutton log in/out
-//     if (req.session.user_sid) {
-//         res.send(JSON.stringify({ islogged: "true", userId: req.session.user_sid }));
-//     } else {
-//         res.send(JSON.stringify({ islogged: "false" }));
-//     }
-// });
+//
 
 export default mathOverflowRouter;

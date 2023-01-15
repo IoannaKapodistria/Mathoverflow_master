@@ -413,3 +413,37 @@ export async function getUserReputation(id: number) {
         });
     return response;
 }
+
+export async function createHistorical(data: any) {
+    let response = await ky
+        .post("http://localhost:3000/create_historical", {
+            mode: "cors",
+            body: JSON.stringify(data),
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then((value: any) => {
+            console.log("this is the value:", value);
+        });
+}
+
+export async function getUserHistorical(id: number) {
+    let response = await ky
+        .get(`http://localhost:3000/get_historical/${id}`, {
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then(async (value: any) => {
+            const a = await value;
+            console.log("this is the get user historical value:", a);
+            return a.json();
+        });
+    return response;
+}

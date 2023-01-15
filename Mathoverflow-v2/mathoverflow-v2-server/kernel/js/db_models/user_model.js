@@ -2,6 +2,7 @@ import { DataTypes, Model } from "sequelize";
 import sequelize_db from "../config/database.js";
 import { Answer } from "./answer_model.js";
 import { AnswerVote } from "./answer_vote_model.js";
+import { HistoricalData } from "./historical_data_model.js";
 import { Question } from "./question_model.js";
 import { Reputation } from "./reputation_model.js";
 import { Vote } from "./vote_model.js";
@@ -59,4 +60,10 @@ User.hasMany(Reputation, {
 });
 Reputation.belongsTo(User, {
   as: "User"
+});
+HistoricalData.belongsTo(User, {
+  as: "User"
+});
+User.hasMany(HistoricalData, {
+  as: "HistoricalData"
 });

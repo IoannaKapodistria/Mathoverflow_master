@@ -1,3 +1,4 @@
+import { HistoricalData } from "../../../kernel/js/db_models/historical_data_model.js";
 import { Reputation } from "../../../kernel/js/db_models/reputation_model.js";
 import { Answer } from "../db_models/answer_model.js";
 import { Question } from "../db_models/question_model.js";
@@ -253,6 +254,40 @@ export function updateReputation(req, res) {
     console.log(err, "this is the error");
     res.status(500).send({
       message: "Error retrieving Reputation with id=" + id
+    });
+  });
+}
+export async function createHistorical(req, res) {
+  console.log(req.session, "this the req seession in vote");
+  await HistoricalData.create({
+    action: req.body.action,
+    data: req.body.data,
+    UserUserId: req.session.user_sid
+  }).then(data => {
+    res.send(data);
+  }).catch(err => {
+    res.status(500).send({
+      message: err.message || "Some error occurred while creating the Historical Data."
+    });
+  });
+}
+export async function getHistorical(req, res) {
+  const id = req.params.id;
+  await HistoricalData.findAll({
+    where: {
+      UserUserId: id
+    }
+  }).then(async data => {
+    if (data) {
+      res.send(data);
+    } else {
+      res.status(404).send({
+        message: `Cannot find Historical Data with user-id=${id}.`
+      });
+    }
+  }).catch(err => {
+    res.status(500).send({
+      message: "Could not find Historical Data with user-id=" + id
     });
   });
 }

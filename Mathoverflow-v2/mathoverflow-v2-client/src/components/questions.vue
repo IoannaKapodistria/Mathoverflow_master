@@ -253,7 +253,7 @@ import Vue from 'vue'
 import { mapGetters } from 'vuex';
 import { VueEditor } from "vue2-editor";
 import progressCircular from "@/tools/circular_loading/circular_loading.vue"
-import { checkSession, deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
+import { checkSession, createHistorical, deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
 export default Vue.extend({
     components: { VueEditor, progressCircular },
     data: () => ({
@@ -382,12 +382,24 @@ export default Vue.extend({
                 // for (const answer of this.getQuestionData.answers) {
                 for (const answer of question.answers) {
                     const deleteAnswerObject = await deleteAnswer(answer.answer_id);
+                    //
+                    const historicalData = {
+                        action: 'delete-answer',
+                        data: value
+                    }
+                    await createHistorical(historicalData)
+                    //
                 }
                 const deleteQuestionObject = await deleteQuestion(value.question_id);
             } else {
                 console.log('mpika edw')
                 const deleteQuestionObject = await deleteQuestion(value.question_id);
             }
+            const historicalData = {
+                action: 'delete-question',
+                data: value
+            }
+            await createHistorical(historicalData)
             //
             this.$router.go(0);
 
