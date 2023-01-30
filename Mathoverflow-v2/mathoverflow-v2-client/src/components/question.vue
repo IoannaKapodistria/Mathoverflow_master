@@ -180,7 +180,8 @@
         <br />
         <v-card flat>
             <v-card-text>
-                <v-icon color="lime">mdi-forum-plus</v-icon
+                <!-- <v-icon color="lime">mdi-forum-plus</v-icon -->
+                <v-icon color="lime" size="25">mdi-chat-plus</v-icon
                 ><span class="text-overline lime--text"> Your Answer </span>
                 <vue-editor
                     ref="editor2"
@@ -221,7 +222,8 @@
                 class="text-overline font-weight-bold d-flex justify-center py-2"
                 style="color: white"
             >
-                <v-icon class="me-2">mdi-forum-outline</v-icon>
+                <!-- <v-icon class="me-2">mdi-forum-outline</v-icon> -->
+                <v-icon class="me-2">mdi-wechat</v-icon>
                 Answers
             </v-card-text>
         </v-card>

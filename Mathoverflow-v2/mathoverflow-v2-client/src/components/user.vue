@@ -461,7 +461,8 @@ export default Vue.extend({
         tab: 0,
         resources: [
             { name: 'Questions', value: 0, color: '#B388FF', icon: 'mdi-help', uid: 'questions' },
-            { name: 'Answers', value: 0, color: '#26C6DA', icon: 'mdi-forum', uid: 'answers' },
+            // { name: 'Answers', value: 0, color: '#26C6DA', icon: 'mdi-forum', uid: 'answers' },
+            { name: 'Answers', value: 0, color: '#26C6DA', icon: 'mdi-wechat', uid: 'answers' },
             { name: 'Reputation', value: 0, color: '#FBC02D', icon: 'mdi-trophy', uid: 'reputation' }
         ],
         // na ftiaxtei getter
