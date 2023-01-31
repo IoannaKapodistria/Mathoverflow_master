@@ -1,127 +1,128 @@
 <template>
     <!-- The question -->
     <v-card flat class="questionCard">
-        <v-card flat :key="fuContent">
-            <v-card flat v-if="!editing">
+        <v-card-text>
+            <v-card flat :key="fuContent">
+                <v-card flat v-if="!editing">
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="10" class="pb-0">
+                                <span
+                                    class="qTittle2 text-body-1 font-weight-medium"
+                                >
+                                    {{ this.questionExample.title }}
+                                </span>
+                            </v-col>
+                            <v-col cols="2" sm="3" md="3" lg="2">
+                                <v-btn
+                                    dark
+                                    color="#FFA726"
+                                    depressed
+                                    elevation="1"
+                                    small
+                                    class="mt-3 py-4"
+                                    @click="ask"
+                                    >Ask Question</v-btn
+                                >
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
+                <v-card v-if="editing" flat style="border: 2px dashed #b39ddb">
+                    <v-card-text v-if="editing" class="pb-0">
+                        <v-textarea
+                            color="#b39ddb"
+                            rows="2"
+                            v-model="editedQuestionTitle"
+                        ></v-textarea>
+                    </v-card-text>
+                </v-card>
+                <v-divider></v-divider>
                 <v-card-text>
                     <v-row>
-                        <v-col cols="10" class="pb-0">
-                            <span
-                                class="qTittle2 text-body-1 font-weight-medium"
-                            >
-                                {{ this.questionExample.title }}
-                            </span>
-                        </v-col>
-                        <v-col cols="2" sm="3" md="3" lg="2">
-                            <v-btn
-                                dark
-                                color="#FFA726"
-                                depressed
-                                elevation="1"
-                                small
-                                class="mt-3 py-4"
-                                @click="ask"
-                                >Ask Question</v-btn
-                            >
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-            </v-card>
-            <v-card v-if="editing" flat style="border: 2px dashed #b39ddb">
-                <v-card-text v-if="editing" class="pb-0">
-                    <v-textarea
-                        color="#b39ddb"
-                        rows="2"
-                        v-model="editedQuestionTitle"
-                    ></v-textarea>
-                </v-card-text>
-            </v-card>
-            <v-divider></v-divider>
-            <v-card-text>
-                <v-row>
-                    <v-col
-                        v-if="!editing"
-                        cols="1"
-                        sm="3"
-                        md="2"
-                        lg="1"
-                        class="mt-0"
-                    >
-                        <v-btn right x-large icon>
-                            <v-icon
-                                size="45px"
-                                @click="upVoteQuestion"
-                                color="#78909C"
-                                >mdi-menu-up</v-icon
-                            >
-                        </v-btn>
-                        <span class="d-flex">
-                            <v-chip dark color="#26A69A" class="ms-2">
-                                {{ this.questionSumVotes }}
-                            </v-chip>
-                        </span>
-                        <v-btn right x-large icon>
-                            <v-icon
-                                size="45px"
-                                @click="downVoteQuestion"
-                                color="#78909C"
-                                >mdi-menu-down</v-icon
-                            >
-                        </v-btn>
-                    </v-col>
-                    <v-col
-                        :cols="editing ? 12 : 11"
-                        :sm="editing ? 12 : 9"
-                        :md="editing ? 12 : 10"
-                        :lg="editing ? 12 : 11"
-                        class="mt-2"
-                    >
-                        <vue-editor
+                        <v-col
                             v-if="!editing"
-                            class="kappa2"
-                            disabled
-                            v-model="this.questionExample.body"
-                            :editorOptions="editorOptions"
-                        ></vue-editor>
-                        <v-card
-                            v-if="editing"
-                            flat
-                            style="border: 2px dashed #b39ddb"
+                            cols="1"
+                            sm="3"
+                            md="2"
+                            lg="1"
+                            class="mt-0"
                         >
-                            <v-card-text>
-                                <vue-editor
-                                    class="pt-0"
-                                    v-model="editedQuestionBody"
-                                    :editorOptions="toolbarOpts_old"
+                            <v-btn right x-large icon>
+                                <v-icon
+                                    size="45px"
+                                    @click="upVoteQuestion"
+                                    color="#78909C"
+                                    >mdi-menu-up</v-icon
                                 >
-                                </vue-editor>
-                            </v-card-text>
-                            <v-card-actions>
-                                <v-row justify="center" align="center">
-                                    <v-col justify="center" align="center">
-                                        <v-btn
-                                            class="me-3"
-                                            small
-                                            dark
-                                            color="#b39ddb"
-                                            @click="editing = false"
-                                        >
-                                            cancel
-                                        </v-btn>
-                                        <v-btn
-                                            small
-                                            outlined
-                                            color="#b39ddb"
-                                            @click="updateQuestion"
-                                        >
-                                            save</v-btn
-                                        >
-                                    </v-col>
-                                </v-row>
-                            </v-card-actions>
-                        </v-card>
-                        <v-row class="mt-15">
-                            <!-- <v-btn right x-large icon>
+                            </v-btn>
+                            <span class="d-flex">
+                                <v-chip dark color="#26A69A" class="ms-2">
+                                    {{ this.questionSumVotes }}
+                                </v-chip>
+                            </span>
+                            <v-btn right x-large icon>
+                                <v-icon
+                                    size="45px"
+                                    @click="downVoteQuestion"
+                                    color="#78909C"
+                                    >mdi-menu-down</v-icon
+                                >
+                            </v-btn>
+                        </v-col>
+                        <v-col
+                            :cols="editing ? 12 : 11"
+                            :sm="editing ? 12 : 9"
+                            :md="editing ? 12 : 10"
+                            :lg="editing ? 12 : 11"
+                            class="mt-2"
+                        >
+                            <vue-editor
+                                v-if="!editing"
+                                class="kappa2"
+                                disabled
+                                v-model="this.questionExample.body"
+                                :editorOptions="editorOptions"
+                            ></vue-editor>
+                            <v-card
+                                v-if="editing"
+                                flat
+                                style="border: 2px dashed #b39ddb"
+                            >
+                                <v-card-text>
+                                    <vue-editor
+                                        class="pt-0"
+                                        v-model="editedQuestionBody"
+                                        :editorOptions="toolbarOpts_old"
+                                    >
+                                    </vue-editor>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-row justify="center" align="center">
+                                        <v-col justify="center" align="center">
+                                            <v-btn
+                                                class="me-3"
+                                                small
+                                                dark
+                                                color="#b39ddb"
+                                                @click="editing = false"
+                                            >
+                                                cancel
+                                            </v-btn>
+                                            <v-btn
+                                                small
+                                                outlined
+                                                color="#b39ddb"
+                                                @click="updateQuestion"
+                                            >
+                                                save</v-btn
+                                            >
+                                        </v-col>
+                                    </v-row>
+                                </v-card-actions>
+                            </v-card>
+                            <v-row class="mt-15">
+                                <!-- <v-btn right x-large icon>
                                 <v-icon @click="upVoteQuestion"
                                     >mdi-menu-up</v-icon
                                 >
@@ -134,29 +135,29 @@
                                     >mdi-menu-down</v-icon
                                 >
                             </v-btn> -->
-                            <v-spacer></v-spacer>
-                            <span class="me-9">
-                                <v-btn
-                                    small
-                                    outlined
-                                    rounded
-                                    text
-                                    @click="editQuestion"
-                                >
-                                    EDIT Question
-                                </v-btn>
-                            </span>
-                            <span class="me-9" v-if="admin">
-                                <v-btn small outlined rounded text>
-                                    Delete Question
-                                </v-btn>
-                            </span>
-                        </v-row>
-                    </v-col>
-                </v-row>
-            </v-card-text>
-        </v-card>
-        <!-- <v-dialog v-model="editQuestionForm" width="800">
+                                <v-spacer></v-spacer>
+                                <span class="me-9">
+                                    <v-btn
+                                        small
+                                        outlined
+                                        rounded
+                                        text
+                                        @click="editQuestion"
+                                    >
+                                        EDIT Question
+                                    </v-btn>
+                                </span>
+                                <span class="me-9" v-if="admin">
+                                    <v-btn small outlined rounded text>
+                                        Delete Question
+                                    </v-btn>
+                                </span>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+            </v-card>
+            <!-- <v-dialog v-model="editQuestionForm" width="800">
             <v-card>
                 <v-card-text>
                     <vue-editor
@@ -175,208 +176,233 @@
                 </v-card-actions>
             </v-card>
         </v-dialog> -->
-        <!-- type an answer-->
-        <br />
-        <br />
-        <v-card flat>
-            <v-card-text>
-                <!-- <v-icon color="lime">mdi-forum-plus</v-icon -->
-                <v-icon color="lime" size="25">mdi-chat-plus</v-icon
-                ><span class="text-overline lime--text"> Your Answer </span>
-                <vue-editor
-                    ref="editor2"
-                    class="mt-3"
-                    v-model="answerBody"
-                    :editorOptions="toolbarOpts_old"
-                >
-                </vue-editor>
-                <v-row>
-                    <v-btn
-                        class="mt-8 ms-3"
-                        small
-                        dark
-                        color="lime"
-                        @click="postAnswer1"
+            <!-- type an answer-->
+            <br />
+            <br />
+            <v-card flat>
+                <v-card-text>
+                    <!-- <v-icon color="lime">mdi-forum-plus</v-icon -->
+                    <v-icon color="lime" size="25">mdi-chat-plus</v-icon
+                    ><span class="text-overline lime--text"> Your Answer </span>
+                    <vue-editor
+                        ref="editor2"
+                        class="mt-3"
+                        v-model="answerBody"
+                        :editorOptions="toolbarOpts_old"
                     >
-                        Post Your Answer
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-icon> mdi-icon </v-icon>
-                </v-row>
-            </v-card-text>
-        </v-card>
-        <!-- table with answers-->
-        <br />
-        <br />
-        <br />
-        <v-card
-            color="#26C6DA"
-            rounded="md"
-            elevation="3"
-            width="35%"
-            style="z-index: 20001"
-            class="overlayQues"
-            dark
-        >
-            <v-card-text
-                class="text-overline font-weight-bold d-flex justify-center py-2"
-                style="color: white"
+                    </vue-editor>
+                    <v-row>
+                        <v-btn
+                            class="mt-8 ms-3"
+                            small
+                            dark
+                            color="lime"
+                            @click="postAnswer1"
+                        >
+                            Post Your Answer
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-icon> mdi-icon </v-icon>
+                    </v-row>
+                </v-card-text>
+            </v-card>
+            <!-- table with answers-->
+            <br />
+            <br />
+            <br />
+            <v-card
+                color="#26C6DA"
+                rounded="md"
+                elevation="3"
+                width="35%"
+                style="z-index: 20001"
+                class="overlayQues"
+                dark
             >
-                <!-- <v-icon class="me-2">mdi-forum-outline</v-icon> -->
-                <v-icon class="me-2">mdi-wechat</v-icon>
-                Answers
-            </v-card-text>
-        </v-card>
-        <v-card flat style="border-top: 2px solid #26c6da" rounded="sm">
-            <!-- <v-toolbar flat>
+                <v-card-text
+                    class="text-overline font-weight-bold d-flex justify-center py-2"
+                    style="color: white"
+                >
+                    <!-- <v-icon class="me-2">mdi-forum-outline</v-icon> -->
+                    <v-icon class="me-2">mdi-wechat</v-icon>
+                    Answers
+                </v-card-text>
+            </v-card>
+            <v-card flat style="border-top: 2px solid #26c6da" rounded="sm">
+                <!-- <v-toolbar flat>
                 <v-toolbar-title> Answers </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-icon>mdi-database</v-icon>
             </v-toolbar> -->
-            <v-card-text class="pt-8">
-                <v-data-table
-                    :headers="answersCols"
-                    :items="this.answers"
-                    v-if="admin"
-                    sort-by="votes"
-                    :sort-desc="true"
-                    class="answersTable"
-                >
-                    <template v-slot:[`item.votes`]="props">
-                        <v-row>
-                            <v-col cols="3" sm="12" md="12" lg="3" class="pa-0">
-                                <v-btn right x-large icon>
-                                    <v-icon
-                                        size="26px"
-                                        color="#78909C"
-                                        @click="upVoteAnswer(props.item)"
-                                        class="mt-3"
-                                        >mdi-plus</v-icon
-                                    >
-                                </v-btn>
-                            </v-col>
-                            <v-col cols="4" sm="12" md="12" lg="4" class="pa-0">
-                                <v-chip color="teal" dark class="mt-4">
-                                    {{ props.item.votes }}
-                                </v-chip>
-                            </v-col>
-                            <v-col cols="3" sm="12" md="12" lg="3" class="pa-0">
-                                <v-btn right x-large icon>
-                                    <v-icon
-                                        @click="downVoteAnswer(props.item)"
-                                        color="#78909C"
-                                        dark
-                                        size="26px"
-                                        class="mt-3"
-                                        >mdi-minus</v-icon
-                                    >
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-
-                        <!-- </div> -->
-                    </template>
-                    <template v-slot:[`item.body`]="props">
-                        <v-card
-                            flat
-                            class="py-5 px-0"
-                            color="transparent"
-                            width="400px"
-                            height="250px"
-                        >
-                            <!-- <v-card-text class="text-truncate"> -->
-                            <v-card-text class="answerBody pa-0 ms-3">
-                                <!-- <span> -->
-                                <vue-editor
-                                    class="kappa"
-                                    disabled
-                                    v-model="props.item.body"
-                                    :editorOptions="editorOptions"
-                                    :style="editorStyle"
+                <v-card-text class="pt-8">
+                    <v-data-table
+                        :headers="answersCols"
+                        :items="this.answers"
+                        v-if="admin"
+                        sort-by="votes"
+                        :sort-desc="true"
+                        class="answersTable"
+                    >
+                        <template v-slot:[`item.votes`]="props">
+                            <v-row>
+                                <v-col
+                                    cols="3"
+                                    sm="12"
+                                    md="12"
+                                    lg="3"
+                                    class="pa-0"
                                 >
-                                </vue-editor>
-                                <!-- </span> -->
-                            </v-card-text>
-                        </v-card>
-                    </template>
-                    <template v-slot:[`item.user`]="props">
-                        <v-card
-                            flat
-                            class="py-0 px-0"
-                            color="transparent"
-                            width="100px"
-                        >
-                            <v-card-text class="pa-0">
-                                <v-row justify="center" align="center">
-                                    <v-col
-                                        cols="5"
-                                        class="pa-0"
-                                        justify="center"
-                                        align="center"
-                                    >
-                                        <v-img
-                                            contain
-                                            src="/prof_photo.png"
-                                            height="75"
-                                        ></v-img>
-                                    </v-col>
-                                    <!-- <v-icon>mdi-account</v-icon> -->
-                                    <v-col
-                                        cols="7"
-                                        class="pa-0"
-                                        justify="center"
-                                        align="center"
-                                    >
-                                        <v-row
-                                            class="ms-0 me-0"
-                                            justify="center"
-                                            align="center"
+                                    <v-btn right x-large icon>
+                                        <v-icon
+                                            size="26px"
+                                            color="#78909C"
+                                            @click="upVoteAnswer(props.item)"
+                                            class="mt-3"
+                                            >mdi-plus</v-icon
                                         >
-                                            <span>{{
-                                                props.item.user.username
-                                            }}</span>
-                                        </v-row>
-                                        <v-row
-                                            class="ms-1"
-                                            justify="center"
-                                            align="center"
+                                    </v-btn>
+                                </v-col>
+                                <v-col
+                                    cols="4"
+                                    sm="12"
+                                    md="12"
+                                    lg="4"
+                                    class="pa-0"
+                                >
+                                    <v-chip color="teal" dark class="mt-4">
+                                        {{ props.item.votes }}
+                                    </v-chip>
+                                </v-col>
+                                <v-col
+                                    cols="3"
+                                    sm="12"
+                                    md="12"
+                                    lg="3"
+                                    class="pa-0"
+                                >
+                                    <v-btn right x-large icon>
+                                        <v-icon
+                                            @click="downVoteAnswer(props.item)"
+                                            color="#78909C"
+                                            dark
+                                            size="26px"
+                                            class="mt-3"
+                                            >mdi-minus</v-icon
                                         >
-                                            <span class="font-weight-medium">{{
-                                                props.item.user.reputation
-                                            }}</span>
-                                            <v-icon
-                                                size="20px"
-                                                color="#FBC02D"
-                                                class="ms-1"
-                                                >mdi-trophy</v-icon
-                                            >
-                                        </v-row>
-                                    </v-col>
-                                </v-row>
-                            </v-card-text>
-                        </v-card>
-                    </template>
-                    <template v-slot:[`item.edit`]="props">
-                        <v-icon @click="showAnswerEdit(props.item)"
-                            >mdi-pencil</v-icon
-                        >
-                        <v-dialog
-                            v-model="answerEditing"
-                            width="850"
-                            height="auto"
-                        >
-                            <v-card>
-                                <v-card-text class="pa-4">
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+
+                            <!-- </div> -->
+                        </template>
+                        <template v-slot:[`item.body`]="props">
+                            <v-card
+                                flat
+                                class="py-5 px-0"
+                                color="transparent"
+                                width="400px"
+                                height="250px"
+                            >
+                                <!-- <v-card-text class="text-truncate"> -->
+                                <v-card-text class="answerBody pa-0 ms-3">
+                                    <!-- <span> -->
                                     <vue-editor
-                                        v-model="editedAnswerBody"
-                                        :editorOptions="toolbarOpts_old"
-                                    ></vue-editor>
-                                    <!-- {{ props.item.body }} -->
+                                        class="kappa"
+                                        disabled
+                                        v-model="props.item.body"
+                                        :editorOptions="editorOptions"
+                                        :style="editorStyle"
+                                    >
+                                    </vue-editor>
+                                    <!-- </span> -->
                                 </v-card-text>
-                                <v-card-actions>
+                            </v-card>
+                        </template>
+                        <template v-slot:[`item.user`]="props">
+                            <v-card
+                                flat
+                                class="py-0 px-0"
+                                color="transparent"
+                                width="100px"
+                            >
+                                <v-card-text class="pa-0">
                                     <v-row justify="center" align="center">
-                                        <v-col justify="center" align="center">
-                                            <!-- <v-btn
+                                        <v-col
+                                            cols="5"
+                                            class="pa-0"
+                                            justify="center"
+                                            align="center"
+                                        >
+                                            <v-img
+                                                contain
+                                                src="/prof_photo.png"
+                                                height="75"
+                                            ></v-img>
+                                        </v-col>
+                                        <!-- <v-icon>mdi-account</v-icon> -->
+                                        <v-col
+                                            cols="7"
+                                            class="pa-0"
+                                            justify="center"
+                                            align="center"
+                                        >
+                                            <v-row
+                                                class="ms-0 me-0"
+                                                justify="center"
+                                                align="center"
+                                            >
+                                                <span>{{
+                                                    props.item.user.username
+                                                }}</span>
+                                            </v-row>
+                                            <v-row
+                                                class="ms-1"
+                                                justify="center"
+                                                align="center"
+                                            >
+                                                <span
+                                                    class="font-weight-medium"
+                                                    >{{
+                                                        props.item.user
+                                                            .reputation
+                                                    }}</span
+                                                >
+                                                <v-icon
+                                                    size="20px"
+                                                    color="#FBC02D"
+                                                    class="ms-1"
+                                                    >mdi-trophy</v-icon
+                                                >
+                                            </v-row>
+                                        </v-col>
+                                    </v-row>
+                                </v-card-text>
+                            </v-card>
+                        </template>
+                        <template v-slot:[`item.edit`]="props">
+                            <v-icon @click="showAnswerEdit(props.item)"
+                                >mdi-pencil</v-icon
+                            >
+                            <v-dialog
+                                v-model="answerEditing"
+                                width="850"
+                                height="auto"
+                            >
+                                <v-card>
+                                    <v-card-text class="pa-4">
+                                        <vue-editor
+                                            v-model="editedAnswerBody"
+                                            :editorOptions="toolbarOpts_old"
+                                        ></vue-editor>
+                                        <!-- {{ props.item.body }} -->
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-row justify="center" align="center">
+                                            <v-col
+                                                justify="center"
+                                                align="center"
+                                            >
+                                                <!-- <v-btn
                                                 class="me-3"
                                                 small
                                                 dark
@@ -385,43 +411,48 @@
                                             >
                                                 cancel
                                             </v-btn> -->
-                                            <v-btn
-                                                class="me-3"
-                                                small
-                                                dark
-                                                color="#b39ddb"
-                                                @click="answerEditing = false"
-                                            >
-                                                cancel
-                                            </v-btn>
-                                            <v-btn
-                                                small
-                                                outlined
-                                                color="#b39ddb"
-                                                @click="
-                                                    updateAnswer(
-                                                        props.item.body
-                                                    )
-                                                "
-                                            >
-                                                save</v-btn
-                                            >
-                                        </v-col>
-                                    </v-row>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
-                    </template>
-                    <template v-slot:[`item.remove`]="props">
-                        <v-icon @click="removeObject(props.item)"
-                            >mdi-delete</v-icon
-                        >
-                    </template>
-                </v-data-table>
-            </v-card-text>
-        </v-card>
+                                                <v-btn
+                                                    class="me-3"
+                                                    small
+                                                    dark
+                                                    color="#b39ddb"
+                                                    @click="
+                                                        answerEditing = false
+                                                    "
+                                                >
+                                                    cancel
+                                                </v-btn>
+                                                <v-btn
+                                                    small
+                                                    outlined
+                                                    color="#b39ddb"
+                                                    @click="
+                                                        updateAnswer(
+                                                            props.item.body
+                                                        )
+                                                    "
+                                                >
+                                                    save</v-btn
+                                                >
+                                            </v-col>
+                                        </v-row>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </template>
+                        <template v-slot:[`item.remove`]="props">
+                            <v-icon @click="removeObject(props.item)"
+                                >mdi-delete</v-icon
+                            >
+                        </template>
+                    </v-data-table>
+                </v-card-text>
+            </v-card>
+            <!-- <progress-circular
+                :progressCircular="progressCircular"
+            ></progress-circular> -->
+        </v-card-text>
     </v-card>
-    <!-- </v-container> -->
 </template>
 
 <script lang="ts">
@@ -432,7 +463,7 @@ import { question1 } from './types';
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
-// import * as mathLive from "mathlive"
+import progressCircular from "@/tools/circular_loading/circular_loading.vue"
 import Quill from 'quill';
 import dayjs from 'dayjs';
 // Vue.use(mathLive);
@@ -445,7 +476,7 @@ declare global {
 //
 export default Vue.extend({
 
-    components: { VueEditor },
+    components: { VueEditor, progressCircular },
     props: {
         question: {
             type: Object as PropType<question1>,
@@ -573,7 +604,9 @@ export default Vue.extend({
         editedQuestionTitle: "",
         answerEditing: false,
         updatedAnswer: {} as any,
-        editedAnswerBody: ''
+        editedAnswerBody: '',
+        progressCircular: false
+
     }),
     watch: {
         question() {
@@ -587,6 +620,7 @@ export default Vue.extend({
         },
         // 
         async getQuestionData(value: any) {
+            this.progressCircular = true;
             //clean answers table
             const empty: any[] = []
             this.answers = empty;
@@ -624,6 +658,8 @@ export default Vue.extend({
             this.questionSumVotes = votesSum;
             //
             this.editedQuestionTitle = this.questionExample.title
+            //
+            this.progressCircular = false
         },
 
     },

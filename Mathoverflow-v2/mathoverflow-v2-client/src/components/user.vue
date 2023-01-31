@@ -177,6 +177,13 @@
                         </v-row>
                     </v-card-text>
                 </v-card>
+                <!-- apexchart with user activity in charts -->
+                <v-btn @click="getUserHistorical1">get historical</v-btn>
+                <apexchart
+                    height="300px"
+                    :options="options"
+                    :series="series"
+                ></apexchart>
             </v-tab-item>
             <v-tab-item class="mt-2">
                 <v-card
@@ -382,15 +389,17 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { deleteAnswer, deleteQuestion, getAnswer, getQuestion, getUser, getUserReputation, isLogged, removeUser } from './functions';
+import { deleteAnswer, deleteQuestion, getAnswer, getQuestion, getUser, getUserHistorical, getUserReputation, isLogged, removeUser } from './functions';
 import { mapGetters } from 'vuex';
 import store from '@/store';
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
+import { ApexOptions } from "apexcharts";
+import Apexchart from "vue-apexcharts";
 import dayjs from 'dayjs';
 export default Vue.extend({
-    components: { VueEditor },
+    components: { VueEditor, Apexchart },
     data: () => ({
         answersCols: [
             {
@@ -466,7 +475,141 @@ export default Vue.extend({
             { name: 'Reputation', value: 0, color: '#FBC02D', icon: 'mdi-trophy', uid: 'reputation' }
         ],
         // na ftiaxtei getter
-        darkTheme: false
+        darkTheme: false,
+        series: [] as any[],
+
+        options: {
+            series: [] as any[],
+            chart: {
+                height: 350,
+                type: 'line'
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            xaxis: {
+                type: 'datetime',
+                categories: [] as any[],
+                // min: 0
+                // labels: {
+                //     formatter: (x: any) => { return (x.toFixed(0)); }
+                // }
+
+
+            },
+            yaxis: {
+                // title: 'Epochs',
+                show: true,
+                // labels: {
+                //     formatter: (val: number) => (val.toFixed(6))
+                // }
+                // decimalsInFloat: 6,
+
+
+            },
+            tooltip: {
+                enabled: true,
+                x: {
+                    formatter: function (value: any, series: any) {
+                        // use series argument to pull original string from chart data
+                        return 'Epochs: ' + value;
+                    }
+                }
+            },
+            title: {
+                margin: 10,
+                offsetX: 0,
+                offsetY: 0,
+                floating: false,
+                text: '',
+                align: 'center',
+                style: {
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    fontFamily: undefined,
+                    color: '#4527A0'
+                },
+            }
+        } as ApexOptions,
+        options2: {
+            series: [],
+            chart: {
+                height: 350,
+                type: 'line',
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+            },
+            legend: {
+                fontSize: "17em",
+            },
+            markers: {
+                size: 0,
+                hover: {
+                    sizeOffset: 6
+                }
+            },
+            yaxis: {
+                min: 0,
+                labels: {
+                    style: {
+                        fontSize: "1em",
+                    },
+                },
+                title: {
+                    offsetX: -7,
+                    style: {
+                        fontSize: "1.5em",
+                    },
+                },
+            },
+            xaxis: {
+                type: "datetime",
+                categories: [],
+                labels: {
+                    // todo: make this options a different property
+                    datetimeUTC: false,
+                    style: {
+                        fontSize: "1em",
+                    },
+                },
+                title: {
+                    offsetY: 15,
+                    style: {
+                        fontSize: "1.5em",
+                    },
+                },
+            },
+            tooltip: {
+                style: {
+                    fontSize: "1em",
+                },
+                x: {
+                    format: "dd MMM yyyy, HH:mm:ss",
+                },
+                y: {
+                    formatter: (val: number | undefined) => (val?.toString()),
+                },
+                followCursor: true,
+                onDatasetHover: {
+                    highlightDataSeries: true,
+                },
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        } as ApexOptions,
+
+
+
+
+
     }),
     watch: {
         getUserData(value: any) {
@@ -621,6 +764,153 @@ export default Vue.extend({
             console.log(userRep, 'the user reputation')
             return userRep.value;
         },
+        async getUserHistorical1() {
+            const duration = dayjs().subtract(1, 'hours').toISOString()
+            const userid = this.user.uid;
+            //
+            const response = await getUserHistorical(userid)
+            console.log(response, 'the response of get user historical')
+            //
+            // for (const object of response) {
+            //     const date = dayjs(object.createdAt).format("YYYY-MM-DD HH:mm:ss")
+            //     console.log(date, 'the historical date of each historical object')
+            // }
+            const array = this.groupByAction(response)
+            console.log(array, 'the array with the actions')
+            let series3: any[] = []
+            let categories2: any[] = []
+            for (const serie of array) {
+                const serieObject = {
+                    name: serie.name,
+                    data: this.ensureArrayLength(serie.data)//serie.data,
+                    // color:'red'
+                }
+                series3.push(serieObject)
+            }
+            categories2 = array[0].categories
+            //
+            console.log(categories2, 'the categories2')
+
+            const cat = this.convertDates(categories2)
+            //
+            console.log(series3, 'the series3')
+            console.log(cat, 'the categories')
+            //
+            this.options = {
+                ...this.options,
+                xaxis: {
+                    ...this.options.xaxis,
+                    categories: cat
+                }
+            }
+            this.options = {
+                ...this.options,
+                title: {
+                    ...this.options.title,
+                    text: 'User Actions'
+                }
+            }
+            this.options = {
+                ...this.options,
+                series: series3
+            }
+
+        },
+        convertDates(arr: any[]) {
+            // while (arr.length < 5) {
+            //     arr.push('n/a');
+            // }
+            // return arr;
+            return arr.map((item) => (item === 'n/a' ? item : dayjs(item).toISOString()));
+
+        },
+        ensureArrayLength(arr: any[]) {
+            while (arr.length < 2) {
+                arr.push('n/a');
+            }
+            return arr;
+            // return arr.map((item) => (item === 'n/a' ? item : dayjs(item).toISOString()));
+
+        },
+        groupByAction(arr: any[]) {
+            const result: any = {};
+            // for (let obj of arr) {
+            //     if (!result[obj.action]) {
+            //         result[obj.action] = [];
+            //     }
+            //     result[obj.action].push(obj);
+            // }
+            // return result;
+
+            //  const result = {};
+            //               const result = {};
+            //   const dateArray = [];
+
+            //   arr.forEach((item) => {
+            //     if (!result[item.action]) {
+            //       result[item.action] = {};
+            //     }
+            //     if (!result[item.action][item.date]) {
+            //       result[item.action][item.date] = [];
+            //       dateArray.push(item.date);
+            //     }
+            //     result[item.action][item.date].push(item);
+            //   });
+
+            //   return {result, dateArray};
+
+            // arr.forEach((item) => {
+            //     if (!result[item.action]) {
+            //         result[item.action] = {};
+            //     }
+            //     if (!result[item.action][item.createdAt.split("T")[0]]) {
+            //         result[item.action][item.createdAt.split("T")[0]] = [];
+            //     }
+            //     result[item.action][item.createdAt.split("T")[0]].push(item);
+            // });
+            // return result;
+            // let dates3: any[] = []
+            const dateArray: any[] = [];
+            arr.forEach((item) => {
+                if (!result[item.action]) {
+                    result[item.action] = {};
+                }
+                const date = item.createdAt.split("T")[0]//.format('YYYY-MM-DD');
+                // const index = dates3.findIndex((el: any) => el === date)
+                if (/*!result[item.action][date]*/index === -1) {
+                    result[item.action][date] = [];
+                    dateArray.push(date);
+                }
+                // dates3.push(date)
+                result[item.action][date].push(item);
+            });
+
+            const actionObjects = Object.entries(result).map(([action, dates]) => ({
+                name: action,
+                data: Object.values(dates as any).map((date) => (date as any).length),
+                categories: dateArray,
+            }));
+
+            return actionObjects;
+            // arr.forEach((item) => {
+            //     if (!result[item.action]) {
+            //         result[item.action] = {};
+            //     }
+            //     if (!result[item.action][item.createdAt.split("T")[0]]) {
+            //         result[item.action][item.createdAt.split("T")[0]] = [];
+            //         dateArray.push(item.createdAt.split("T")[0]);
+            //     }
+            //     result[item.action][item.createdAt.split("T")[0]].push(item);
+            // });
+
+            // const actionObjects = Object.entries(result).map(([action, dates]) => ({
+            //     name: action,
+            //     data: Object.values(dates as any).map((date) => (date as any).length),
+            //     categories: dateArray,
+            // }));
+
+            // return actionObjects;
+        }
     },
     async mounted() {
         window.katex = katex;
@@ -640,6 +930,7 @@ export default Vue.extend({
         // this.answers = this.getUserData.answers;
         await this.getUserAnswers()
         await this.getUserStats()
+        await this.getUserHistorical1()
 
     }
 })
