@@ -800,6 +800,7 @@ export default Vue.extend({
                 ...this.options,
                 xaxis: {
                     ...this.options.xaxis,
+                    //exoun thema oi hmeromhnies
                     categories: ["2023-01-15T18:05:22.613Z", "2023-01-31T17:43:13.493Z"]//cat
                 }
             }
