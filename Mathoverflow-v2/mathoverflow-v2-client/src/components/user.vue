@@ -513,10 +513,10 @@ export default Vue.extend({
             tooltip: {
                 enabled: true,
                 x: {
-                    formatter: function (value: any, series: any) {
-                        // use series argument to pull original string from chart data
-                        return 'Epochs: ' + value;
-                    }
+                    // formatter: function (value: any, series: any) {
+                    //     // use series argument to pull original string from chart data
+                    //     return 'Epochs: ' + value;
+                    // }
                 }
             },
             title: {
@@ -800,7 +800,7 @@ export default Vue.extend({
                 ...this.options,
                 xaxis: {
                     ...this.options.xaxis,
-                    categories: cat
+                    categories: ["2023-01-15T18:05:22.613Z", "2023-01-31T17:43:13.493Z"]//cat
                 }
             }
             this.options = {
@@ -877,7 +877,7 @@ export default Vue.extend({
                 }
                 const date = item.createdAt.split("T")[0]//.format('YYYY-MM-DD');
                 // const index = dates3.findIndex((el: any) => el === date)
-                if (/*!result[item.action][date]*/index === -1) {
+                if (!result[item.action][date]/*index === -1*/) {
                     result[item.action][date] = [];
                     dateArray.push(date);
                 }
