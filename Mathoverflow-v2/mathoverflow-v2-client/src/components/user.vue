@@ -398,6 +398,9 @@ import 'katex/dist/katex.min.css';
 import { ApexOptions } from "apexcharts";
 import Apexchart from "vue-apexcharts";
 import dayjs from 'dayjs';
+import utc from "dayjs/plugin/utc"
+
+dayjs.extend(utc)
 export default Vue.extend({
     components: { VueEditor, Apexchart },
     data: () => ({
@@ -484,8 +487,10 @@ export default Vue.extend({
                 height: 350,
                 type: 'line'
             },
+            colors: ["#00BCD4", "#FF9800", "#FFEB3B", "#795548", "#9C27B0", "#4CAF50", "#2196F3",],
+
             dataLabels: {
-                enabled: false
+                enabled: true
             },
             stroke: {
                 curve: 'smooth'
@@ -493,10 +498,12 @@ export default Vue.extend({
             xaxis: {
                 type: 'datetime',
                 categories: [] as any[],
-                // min: 0
-                // labels: {
-                //     formatter: (x: any) => { return (x.toFixed(0)); }
-                // }
+                labels: {
+                    style: {
+                        colors: ["#00BCD4", "#FF9800", "#FFEB3B", "#795548", "#9C27B0", "#9C27B0", "#4CAF50", "#2196F3",],
+                        fontSize: '12px'
+                    }
+                }
 
 
             },
@@ -767,41 +774,33 @@ export default Vue.extend({
         async getUserHistorical1() {
             const duration = dayjs().subtract(1, 'hours').toISOString()
             const userid = this.user.uid;
-            //
             const response = await getUserHistorical(userid)
             console.log(response, 'the response of get user historical')
-            //
-            // for (const object of response) {
-            //     const date = dayjs(object.createdAt).format("YYYY-MM-DD HH:mm:ss")
-            //     console.log(date, 'the historical date of each historical object')
-            // }
-            const array = this.groupByAction(response)
+            const array = this.groupByAction2(response)
             console.log(array, 'the array with the actions')
             let series3: any[] = []
-            let categories2: any[] = []
+            // let categories2: any[] = []
+            const uniqueDates = Array.from(new Set(array[0].categories.map(date => dayjs.utc(date).format('YYYY-MM-DD'))))
+                .map(date => dayjs.utc(date).toISOString());
+            console.log(uniqueDates, 'the unique dates')
+            console.log(array[0].categories, 'the array[0].categories')
             for (const serie of array) {
                 const serieObject = {
                     name: serie.name,
-                    data: this.ensureArrayLength(serie.data)//serie.data,
-                    // color:'red'
+                    // data: serie.data///this.ensureArrayLength(serie.data, uniqueDates.length)
+                    data: this.ensureArrayLength(serie.data, uniqueDates.length)
                 }
                 series3.push(serieObject)
             }
-            categories2 = array[0].categories
-            //
-            console.log(categories2, 'the categories2')
-
-            const cat = this.convertDates(categories2)
-            //
             console.log(series3, 'the series3')
-            console.log(cat, 'the categories')
             //
+
             this.options = {
                 ...this.options,
                 xaxis: {
                     ...this.options.xaxis,
-                    //exoun thema oi hmeromhnies
-                    categories: ["2023-01-15T18:05:22.613Z", "2023-01-31T17:43:13.493Z"]//cat
+                    // categories: array[0].categories//uniqueDates
+                    categories: uniqueDates
                 }
             }
             this.options = {
@@ -818,71 +817,31 @@ export default Vue.extend({
 
         },
         convertDates(arr: any[]) {
-            // while (arr.length < 5) {
-            //     arr.push('n/a');
-            // }
-            // return arr;
             return arr.map((item) => (item === 'n/a' ? item : dayjs(item).toISOString()));
 
         },
-        ensureArrayLength(arr: any[]) {
-            while (arr.length < 2) {
-                arr.push('n/a');
-            }
+        ensureArrayLength(arr: any[], datesLength: number) {
+            // to 0 den mapinei se swsth thesh, prepei na mpainei stin idia thesi pou moainei kai 
+            //to date pou eixe 0 data
+            // while (arr.length < datesLength) {
+            //     arr.push(0);
+            // }
             return arr;
-            // return arr.map((item) => (item === 'n/a' ? item : dayjs(item).toISOString()));
 
         },
-        groupByAction(arr: any[]) {
+        groupByAction2(arr: any[]) {
             const result: any = {};
-            // for (let obj of arr) {
-            //     if (!result[obj.action]) {
-            //         result[obj.action] = [];
-            //     }
-            //     result[obj.action].push(obj);
-            // }
-            // return result;
-
-            //  const result = {};
-            //               const result = {};
-            //   const dateArray = [];
-
-            //   arr.forEach((item) => {
-            //     if (!result[item.action]) {
-            //       result[item.action] = {};
-            //     }
-            //     if (!result[item.action][item.date]) {
-            //       result[item.action][item.date] = [];
-            //       dateArray.push(item.date);
-            //     }
-            //     result[item.action][item.date].push(item);
-            //   });
-
-            //   return {result, dateArray};
-
-            // arr.forEach((item) => {
-            //     if (!result[item.action]) {
-            //         result[item.action] = {};
-            //     }
-            //     if (!result[item.action][item.createdAt.split("T")[0]]) {
-            //         result[item.action][item.createdAt.split("T")[0]] = [];
-            //     }
-            //     result[item.action][item.createdAt.split("T")[0]].push(item);
-            // });
-            // return result;
-            // let dates3: any[] = []
+            // 
             const dateArray: any[] = [];
             arr.forEach((item) => {
                 if (!result[item.action]) {
                     result[item.action] = {};
                 }
-                const date = item.createdAt.split("T")[0]//.format('YYYY-MM-DD');
-                // const index = dates3.findIndex((el: any) => el === date)
-                if (!result[item.action][date]/*index === -1*/) {
+                const date = item.createdAt.split("T")[0]
+                if (!result[item.action][date]) {
                     result[item.action][date] = [];
                     dateArray.push(date);
                 }
-                // dates3.push(date)
                 result[item.action][date].push(item);
             });
 
@@ -891,26 +850,40 @@ export default Vue.extend({
                 data: Object.values(dates as any).map((date) => (date as any).length),
                 categories: dateArray,
             }));
-
             return actionObjects;
-            // arr.forEach((item) => {
-            //     if (!result[item.action]) {
-            //         result[item.action] = {};
-            //     }
-            //     if (!result[item.action][item.createdAt.split("T")[0]]) {
-            //         result[item.action][item.createdAt.split("T")[0]] = [];
-            //         dateArray.push(item.createdAt.split("T")[0]);
-            //     }
-            //     result[item.action][item.createdAt.split("T")[0]].push(item);
-            // });
+        },
+        groupByAction(arr: any[]) {
+            const result: any = {};
 
-            // const actionObjects = Object.entries(result).map(([action, dates]) => ({
-            //     name: action,
-            //     data: Object.values(dates as any).map((date) => (date as any).length),
-            //     categories: dateArray,
-            // }));
+            const dateArray: any[] = [];
+            arr.forEach((item) => {
+                if (!result[item.action]) {
+                    result[item.action] = {};
+                }
+                const date = item.createdAt.split("T")[0]
+                if (!result[item.action][date]) {
+                    result[item.action][date] = [];
+                    dateArray.push(date);
+                }
+                result[item.action][date].push(item);
+            });
 
-            // return actionObjects;
+            const uniqueDates = Array.from(new Set(dateArray.map(date => dayjs.utc(date).format('YYYY-MM-DD'))))
+                .map(date => dayjs.utc(date).toISOString());
+
+            const actionObjects = Object.entries(result).map(([action, dates]) => {
+                const data = uniqueDates.map(date => {
+                    // const count = ((dates as any)[date] || []).length;
+                    const count = ((date as any)).length;
+                    return count;
+                });
+                return {
+                    name: action,
+                    data,
+                    categories: uniqueDates,
+                };
+            });
+            return actionObjects;
         }
     },
     async mounted() {
@@ -927,8 +900,6 @@ export default Vue.extend({
             created: this.getUserData.data.createdAt
         },
             await this.getQuestions2();
-        // this.questions = this.getUserData.questions;
-        // this.answers = this.getUserData.answers;
         await this.getUserAnswers()
         await this.getUserStats()
         await this.getUserHistorical1()
