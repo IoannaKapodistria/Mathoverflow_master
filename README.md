@@ -6,7 +6,7 @@
 2. Start the development server: npm run dev
 3. Open your browser and navigate to http://localhost:3000
 
-### _Features_
+### Features
 - Ask and answer questions: Users can ask questions related to mathematics and receive answers from the community. They can also answer questions posted by others and earn reputation points for helpful answers.
 
 - Search functionality: Users can search for questions and answers by keyword to find what they're looking for quickly and easily.
