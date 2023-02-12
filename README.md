@@ -1,5 +1,5 @@
 
-## MathStack is a community-driven platform where users can ask and answer questions related to mathematics. Whether you're a student, teacher, or professional mathematician, MathStack is the place to go to find answers and help others.
+## MathOverflow is a community-driven platform where users can ask and answer questions related to mathematics. Whether you're a student, teacher, or professional mathematician, MathOverflow is the place to go to find answers and help others.
 
 ### Features
 - Ask and answer questions: Users can ask questions related to mathematics and receive answers from the community. They can also answer questions posted by others and earn reputation points for helpful answers.
