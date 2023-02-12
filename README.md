@@ -1,7 +1,7 @@
 
 ### MathOverflow is a community-driven platform where users can ask and answer questions related to mathematics. Whether you're a student, teacher, or professional mathematician, MathOverflow is the place to go to find answers and help others.
 
-## Project setup
+### Project setup
 ```
 npm install
 ```
