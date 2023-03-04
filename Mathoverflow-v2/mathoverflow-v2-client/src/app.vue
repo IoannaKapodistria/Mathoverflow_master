@@ -75,7 +75,8 @@ import moQuestions from "./components/questions.vue"
 import Users from "./components/users.vue";
 import User from "./components/user.vue"
 import { mapGetters } from 'vuex';
-import { signOut } from './components/functions';
+import { getUser, isLogged, signOut } from './components/functions';
+import store from './store';
 // import "particles.js"
 
 // declare const window: any;
@@ -130,7 +131,7 @@ export default Vue.extend({
             this.$router.push('/signup');
         }
     },
-    mounted() {
+    async mounted() {
         this.buttonObjects = [
             { uid: "", title: "Home", icon: "mdi-home", url: "/" },
             { uid: "", title: "Questions", icon: "mdi-earth", url: "/questions", content: [{ uid: "", title: "Top Voted", icon: "mdi-trophy", url: "/top_voted_questions" }, { uid: "", title: "Unanswered", icon: "mdi-help", url: "/unanswered_questions" }, /*{ uid: "", title: "All Questions", icon: "mdi-web", url: "/" }*/] },
@@ -140,6 +141,14 @@ export default Vue.extend({
             { uid: "", title: "Users", icon: "mdi-account-multiple", url: "/users" },
         ]
         // this.initParticles()
+        const user = await isLogged()
+        console.log(user, 'the is logges user22')
+        if (user.islogged === true) {
+            const userData = await getUser(user.userId)
+            console.log(userData, "the card data222");
+            // store.commit("setUserData", userData);
+            store.commit("setLoggedUser", userData.data);
+        }
     }
 });
 </script>
