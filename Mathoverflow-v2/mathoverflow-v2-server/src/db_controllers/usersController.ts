@@ -344,7 +344,7 @@ export async function getReputation(req: any, res: any) {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Reputation with id=${id}.`,
+                    message: `Cannot find Reputation with user id=${id}.`,
                 });
             }
         })

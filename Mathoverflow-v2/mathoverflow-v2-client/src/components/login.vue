@@ -279,7 +279,8 @@ export default Vue.extend({
             this.showPassword = !this.showPassword;
         },
         async createReputation(userId: number) {
-            const initialReputation = 10
+            //1 or 10?
+            const initialReputation = 1
             const data = { value: initialReputation, userId: userId }
             await postUserReputation(data);
         },

@@ -217,7 +217,7 @@ export async function getReputation(req, res) {
         }
         else {
             res.status(404).send({
-                message: `Cannot find Reputation with id=${id}.`,
+                message: `Cannot find Reputation with user id=${id}.`,
             });
         }
     })

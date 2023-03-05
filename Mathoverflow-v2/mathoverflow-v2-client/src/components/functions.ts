@@ -447,3 +447,19 @@ export async function getUserHistorical(id: number) {
         });
     return response;
 }
+
+export async function updateReputation1(id: number, value: any) {
+    let response = await ky
+        .put(`http://localhost:3000/update_reputation/${id}`, {
+            mode: "cors",
+            body: JSON.stringify(value),
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then((value: any) => {
+            console.log("this is the value of updating reputation:", value);
+        });
+}

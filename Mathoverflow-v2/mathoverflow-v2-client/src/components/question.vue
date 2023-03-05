@@ -458,7 +458,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex';
-import { createHistorical, deleteAnswer, getAnswer, getQuestion, getUser, getUserReputation, getUsers, postAnswer, updateAnswer1, updateQuestion1, voteAnswer, voteQuestion } from './functions';
+import { createHistorical, deleteAnswer, getAnswer, getQuestion, getUser, getUserReputation, getUsers, postAnswer, updateAnswer1, updateQuestion1, updateReputation1, voteAnswer, voteQuestion } from './functions';
 import { question1 } from './types';
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
@@ -608,6 +608,7 @@ export default Vue.extend({
         progressCircular: false
 
     }),
+
     watch: {
         question() {
             this.questionExample = this.question;
@@ -664,7 +665,7 @@ export default Vue.extend({
 
     },
     computed: {
-        ...mapGetters(["getQuestionData"]),
+        ...mapGetters(["getQuestionData", "getLoggedUser"]),
         toolbarOpts(): any {
             const a = {
                 modules: {
@@ -793,18 +794,53 @@ export default Vue.extend({
         async upVoteQuestion() {
             const data = { value: 1, QuestionQuestionId: this.getQuestionData.data.question_id }
             await voteQuestion(data);
-            // 
+            //first get the reps and then update question'user's rep & upvoter rep
+            console.log(this.getLoggedUser, "the getLoggedUser in upvote")
+            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            console.log(userRep, 'the user reputation!!')
+            let oldRep = +userRep.value
+            const data2 = { value: oldRep += 1 }
+            console.log(data2, 'the update data')
+            await updateReputation1(userRep.reputation_id, data2);
+            // update writers reputation
+            console.log(this.getQuestionData.data.UserUserId, 'the question data33')
+            const writerId = this.getQuestionData.data.UserUserId
+            const userRep2 = await getUserReputation(writerId)
+            console.log(userRep, 'the user reputation!!')
+            let oldRep2 = +userRep2.value
+            const data3 = { value: oldRep2 += 5 }
+            console.log(data2, 'the update data 2')
+            await updateReputation1(userRep2.reputation_id, data3);
+            //
             const historicalData = {
                 action: 'vote-question',
                 data: data
             }
-            await createHistorical(historicalData)
+            await createHistorical(historicalData);
             // this.$router.go(0);
             this.forceUpdateQuestion();
         },
         async downVoteQuestion() {
             const data = { value: -1, QuestionQuestionId: this.getQuestionData.data.question_id }
             await voteQuestion(data);
+            //
+            //first get the reps and then update question'user's rep & upvoter rep
+            // console.log(this.getLoggedUser, "the getLoggedUser in upvote")
+            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            // console.log(userRep, 'the user reputation!!')
+            let oldRep = +userRep.value
+            const data2 = { value: oldRep -= 1 }
+            // console.log(data2, 'the update data')
+            await updateReputation1(userRep.reputation_id, data2);
+            // update writers reputation
+            // console.log(this.getQuestionData.data.UserUserId, 'the question data33')
+            const writerId = this.getQuestionData.data.UserUserId
+            const userRep2 = await getUserReputation(writerId)
+            // console.log(userRep, 'the user reputation!!')
+            let oldRep2 = +userRep2.value
+            const data3 = { value: oldRep2 -= 2 }
+            // console.log(data2, 'the update data 2')
+            await updateReputation1(userRep2.reputation_id, data3);
             //
             const historicalData = {
                 action: 'vote-question',
