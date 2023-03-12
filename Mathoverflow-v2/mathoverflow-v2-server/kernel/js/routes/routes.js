@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createHistorical, createReputation, createUser, deleteReputation, deleteUser, getHistorical, getReputation, getUser, getUsers, isLogged, sessionChecker, signIn, signOut, updateReputation, updateUser } from "../../../kernel/js/db_controllers/usersController.js";
-import { createAnswer, createAnswerVote, createQuestion, createVote, deleteAllAnswers, deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getQuestions, updateAnswer, updateQuestion } from "../db_controllers/questionsController.js";
+import { createAnswer, createAnswerVote, createQuestion, createVote, deleteAllAnswers, deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getQuestions, updateAnswer, updateQuestion, updateVote } from "../db_controllers/questionsController.js";
 const mathOverflowRouter = Router();
 mathOverflowRouter.get("/", function (req, res) {
   res.render("hey this worked");
@@ -25,6 +25,7 @@ mathOverflowRouter.delete("/delete_user_answers/:id", deleteAllAnswers);
 mathOverflowRouter.put("/update_answer/:id", updateAnswer);
 mathOverflowRouter.get("/answers/:id", getAnswer);
 mathOverflowRouter.post("/vote", createVote);
+mathOverflowRouter.put("/update_vote/:id", updateVote);
 mathOverflowRouter.delete("/delete_vote/:id", deleteVote);
 mathOverflowRouter.post("/answer_vote", createAnswerVote);
 mathOverflowRouter.delete("/delete_answer_vote/:id", deleteAnswerVote);

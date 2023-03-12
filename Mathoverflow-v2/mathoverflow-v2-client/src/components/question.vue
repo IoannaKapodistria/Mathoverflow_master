@@ -51,8 +51,16 @@
                             <v-btn right x-large icon>
                                 <v-icon
                                     size="45px"
-                                    @click="upVoteQuestion"
-                                    color="#78909C"
+                                    @click="
+                                        queVotedUp === true
+                                            ? doNothing()
+                                            : upVoteQuestion()
+                                    "
+                                    :color="
+                                        queVotedUp === true
+                                            ? 'green'
+                                            : '#78909C'
+                                    "
                                     >mdi-menu-up</v-icon
                                 >
                             </v-btn>
@@ -64,8 +72,16 @@
                             <v-btn right x-large icon>
                                 <v-icon
                                     size="45px"
-                                    @click="downVoteQuestion"
-                                    color="#78909C"
+                                    @click="
+                                        queVotedUp === false
+                                            ? doNothing()
+                                            : downVoteQuestion()
+                                    "
+                                    :color="
+                                        queVotedUp === false
+                                            ? 'green'
+                                            : '#78909C'
+                                    "
                                     >mdi-menu-down</v-icon
                                 >
                             </v-btn>
@@ -255,8 +271,18 @@
                                     <v-btn right x-large icon>
                                         <v-icon
                                             size="26px"
-                                            color="#78909C"
-                                            @click="upVoteAnswer(props.item)"
+                                            :color="
+                                                props.item.userAnswerVote ===
+                                                true
+                                                    ? 'green'
+                                                    : '#78909C'
+                                            "
+                                            @click="
+                                                props.item.userAnswerVote !==
+                                                true
+                                                    ? upVoteAnswer(props.item)
+                                                    : doNothing()
+                                            "
                                             class="mt-3"
                                             >mdi-plus</v-icon
                                         >
@@ -282,8 +308,18 @@
                                 >
                                     <v-btn right x-large icon>
                                         <v-icon
-                                            @click="downVoteAnswer(props.item)"
-                                            color="#78909C"
+                                            @click="
+                                                props.item.userAnswerVote !==
+                                                false
+                                                    ? downVoteAnswer(props.item)
+                                                    : doNothing()
+                                            "
+                                            :color="
+                                                props.item.userAnswerVote ===
+                                                false
+                                                    ? 'green'
+                                                    : '#78909C'
+                                            "
                                             dark
                                             size="26px"
                                             class="mt-3"
@@ -458,7 +494,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex';
-import { createHistorical, deleteAnswer, getAnswer, getQuestion, getUser, getUserReputation, getUsers, postAnswer, updateAnswer1, updateQuestion1, updateReputation1, voteAnswer, voteQuestion } from './functions';
+import { createHistorical, deleteAnswer, getAnswer, getQuestion, getUser, getUserReputation, getUsers, postAnswer, updateAnswer1, updateQuestion1, updateReputation1, updateVote1, voteAnswer, voteQuestion } from './functions';
 import { question1 } from './types';
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
@@ -605,7 +641,8 @@ export default Vue.extend({
         answerEditing: false,
         updatedAnswer: {} as any,
         editedAnswerBody: '',
-        progressCircular: false
+        progressCircular: false,
+        queVotedUp: null as null | boolean
 
     }),
 
@@ -644,7 +681,8 @@ export default Vue.extend({
                             ...answer,
                             votes: await this.getAnswerVotes(answer),
                             user: await this.getUserObject(user),//.username,
-                            created: dayjs(answer.createdAt).format("DD MMM. YYYY | HH:mm:ss")
+                            created: dayjs(answer.createdAt).format("DD MMM. YYYY | HH:mm:ss"),
+                            userAnswerVote: await this.getUserAnswerVote(answer)
                         }
                         this.answers.push(answerObject)
                     }
@@ -656,7 +694,10 @@ export default Vue.extend({
             const votesSum = this.getVotes();
             //console.log('')
             //
+            //
             this.questionSumVotes = votesSum;
+            //
+            this.getUserVote()
             //
             this.editedQuestionTitle = this.questionExample.title
             //
@@ -702,6 +743,9 @@ export default Vue.extend({
         },
     },
     methods: {
+        doNothing() {
+            console.log('do nothing')
+        },
         async getUserObject(user: any) {
             const userObject = {
                 ...user,
@@ -777,6 +821,31 @@ export default Vue.extend({
             // this.answerVotes = votesSum;
             return votesSum;
         },
+        async getUserAnswerVote(value: any) {
+            const answerVotesArray: any[] = []
+            const answerData = await getAnswer(value.answer_id)
+            console.log(answerData, "THE ANSWER DATA")
+            // const votes = this.getQuestionData.votes
+            //calculate votes
+            // if(answerData.UserUserId !==null){}
+            // for (const vote of answerData.answerVotes) {
+            //     const value = vote.value;
+            //     answerVotesArray.push(value)
+            // }
+            console.log(this.getLoggedUser, 'this.getLoggedUser!!')
+            const userVote = answerData.answerVotes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
+            console.log(userVote, 'user answer vote')
+            if (userVote !== undefined) {
+                if (userVote.value === 1) return true
+                else if (userVote.value === -1) return false
+            }
+            else return null
+            // //get the sum
+            // const votesSum = answerVotesArray.reduce((a, b) => a + b, 0)
+            // console.log(votesSum, 'teh votes of answer')
+            // // this.answerVotes = votesSum;
+            // return votesSum;
+        },
         async postAnswer1() {
             const data = { body: this.answerBody, QuestionQuestionId: this.getQuestionData.data.question_id }
             await postAnswer(data); // den ananewnetai amesws h selida na fanei h apantish kai stelnei mono periorismeno airthmo leksewn,  vgazei error 500 meta
@@ -793,7 +862,14 @@ export default Vue.extend({
         },
         async upVoteQuestion() {
             const data = { value: 1, QuestionQuestionId: this.getQuestionData.data.question_id }
-            await voteQuestion(data);
+            if (this.queVotedUp === false) {
+                const userVote = this.getQuestionData.votes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
+                if (userVote !== undefined) {
+                    await this.updateQuestionVote(userVote.vote_id, { value: 1 })
+                }
+            } else if (this.queVotedUp === null) {
+                await voteQuestion(data);
+            }
             //first get the reps and then update question'user's rep & upvoter rep
             console.log(this.getLoggedUser, "the getLoggedUser in upvote")
             const userRep = await getUserReputation(this.getLoggedUser.user_id)
@@ -820,10 +896,24 @@ export default Vue.extend({
             // this.$router.go(0);
             this.forceUpdateQuestion();
         },
+        async updateQuestionVote(voteId: number, data: any) {
+            await updateVote1(voteId, data)
+        },
         async downVoteQuestion() {
+            console.log('mpika edw0')
             const data = { value: -1, QuestionQuestionId: this.getQuestionData.data.question_id }
-            await voteQuestion(data);
-            //
+            if (this.queVotedUp === true) {
+                console.log('mpika edw 1')
+
+                const userVote = this.getQuestionData.votes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
+                if (userVote !== undefined) {
+                    await this.updateQuestionVote(userVote.vote_id, { value: -1 })
+                }
+            } else if (this.queVotedUp === null) {
+                console.log('mpika edw 2')
+
+                await voteQuestion(data);
+            }
             //first get the reps and then update question'user's rep & upvoter rep
             // console.log(this.getLoggedUser, "the getLoggedUser in upvote")
             const userRep = await getUserReputation(this.getLoggedUser.user_id)
@@ -897,6 +987,24 @@ export default Vue.extend({
             const data = { value: 1, AnswerAnswerId: value.answer_id }
             await voteAnswer(data);
             // 
+            //first get the reps and then update question'user's rep & upvoter rep
+            console.log(this.getLoggedUser, "the getLoggedUser in upvote")
+            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            console.log(userRep, 'the user reputation!!')
+            let oldRep = +userRep.value
+            const data2 = { value: oldRep += 1 }
+            console.log(data2, 'the update data')
+            await updateReputation1(userRep.reputation_id, data2);
+            // update writers reputation
+            console.log(this.getQuestionData.data.UserUserId, 'the question data33')
+            const writerId = this.getQuestionData.data.UserUserId
+            const userRep2 = await getUserReputation(writerId)
+            console.log(userRep, 'the user reputation!!')
+            let oldRep2 = +userRep2.value
+            const data3 = { value: oldRep2 += 10 }
+            console.log(data2, 'the update data 2')
+            await updateReputation1(userRep2.reputation_id, data3);
+            //
             const historicalData = {
                 action: 'vote-answer',
                 data: data
@@ -911,6 +1019,24 @@ export default Vue.extend({
             const data = { value: -1, AnswerAnswerId: value.answer_id }
             await voteAnswer(data);
             // 
+            //first get the reps and then update question'user's rep & upvoter rep
+            // console.log(this.getLoggedUser, "the getLoggedUser in upvote")
+            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            // console.log(userRep, 'the user reputation!!')
+            let oldRep = +userRep.value
+            const data2 = { value: oldRep -= 1 }
+            // console.log(data2, 'the update data')
+            await updateReputation1(userRep.reputation_id, data2);
+            // update writers reputation
+            // console.log(this.getQuestionData.data.UserUserId, 'the question data33')
+            const writerId = this.getQuestionData.data.UserUserId
+            const userRep2 = await getUserReputation(writerId)
+            // console.log(userRep, 'the user reputation!!')
+            let oldRep2 = +userRep2.value
+            const data3 = { value: oldRep2 -= 2 }
+            // console.log(data2, 'the update data 2')
+            await updateReputation1(userRep2.reputation_id, data3);
+            //
             const historicalData = {
                 action: 'vote-answer',
                 data: data
@@ -944,12 +1070,29 @@ export default Vue.extend({
             console.log(value, 'the answer which gonna be updated')
             this.updatedAnswer = value
             this.editedAnswerBody = value.body
+        },
+        async getUserVote() {
+            const qData = await getQuestion(this.getQuestionData.data.question_id)
+            console.log(qData, 'THE QDATA222')
+            // const userVote = this.getQuestionData.votes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
+            const userVote = qData.votes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
+            if (userVote !== undefined) {
+                console.log(userVote, 'the logged in user vote in this question')
+                console.log(this.getLoggedUser, 'the logged in user')
+                if (userVote.value === 1) this.queVotedUp = true
+                else if (userVote.value === -1) this.queVotedUp = false
+            }
+
         }
+    },
+    beforeDestroy() {
+        this.queVotedUp = null
     },
     mounted() {
         window.katex = katex;
-        this.getQuestionData;
-        console.log(this.getQuestionData);
+        // this.getQuestionData;
+        console.log(this.getQuestionData, "the QUESTION NDATA");
+        // this.getUserVote()
     }
 })
 </script>

@@ -64,10 +64,12 @@ export async function getAnswer(req, res) {
         .then(async (data) => {
         if (data) {
             const votes = await AnswerVote.findAll({ where: { AnswerAnswerId: id } });
+            console.log(votes, "the votes in get answer");
             const value = {
                 data,
                 answerVotes: votes,
             };
+            console.log(value, "the get answer value");
             res.send(value);
         }
         else {
@@ -231,6 +233,30 @@ export async function createVote(req, res) {
         .catch((err) => {
         res.status(500).send({
             message: err.message || "Some error occurred while creating the Vote.",
+        });
+    });
+}
+export function updateVote(req, res) {
+    const id = req.params.id;
+    Vote.update({ value: req.body.value }, {
+        where: { vote_id: id },
+    })
+        .then(async (data) => {
+        if (data) {
+            res.send({
+                message: "Vote with id=" + id + " has been updated successfully",
+            });
+        }
+        else {
+            res.status(404).send({
+                message: `Cannot update Vote with id=${id}.`,
+            });
+        }
+    })
+        .catch((err) => {
+        console.log(err, "this is the error");
+        res.status(500).send({
+            message: "Error retrieving Vote with id=" + id,
         });
     });
 }

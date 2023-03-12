@@ -3,7 +3,7 @@ import { createHistorical, createReputation, createUser, deleteReputation, delet
 // import path from "path";
 // import { getSignup, postSignup, getQuestions, getQuestionsbyId, getAskQuestion, postSubmitQuestion, postAnswer, getUserbyId, getUsers, postLogin, getLogin, getLogout } from "../route_controllers/functions";
 // import { sessionChecker } from "../db_controllers/usersController";
-import { createAnswer, createAnswerVote, createQuestion, createVote, deleteAllAnswers, deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getQuestions, updateAnswer, updateQuestion } from "../db_controllers/questionsController";
+import { createAnswer, createAnswerVote, createQuestion, createVote, deleteAllAnswers, deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getQuestions, updateAnswer, updateQuestion, updateVote } from "../db_controllers/questionsController";
 
 const mathOverflowRouter = Router();
 
@@ -35,6 +35,7 @@ mathOverflowRouter.put("/update_answer/:id", updateAnswer);
 mathOverflowRouter.get("/answers/:id", getAnswer);
 
 mathOverflowRouter.post("/vote", createVote);
+mathOverflowRouter.put("/update_vote/:id", updateVote);
 mathOverflowRouter.delete("/delete_vote/:id", deleteVote);
 
 mathOverflowRouter.post("/answer_vote", createAnswerVote);

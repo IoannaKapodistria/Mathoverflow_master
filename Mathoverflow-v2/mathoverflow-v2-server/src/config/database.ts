@@ -7,7 +7,7 @@ import { Question } from "../db_models/question_model";
 import { User } from "../db_models/user_model";
 
 //Option 2: Passing parameters separately (other dialects)
-const sequelize_db: Sequelize = new Sequelize("math_2", "postgres", "1234", {
+const sequelize_db: Sequelize = new Sequelize("math_3", "postgres", "1234", {
     host: "localhost",
     dialect: "postgres",
     logging: console.log,

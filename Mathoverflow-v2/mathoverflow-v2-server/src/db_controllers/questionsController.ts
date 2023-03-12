@@ -153,13 +153,14 @@ export async function getAnswer(req: any, res: any) {
             if (data) {
                 // const answers = await Answer.findAll({ where: { QuestionQuestionId: id } } /*{ include: [{ model: Question, as: "Question", where: { QuestionQuestionId: id } }] }*/);
                 const votes = await AnswerVote.findAll({ where: { AnswerAnswerId: id } });
-
+                console.log(votes, "the votes in get answer");
                 // na ftiaxtei na epistrefetai kai to athroisma twn votes
                 const value = {
                     data,
                     // answers: answers,
                     answerVotes: votes,
                 };
+                console.log(value, "the get answer value");
                 res.send(value);
             } else {
                 res.status(404).send({
@@ -362,6 +363,34 @@ export async function createVote(req: any, res: any) {
         .catch((err: any) => {
             res.status(500).send({
                 message: err.message || "Some error occurred while creating the Vote.",
+            });
+        });
+}
+
+//update vote
+export function updateVote(req: any, res: any) {
+    const id = req.params.id;
+    Vote.update(
+        { value: req.body.value },
+        {
+            where: { vote_id: id },
+        }
+    )
+        .then(async (data) => {
+            if (data) {
+                res.send({
+                    message: "Vote with id=" + id + " has been updated successfully",
+                });
+            } else {
+                res.status(404).send({
+                    message: `Cannot update Vote with id=${id}.`,
+                });
+            }
+        })
+        .catch((err) => {
+            console.log(err, "this is the error");
+            res.status(500).send({
+                message: "Error retrieving Vote with id=" + id,
             });
         });
 }
