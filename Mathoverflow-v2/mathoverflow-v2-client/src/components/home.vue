@@ -184,7 +184,9 @@
                         </v-card>
                     </template>
                     <template v-slot:[`item.remove`]="props" v-if="admin">
-                        <v-icon @click="removeObject(props.item)"
+                        <v-icon
+                            v-if="checkUserAction(props.item)"
+                            @click="removeObject(props.item)"
                             >mdi-delete</v-icon
                         >
                     </template>
@@ -252,7 +254,7 @@ export default Vue.extend({
         progressCircular: false
     }),
     computed: {
-        ...mapGetters(["getQuestions", "getUsers", "getQuestionData"]),
+        ...mapGetters(["getQuestions", "getUsers", "getQuestionData", "getLoggedUser"]),
         computedHeaders(): any {
             return this.questionsCols.filter(word => word.value !== "question_id")
         }
@@ -396,6 +398,12 @@ export default Vue.extend({
                 const user = await this.getUserObject(users[index])
                 return user;
             }
+        },
+        checkUserAction(item: any) {
+            console.log(item, 'the item in check user acctions')
+            console.log(this.getLoggedUser, 'the get logged user')
+            if (item.user.user_id === this.getLoggedUser.user_id) return true;
+            else false;
         }
     },
     async mounted() {

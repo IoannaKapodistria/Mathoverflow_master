@@ -68,6 +68,55 @@
                         Post Your Question
                     </v-btn>
                 </v-row>
+                <v-dialog v-model="sessionCheckDialog" width="500" persistent>
+                    <v-card class="pb-4 pt-4 ps-3" style="border-radius: 16px">
+                        <v-toolbar flat class="pt-6">
+                            <v-row justify="center" align="center">
+                                <v-col
+                                    justify="center"
+                                    align="center"
+                                    class="me-6"
+                                >
+                                    <v-icon
+                                        color="teal"
+                                        size="53px"
+                                        class="mb-0"
+                                        >mdi-google-downasaur</v-icon
+                                    >
+                                    <span
+                                        class="d-flex justify-center blue-grey--text text-body-1 font-weight-bold me-2 mb-9"
+                                        style="font-size: 21px !important"
+                                        >Oops!</span
+                                    >
+                                </v-col>
+                            </v-row>
+                        </v-toolbar>
+                        <v-card-text class="mt-6">
+                            <v-row
+                                justify="start"
+                                align="start"
+                                class="text-body-1"
+                            >
+                                <v-col justify="start" align="start">
+                                    It looks like that you're not currently
+                                    logged into our app. To ensure the best
+                                    possible experience, please sign in to your
+                                    account!
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                        <v-card-actions class="justify-end mb-0">
+                            <span class="d-flex justify-end me-3">
+                                <v-icon
+                                    small
+                                    @click="sessionCheckDialog = false"
+                                    style="cursor: pointer"
+                                    >mdi-close</v-icon
+                                >
+                            </span>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
             </v-card-text>
         </v-card>
     </v-container>
@@ -75,7 +124,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { createHistorical, postQuestion } from "../components/functions";
+import { checkSession, createHistorical, postQuestion } from "../components/functions";
 // import VueQuillEditor from 'vue-quill-editor'
 import Quill from "quill"
 // import Delta from "quill-delta"
@@ -103,7 +152,8 @@ export default Vue.extend({
             ['link', 'image', 'video', 'formula'],
             [{ 'direction': 'rtl' }],
             ['clean'],
-        ]
+        ],
+        sessionCheckDialog: false
     }),
     watch: {
         quillContent(value: any) {
@@ -112,6 +162,13 @@ export default Vue.extend({
     },
     methods: {
         async postQuestion() {
+            //if not logged in
+            const sessionCheck = await checkSession()
+            if (sessionCheck.userSid === undefined && sessionCheck.message === 'user is not logged in') {
+                this.sessionCheckDialog = true
+                return;
+            }
+            //if logged in
             const data = { title: this.title, body: this.body }
             await postQuestion(data);
             const historicalData = {

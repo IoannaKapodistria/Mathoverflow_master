@@ -487,6 +487,90 @@
             <!-- <progress-circular
                 :progressCircular="progressCircular"
             ></progress-circular> -->
+            <v-dialog v-model="sessionCheckDialog" width="500" persistent>
+                <v-card class="pb-4 pt-4 ps-3" style="border-radius: 16px">
+                    <v-toolbar flat class="pt-6">
+                        <v-row justify="center" align="center">
+                            <v-col justify="center" align="center" class="me-6">
+                                <v-icon color="teal" size="53px" class="mb-0"
+                                    >mdi-google-downasaur</v-icon
+                                >
+                                <span
+                                    class="d-flex justify-center blue-grey--text text-body-1 font-weight-bold me-2 mb-9"
+                                    style="font-size: 21px !important"
+                                    >Oops!</span
+                                >
+                            </v-col>
+                        </v-row>
+                    </v-toolbar>
+                    <v-card-text class="mt-6">
+                        <v-row
+                            justify="start"
+                            align="start"
+                            class="text-body-1"
+                        >
+                            <v-col justify="start" align="start">
+                                It looks like that you're not currently logged
+                                into our app. To ensure the best possible
+                                experience, please sign in to your account!
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions class="justify-end mb-0">
+                        <span class="d-flex justify-end me-3">
+                            <v-icon
+                                small
+                                @click="sessionCheckDialog = false"
+                                style="cursor: pointer"
+                                >mdi-close</v-icon
+                            >
+                        </span>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+            <v-dialog v-model="checkRepDialog" width="500" persistent>
+                <v-card class="pb-4 pt-4 ps-3" style="border-radius: 16px">
+                    <v-toolbar flat class="pt-6">
+                        <v-row justify="center" align="center">
+                            <v-col justify="center" align="center" class="me-6">
+                                <v-icon color="teal" size="53px" class="mb-0"
+                                    >mdi-crown-outline</v-icon
+                                >
+                                <span
+                                    class="d-flex justify-center blue-grey--text text-body-1 font-weight-bold me-2 mb-9"
+                                    style="font-size: 21px !important"
+                                    >Thank you!</span
+                                >
+                            </v-col>
+                        </v-row>
+                    </v-toolbar>
+                    <v-card-text class="mt-6">
+                        <v-row
+                            justify="start"
+                            align="start"
+                            class="text-body-1"
+                        >
+                            <v-col justify="start" align="start">
+                                It looks like you don't have enough reputation
+                                to cast a vote yet. You need a minimum of
+                                {{ repLimit }} reputation points to do so. Keep
+                                participating in the community to earn more
+                                reputation points and unlock additional features
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions class="justify-end mb-0">
+                        <span class="d-flex justify-end me-3">
+                            <v-icon
+                                small
+                                @click="checkRepDialog = false"
+                                style="cursor: pointer"
+                                >mdi-close</v-icon
+                            >
+                        </span>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-card-text>
     </v-card>
 </template>
@@ -494,7 +578,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex';
-import { createHistorical, deleteAnswer, getAnswer, getQuestion, getUser, getUserReputation, getUsers, postAnswer, updateAnswer1, updateQuestion1, updateReputation1, updateVote1, voteAnswer, voteQuestion } from './functions';
+import { checkSession, createHistorical, deleteAnswer, getAnswer, getQuestion, getUser, getUserReputation, getUsers, postAnswer, updateAnswer1, updateQuestion1, updateReputation1, updateVote1, voteAnswer, voteQuestion } from './functions';
 import { question1 } from './types';
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
@@ -642,7 +726,10 @@ export default Vue.extend({
         updatedAnswer: {} as any,
         editedAnswerBody: '',
         progressCircular: false,
-        queVotedUp: null as null | boolean
+        queVotedUp: null as null | boolean,
+        sessionCheckDialog: false,
+        checkRepDialog: false,
+        repLimit: 15 as 15 | number
 
     }),
 
@@ -847,20 +934,42 @@ export default Vue.extend({
             // return votesSum;
         },
         async postAnswer1() {
+            const sessionCheck = await checkSession()
+            if (sessionCheck.userSid === undefined && sessionCheck.message === 'user is not logged in') {
+                this.sessionCheckDialog = true
+                return;
+            }
+            //if not logged in
+
+            //if logged in
             const data = { body: this.answerBody, QuestionQuestionId: this.getQuestionData.data.question_id }
             await postAnswer(data); // den ananewnetai amesws h selida na fanei h apantish kai stelnei mono periorismeno airthmo leksewn,  vgazei error 500 meta
-            //
             const historicalData = {
                 action: 'answer',
                 data: data
             }
             await createHistorical(historicalData)
-            //
             this.forceUpdateQuestion();
             this.answerBody = ""
 
         },
         async upVoteQuestion() {
+            //if not logged in
+            const sessionCheck = await checkSession()
+            if (sessionCheck.userSid === undefined && sessionCheck.message === 'user is not logged in') {
+                this.sessionCheckDialog = true
+                return;
+            }
+            //if logged in
+            //check rep
+            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            console.log(userRep, 'the user reputation!!')
+            if (+userRep.value < 15) {
+                this.repLimit = 15
+                this.checkRepDialog = true
+                return;
+            }
+            //
             const data = { value: 1, QuestionQuestionId: this.getQuestionData.data.question_id }
             if (this.queVotedUp === false) {
                 const userVote = this.getQuestionData.votes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
@@ -872,7 +981,7 @@ export default Vue.extend({
             }
             //first get the reps and then update question'user's rep & upvoter rep
             console.log(this.getLoggedUser, "the getLoggedUser in upvote")
-            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            // const userRep = await getUserReputation(this.getLoggedUser.user_id)
             console.log(userRep, 'the user reputation!!')
             let oldRep = +userRep.value
             const data2 = { value: oldRep += 1 }
@@ -900,6 +1009,21 @@ export default Vue.extend({
             await updateVote1(voteId, data)
         },
         async downVoteQuestion() {
+            //if not logged in
+            const sessionCheck = await checkSession()
+            if (sessionCheck.userSid === undefined && sessionCheck.message === 'user is not logged in') {
+                this.sessionCheckDialog = true
+                return;
+            }
+            //if logged in
+            //check rep
+            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            console.log(userRep, 'the user reputation!!')
+            if (+userRep.value < 125) {
+                this.repLimit = 125
+                this.checkRepDialog = true
+                return;
+            }
             console.log('mpika edw0')
             const data = { value: -1, QuestionQuestionId: this.getQuestionData.data.question_id }
             if (this.queVotedUp === true) {
@@ -915,9 +1039,7 @@ export default Vue.extend({
                 await voteQuestion(data);
             }
             //first get the reps and then update question'user's rep & upvoter rep
-            // console.log(this.getLoggedUser, "the getLoggedUser in upvote")
-            const userRep = await getUserReputation(this.getLoggedUser.user_id)
-            // console.log(userRep, 'the user reputation!!')
+            // const userRep = await getUserReputation(this.getLoggedUser.user_id)
             let oldRep = +userRep.value
             const data2 = { value: oldRep -= 1 }
             // console.log(data2, 'the update data')
@@ -983,13 +1105,28 @@ export default Vue.extend({
             this.formulaText = value.target.getValue("latex-unstyled")
         },
         async upVoteAnswer(value: any) {
+            //if not logged in
+            const sessionCheck = await checkSession()
+            if (sessionCheck.userSid === undefined && sessionCheck.message === 'user is not logged in') {
+                this.sessionCheckDialog = true
+                return;
+            }
+            //if logged in
+            //check rep
+            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            console.log(userRep, 'the user reputation!!')
+            if (+userRep.value < 15) {
+                this.repLimit = 15
+                this.checkRepDialog = true
+                return;
+            }
             console.log(value, "value of up vote answer");
             const data = { value: 1, AnswerAnswerId: value.answer_id }
             await voteAnswer(data);
             // 
             //first get the reps and then update question'user's rep & upvoter rep
             console.log(this.getLoggedUser, "the getLoggedUser in upvote")
-            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            // const userRep = await getUserReputation(this.getLoggedUser.user_id)
             console.log(userRep, 'the user reputation!!')
             let oldRep = +userRep.value
             const data2 = { value: oldRep += 1 }
@@ -1014,15 +1151,27 @@ export default Vue.extend({
             this.forceUpdateQuestion();
         },
         async downVoteAnswer(value: any) {
+            //if not logged in
+            const sessionCheck = await checkSession()
+            if (sessionCheck.userSid === undefined && sessionCheck.message === 'user is not logged in') {
+                this.sessionCheckDialog = true
+                return;
+            }
+            //if logged in
+            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            console.log(userRep, 'the user reputation!!')
+            if (+userRep.value < 125) {
+                this.repLimit = 125
+                this.checkRepDialog = true
+                return;
+            }
             console.log(value, "value of down vote answer")
             // console.log(value, "value of up vote answer");
             const data = { value: -1, AnswerAnswerId: value.answer_id }
             await voteAnswer(data);
             // 
             //first get the reps and then update question'user's rep & upvoter rep
-            // console.log(this.getLoggedUser, "the getLoggedUser in upvote")
-            const userRep = await getUserReputation(this.getLoggedUser.user_id)
-            // console.log(userRep, 'the user reputation!!')
+            // const userRep = await getUserReputation(this.getLoggedUser.user_id)
             let oldRep = +userRep.value
             const data2 = { value: oldRep -= 1 }
             // console.log(data2, 'the update data')
