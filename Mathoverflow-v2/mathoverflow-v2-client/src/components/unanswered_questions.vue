@@ -304,7 +304,7 @@ import store from '@/store';
 import dayjs from 'dayjs';
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
-import { getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
+import { createHistorical, deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
 import progressCircular from "@/tools/circular_loading/circular_loading.vue"
 import { VueEditor } from "vue2-editor";
 export default Vue.extend({
@@ -342,7 +342,7 @@ export default Vue.extend({
 
     }),
     computed: {
-        ...mapGetters(["getQuestions", "getUsers", "getLoggedUser"]),
+        ...mapGetters(["getQuestions", "getUsers", "getLoggedUser", "getQuestionData"]),
         computedHeaders(): any {
             return this.questionsCols.filter(word => word.value !== "question_id")
         }
@@ -434,11 +434,41 @@ export default Vue.extend({
             this.$router.push('/ask')
         },
         checkUserAction(item: any) {
-            console.log(item, 'the item in check user acctions')
+            console.log(item, 'the item in check user acctions in user profile')
             console.log(this.getLoggedUser, 'the get logged user')
             if (item.user.user_id === this.getLoggedUser.user_id) return true;
             else false;
-        }
+        },
+        async removeObject(value: any) {
+            console.log(value, "the value of remove object")
+            //when delete question delete all its answers
+            const answers = value.answers
+            if (answers !== 0) {
+                console.log('skata mpika edw')
+
+                for (const answer of this.getQuestionData.answers) {
+                    const deleteAnswerObject = await deleteAnswer(answer.answer_id);
+                    const historicalData = {
+                        action: 'delete-answer',
+                        data: value
+                    }
+                    await createHistorical(historicalData)
+                }
+                const deleteQuestionObject = await deleteQuestion(value.question_id);
+            } else {
+                console.log('mpika edw')
+                const deleteQuestionObject = await deleteQuestion(value.question_id);
+            }
+            //
+            const historicalData = {
+                action: 'delete-question',
+                data: value
+            }
+            await createHistorical(historicalData)
+            //
+            this.$router.go(0);
+
+        },
     },
 
     async mounted() {

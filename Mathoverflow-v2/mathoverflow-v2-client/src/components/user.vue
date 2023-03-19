@@ -29,7 +29,7 @@
                             <div class="grey--text mt-4">
                                 <!-- na upologizetai me new date ktlp h h merominia p einai eggegramenos -->
                                 <span class="grey--text">
-                                    <v-icon medium class="mb-2"
+                                    <v-icon medium class="mb-2" color="#26C6DA"
                                         >mdi-cake-variant</v-icon
                                     >
                                 </span>
@@ -41,7 +41,9 @@
                             <div class="grey--text">
                                 <!-- na upologizetai me new date ktlp h h merominia p einai eggegramenos -->
                                 <span class="grey--text">
-                                    <v-icon class="mb-1">mdi-at</v-icon>
+                                    <v-icon color="#26C6DA" class="mb-1"
+                                        >mdi-at</v-icon
+                                    >
                                 </span>
 
                                 {{ user.email }}
@@ -51,7 +53,9 @@
                             <div class="grey--text">
                                 <!-- na upologizetai me new date ktlp h h merominia p einai eggegramenos -->
                                 <span class="grey--text">
-                                    <v-icon class="mb-1">mdi-map-marker</v-icon>
+                                    <v-icon color="#26C6DA" class="mb-1"
+                                        >mdi-map-marker</v-icon
+                                    >
                                 </span>
                                 Greece
                                 {{ user.location }}
@@ -276,11 +280,10 @@
                                 {{ getCreationDate(item.created) }}
                                 <!-- </v-chip> -->
                             </template>
-                            <template
-                                v-slot:[`item.remove`]="props"
-                                v-if="admin"
-                            >
-                                <v-icon @click="removeObject(props.item)"
+                            <template v-slot:[`item.remove`]="props">
+                                <v-icon
+                                    v-if="checkUserAction(props.item)"
+                                    @click="removeObject(props.item)"
                                     >mdi-delete</v-icon
                                 >
                             </template>
@@ -334,6 +337,7 @@
                             </v-btn>
                         </v-row>
                         <v-data-table
+                            :key="fu"
                             :headers="answersCols"
                             :items="answerObjects"
                             style="cursor: pointer"
@@ -375,7 +379,9 @@
                                 {{ getCreationDate(item.created) }}
                             </template>
                             <template v-slot:[`item.remove`]="props">
-                                <v-icon @click="removeObject(props.item)"
+                                <v-icon
+                                    v-if="checkUserActionInAnswer(props.item)"
+                                    @click="removeAnswerObject(props.item)"
                                     >mdi-delete</v-icon
                                 >
                             </template>
@@ -389,7 +395,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { deleteAnswer, deleteQuestion, getAnswer, getQuestion, getUser, getUserHistorical, getUserReputation, isLogged, removeUser } from './functions';
+import { createHistorical, deleteAnswer, deleteQuestion, getAnswer, getQuestion, getUser, getUserHistorical, getUserReputation, isLogged, removeUser } from './functions';
 import { mapGetters } from 'vuex';
 import store from '@/store';
 import { VueEditor } from "vue2-editor";
@@ -612,7 +618,7 @@ export default Vue.extend({
                 borderColor: '#f1f1f1',
             }
         } as ApexOptions,
-
+        fu: false
 
 
 
@@ -632,7 +638,7 @@ export default Vue.extend({
         },
     },
     computed: {
-        ...mapGetters(["getUserData", "getQuestions"]),
+        ...mapGetters(["getUserData", "getQuestions", "getLoggedUser", "getQuestionData"]),
         getUserRegistration(): string {
             return dayjs(this.user.created).format("DD MMM. YYYY | HH:mm:ss")
         }
@@ -662,6 +668,7 @@ export default Vue.extend({
         async getQuestions2() {
             for (const question of this.getUserData.questions) {
                 const questionData = await getQuestion(question.question_id);
+                console.log(questionData, 'the que data222')
                 const answers = questionData.answers;
                 const answersNumber = answers.length;
                 //
@@ -675,7 +682,7 @@ export default Vue.extend({
                 //get the sum
                 const votesSum = votesArray.reduce((a, b) => a + b, 0)
                 //
-                const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, created: question.createdAt, question_id: question.question_id };
+                const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, created: question.createdAt, question_id: question.question_id, userId: questionData.data.UserUserId };
                 this.questions.push(questionObject);
             }
         },
@@ -725,6 +732,7 @@ export default Vue.extend({
             });
         },
         async getUserAnswers() {
+            console.log(this.getUserData, 'get user dara in refresh')
             for (const answer of this.getUserData.answers) {
                 const answerObject = {
                     ...answer,
@@ -884,6 +892,98 @@ export default Vue.extend({
                 };
             });
             return actionObjects;
+        },
+        checkUserAction(item: any) {
+            console.log(item, 'the item in check user acctions')
+            console.log(this.getLoggedUser, 'the get logged user')
+            if (item.userId === this.getLoggedUser.user_id) return true;
+            else false;
+        },
+        checkUserActionInAnswer(item: any) {
+            console.log(item, 'the item in check user acctions')
+            console.log(this.getLoggedUser, 'the get logged user')
+            if (item.UserUserId === this.getLoggedUser.user_id) return true;
+            else false;
+        },
+        async removeObject(value: any) {
+            console.log(value, "the value of remove object")
+            //when delete question delete all its answers
+            const answers = value.answers
+            if (answers !== 0) {
+                console.log('skata mpika edw')
+                for (const answer of this.getQuestionData.answers) {
+                    const deleteAnswerObject = await deleteAnswer(answer.answer_id);
+                    const historicalData = {
+                        action: 'delete-answer',
+                        data: value
+                    }
+                    await createHistorical(historicalData)
+                }
+                const deleteQuestionObject = await deleteQuestion(value.question_id);
+            } else {
+                console.log('mpika edw')
+                const deleteQuestionObject = await deleteQuestion(value.question_id);
+            }
+            //
+            const historicalData = {
+                action: 'delete-question',
+                data: value
+            }
+            await createHistorical(historicalData)
+            //
+            // this.$router.go(0);
+            // this.$router.push(`/users/${this.getLoggedUser.user_id}`);
+            setTimeout(async () => {
+                await this.profileClicked()
+            }, 500)
+        },
+        async removeAnswerObject(value: any) {
+            console.log(value, "the value of remove object answer")
+            const deleteAnswerObject = await deleteAnswer(value.answer_id);
+            const historicalData = {
+                action: 'delete-answer',
+                data: value
+            }
+            await createHistorical(historicalData)
+            //when delete question delete all its answers
+            // const answers = value.answers
+            // if (answers !== 0) {
+            //     console.log('skata mpika edw')
+
+            //     for (const answer of this.getQuestionData.answers) {
+            //         const deleteAnswerObject = await deleteAnswer(answer.answer_id);
+            //         const historicalData = {
+            //             action: 'delete-answer',
+            //             data: value
+            //         }
+            //         await createHistorical(historicalData)
+            //     }
+            //     const deleteQuestionObject = await deleteQuestion(value.question_id);
+            // } else {
+            //     console.log('mpika edw')
+            //     const deleteQuestionObject = await deleteQuestion(value.question_id);
+            // }
+            // //
+            // const historicalData = {
+            //     action: 'delete-question',
+            //     data: value
+            // }
+            // await createHistorical(historicalData)
+            //
+            // this.$router.go(0);
+            // this.$router.push(`/users/${this.getLoggedUser.user_id}`);
+            // setTimeout(async () => {
+            //     await this.profileClicked()
+            // }, 500)
+            this.fu = !this.fu
+        },
+        async profileClicked() {
+            console.log(this.getLoggedUser, "the value of click user");
+            const userId = this.getLoggedUser.user_id;
+            const userData = await getUser(userId);
+            console.log(userData, "the card data");
+            store.commit("setUserData", userData);
+            this.$router.push(`/users/${userId}`);
         }
     },
     async mounted() {

@@ -534,7 +534,7 @@
                         <v-row justify="center" align="center">
                             <v-col justify="center" align="center" class="me-6">
                                 <v-icon color="teal" size="53px" class="mb-0"
-                                    >mdi-crown-outline</v-icon
+                                    >mdi-trophy</v-icon
                                 >
                                 <span
                                     class="d-flex justify-center blue-grey--text text-body-1 font-weight-bold me-2 mb-9"
@@ -553,9 +553,12 @@
                             <v-col justify="start" align="start">
                                 It looks like you don't have enough reputation
                                 to cast a vote yet. You need a minimum of
-                                {{ repLimit }} reputation points to do so. Keep
-                                participating in the community to earn more
-                                reputation points and unlock additional features
+                                <span class="blue--text font-weight-medium"
+                                    >{{ repLimit }}
+                                </span>
+                                reputation points to do so. Keep participating
+                                in the community to earn more reputation points
+                                and unlock additional features.
                             </v-col>
                         </v-row>
                     </v-card-text>
