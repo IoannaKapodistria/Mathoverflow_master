@@ -109,8 +109,9 @@
                     rounded="lg"
                     elevation="1"
                     style="border: 2px solid #e0e0e0"
+                    class="mb-16"
                 >
-                    <v-card-text class="pt-8">
+                    <v-card-text class="pt-">
                         <v-row class="mt-3" justify="center" align="center">
                             <v-col
                                 v-for="(resource, i) in resources"
@@ -182,12 +183,39 @@
                     </v-card-text>
                 </v-card>
                 <!-- apexchart with user activity in charts -->
-                <v-btn @click="getUserHistorical1">get historical</v-btn>
-                <apexchart
-                    height="300px"
-                    :options="options"
-                    :series="series"
-                ></apexchart>
+                <!-- <v-btn @click="getUserHistorical1">get historical</v-btn> -->
+                <v-card
+                    color="#26C6DA"
+                    rounded="md"
+                    elevation="3"
+                    width="35%"
+                    style="z-index: 20001"
+                    class="overlayUserQues"
+                    dark
+                >
+                    <v-card-text
+                        class="text-overline font-weight-bold d-flex justify-center py-2"
+                        style="color: white"
+                    >
+                        <v-icon class="me-2"
+                            >mdi-chart-bell-curve-cumulative</v-icon
+                        >
+                        Historical
+                    </v-card-text>
+                </v-card>
+                <v-card
+                    rounded="lg"
+                    elevation="1"
+                    style="border: 2px solid #e0e0e0"
+                >
+                    <v-card-text class="pt-8">
+                        <apexchart
+                            height="300px"
+                            :options="options"
+                            :series="series"
+                        ></apexchart>
+                    </v-card-text>
+                </v-card>
             </v-tab-item>
             <v-tab-item class="mt-2">
                 <v-card
@@ -540,7 +568,7 @@ export default Vue.extend({
                 text: '',
                 align: 'center',
                 style: {
-                    fontSize: '14px',
+                    fontSize: '16px',
                     fontWeight: 'bold',
                     fontFamily: undefined,
                     color: '#4527A0'
@@ -785,22 +813,25 @@ export default Vue.extend({
             const response = await getUserHistorical(userid)
             console.log(response, 'the response of get user historical')
             const array = this.groupByAction2(response)
+            const array2 = this.transformArray(response)
+            const modifiedSeries = this.modifyData(array2)
+            console.log(modifiedSeries, 'the modifiedSeries')
             console.log(array, 'the array with the actions')
-            let series3: any[] = []
-            // let categories2: any[] = []
-            const uniqueDates = Array.from(new Set(array[0].categories.map(date => dayjs.utc(date).format('YYYY-MM-DD'))))
-                .map(date => dayjs.utc(date).toISOString());
-            console.log(uniqueDates, 'the unique dates')
-            console.log(array[0].categories, 'the array[0].categories')
-            for (const serie of array) {
-                const serieObject = {
-                    name: serie.name,
-                    // data: serie.data///this.ensureArrayLength(serie.data, uniqueDates.length)
-                    data: this.ensureArrayLength(serie.data, uniqueDates.length)
-                }
-                series3.push(serieObject)
-            }
-            console.log(series3, 'the series3')
+            console.log(array2, 'the array22222 with the actions')
+            // let series3: any[] = []
+            // const uniqueDates = Array.from(new Set(array[0].categories.map(date => dayjs.utc(date).format('YYYY-MM-DD'))))
+            //     .map(date => dayjs.utc(date).toISOString());
+            // console.log(uniqueDates, 'the unique dates')
+            // console.log(array[0].categories, 'the array[0].categories')
+            // for (const serie of array2) {
+            //     const serieObject = {
+            //         name: serie.name,
+            //         // daa: serie.data///this.ensureArrayLength(serie.data, uniqueDates.length)
+            //         data: this.ensureArrayLength(serie.data, uniqueDates.length)
+            //     }
+            //     series3.push(serieObject)
+            // }
+            // console.log(series3, 'the series3')
             //
 
             this.options = {
@@ -808,7 +839,7 @@ export default Vue.extend({
                 xaxis: {
                     ...this.options.xaxis,
                     // categories: array[0].categories//uniqueDates
-                    categories: uniqueDates
+                    categories: modifiedSeries.superCategories
                 }
             }
             this.options = {
@@ -820,13 +851,111 @@ export default Vue.extend({
             }
             this.options = {
                 ...this.options,
-                series: series3
+                series: modifiedSeries.modifiedArr
             }
 
         },
         convertDates(arr: any[]) {
             return arr.map((item) => (item === 'n/a' ? item : dayjs(item).toISOString()));
 
+        },
+        modifyData(arr: any[]) {
+            // const modifiedArr = arr.map((item) => {
+            //     const modifiedData = [] as any[];
+            //     const { name, data, categories } = item;
+            //     superCategories.forEach((category) => {
+            //         const index = categories.indexOf(category);
+            //         if (index === -1) {
+            //             modifiedData.push(0);
+            //         } else {
+            //             modifiedData.push(data[index]);
+            //         }
+            //     });
+            //     return {
+            //         name,
+            //         data: modifiedData,
+            //     };
+            // });
+            // return modifiedArr;
+            // Find the largest categories array from every object in the arr array
+            const superCategories: any[] = arr.reduce((acc, curr) => {
+                if (curr.categories.length > acc.length) {
+                    return curr.categories;
+                } else {
+                    return acc;
+                }
+            }, []);
+
+            const modifiedArr = arr.map((item) => {
+                const modifiedData: any[] = [];
+                const { name, data, categories } = item;
+                superCategories.forEach((category) => {
+                    const index = categories.indexOf(category);
+                    if (index === -1) {
+                        modifiedData.push(0);
+                    } else {
+                        modifiedData.push(data[index]);
+                    }
+                });
+                return {
+                    name,
+                    data: modifiedData,
+                };
+            });
+            return { modifiedArr, superCategories };
+        },
+        transformArray(arr: any[]) {
+            const transformed = {} as any;
+            arr.forEach((item) => {
+                const { action, createdAt } = item;
+                if (!transformed[action]) {
+                    transformed[action] = {
+                        name: action,
+                        data: [],
+                        categories: [],
+                    };
+                }
+                const itemDate = createdAt.split("T")[0];
+                const existingCategoryIndex = transformed[action].categories.indexOf(
+                    itemDate
+                );
+                if (existingCategoryIndex === -1) {
+                    transformed[action].categories.push(itemDate);
+                    transformed[action].data.push(
+                        1
+                    );
+                } else {
+                    transformed[action].data[existingCategoryIndex] += 1;
+                }
+            });
+            return Object.values(transformed) as any[];
+            // arr.forEach((item) => {
+            //     const { action, createdAt } = item;
+            //     if (!transformed[action]) {
+            //         transformed[action] = {
+            //             name: action,
+            //             data: [],
+            //             categories: [],
+            //         };
+            //     }
+            //     const itemDate = createdAt.split("T")[0];
+            //     const existingCategoryIndex = transformed[action].categories.indexOf(
+            //         itemDate
+            //     );
+            //     if (existingCategoryIndex === -1) {
+            //         transformed[action].categories.push(itemDate);
+            //         transformed[action].data.push(
+            //             Number.isInteger(item.data.value) ? item.data.value : 0
+            //         );
+            //     } else {
+            //         transformed[action].data[existingCategoryIndex] += Number.isInteger(
+            //             item.data.value
+            //         )
+            //             ? item.data.value
+            //             : 0;
+            //     }
+            // });
+            // return Object.values(transformed);
         },
         ensureArrayLength(arr: any[], datesLength: number) {
             // to 0 den mapinei se swsth thesh, prepei na mpainei stin idia thesi pou moainei kai 
