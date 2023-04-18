@@ -191,7 +191,7 @@
                         >
                     </template>
                 </v-data-table>
-                <v-btn @click="sessionCheck1">session check</v-btn>
+                <!-- <v-btn @click="sessionCheck1">session check</v-btn> -->
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
