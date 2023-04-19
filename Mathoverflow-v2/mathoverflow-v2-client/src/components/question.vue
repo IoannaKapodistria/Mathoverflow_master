@@ -787,7 +787,7 @@ export default Vue.extend({
             //
             this.questionSumVotes = votesSum;
             //
-            this.getUserVote()
+            await this.getUserVote()
             //
             this.editedQuestionTitle = this.questionExample.title
             //
@@ -923,7 +923,7 @@ export default Vue.extend({
             //     answerVotesArray.push(value)
             // }
             console.log(this.getLoggedUser, 'this.getLoggedUser!!')
-            const userVote = answerData.answerVotes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
+            const userVote = answerData.answerVotes.find((el: any) => el.UserUserId === this.getLoggedUser.user_id)
             console.log(userVote, 'user answer vote')
             if (userVote !== undefined) {
                 if (userVote.value === 1) return true
@@ -1226,8 +1226,11 @@ export default Vue.extend({
         async getUserVote() {
             const qData = await getQuestion(this.getQuestionData.data.question_id)
             console.log(qData, 'THE QDATA222')
+            const vot = qData.votes
+            console.log(vot, 'THE QDATA222 vot')
+
             // const userVote = this.getQuestionData.votes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
-            const userVote = qData.votes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
+            const userVote = vot.find((el: any) => el.UserUserId === this.getLoggedUser.user_id)
             if (userVote !== undefined) {
                 console.log(userVote, 'the logged in user vote in this question')
                 console.log(this.getLoggedUser, 'the logged in user')

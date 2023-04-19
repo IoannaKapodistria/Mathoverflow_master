@@ -123,14 +123,18 @@ export async function getQuestion(req: any, res: any) {
             if (data) {
                 const answers = await Answer.findAll({ where: { QuestionQuestionId: id } } /*{ include: [{ model: Question, as: "Question", where: { QuestionQuestionId: id } }] }*/);
                 const votes = await Vote.findAll({ where: { QuestionQuestionId: id } });
+                console.log(votes, "the get question value votes in server");
 
                 // na ftiaxtei na epistrefetai kai to athroisma twn votes
                 const value = {
                     data,
                     answers: answers,
                     votes: votes,
+                    // votes2: votes,
                 };
+                console.log(value, "the get question value in server");
                 res.send(value);
+                // res.send(votes);
             } else {
                 res.status(404).send({
                     message: `Cannot find Question with id=${id}.`,

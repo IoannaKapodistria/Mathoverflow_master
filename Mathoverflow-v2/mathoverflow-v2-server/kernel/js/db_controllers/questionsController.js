@@ -41,11 +41,13 @@ export async function getQuestion(req, res) {
           QuestionQuestionId: id
         }
       });
+      console.log(votes, "the get question value votes in server");
       const value = {
         data,
         answers: answers,
         votes: votes
       };
+      console.log(value, "the get question value in server");
       res.send(value);
     } else {
       res.status(404).send({

@@ -61,6 +61,7 @@ export async function getQuestion(id: any) {
             });
         if (response !== undefined) {
             const value = await response.json();
+            // console.log(await response, "this is the response from question by id 1");
             console.log(value, "this is the question by id 1");
             // store.commit("setQuestions", questions);
             return value;

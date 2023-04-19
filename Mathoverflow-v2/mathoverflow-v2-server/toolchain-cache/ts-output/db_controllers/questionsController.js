@@ -38,11 +38,13 @@ export async function getQuestion(req, res) {
         if (data) {
             const answers = await Answer.findAll({ where: { QuestionQuestionId: id } });
             const votes = await Vote.findAll({ where: { QuestionQuestionId: id } });
+            console.log(votes, "the get question value votes in server");
             const value = {
                 data,
                 answers: answers,
                 votes: votes,
             };
+            console.log(value, "the get question value in server");
             res.send(value);
         }
         else {
