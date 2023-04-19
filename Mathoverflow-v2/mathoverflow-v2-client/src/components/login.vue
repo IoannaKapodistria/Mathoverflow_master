@@ -35,7 +35,7 @@
                                         required
                                         v-model="email"
                                         :rules="emailRules"
-                                        label="Username"
+                                        label="Email"
                                         prepend-icon="mdi-email"
                                     >
                                     </v-text-field>
