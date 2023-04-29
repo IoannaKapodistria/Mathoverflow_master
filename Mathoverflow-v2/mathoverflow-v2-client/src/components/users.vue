@@ -104,7 +104,7 @@
                     :length="pages"
                     @input="updatePage"
                     circle
-                    color="purple"
+                    color="#B388FF"
                 ></v-pagination>
             </v-card-text>
         </v-card>

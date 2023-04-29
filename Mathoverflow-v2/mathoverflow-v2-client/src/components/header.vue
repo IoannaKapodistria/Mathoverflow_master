@@ -58,11 +58,11 @@
                     >
                         <span
                             v-if="existSession === false"
-                            class="me-4 mt-1"
+                            class="me-3 mt-1"
                             style="cursor: pointer"
                             @click="signup"
                         >
-                            <v-icon dark size="20px"
+                            <v-icon dark size="22px"
                                 >mdi-progress-pencil</v-icon
                             >
                             Sign up
@@ -73,7 +73,9 @@
                             style="cursor: pointer"
                             @click="login"
                         >
-                            <v-icon dark size="20px">mdi-power</v-icon> Log in
+                            <v-icon dark size="21px">mdi-login-variant</v-icon>
+                            <!-- <v-icon dark size="21px">mdi-login</v-icon> -->
+                            Log in
                         </span>
                         <span
                             v-if="existSession === true"
@@ -81,7 +83,9 @@
                             style="cursor: pointer"
                             @click="logout"
                         >
-                            <v-icon dark size="20px">mdi-power</v-icon> Log out
+                            <!-- <v-icon dark size="21px">mdi-logout-variant</v-icon> -->
+                            <v-icon dark size="21px">mdi-run</v-icon>
+                            Log out
                         </span>
                     </div>
                     <span class="logo" style="cursor: pointer" @click="goHome">

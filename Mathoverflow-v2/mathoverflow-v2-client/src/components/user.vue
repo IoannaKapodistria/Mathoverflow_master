@@ -310,6 +310,7 @@
                             </template>
                             <template v-slot:[`item.remove`]="props">
                                 <v-icon
+                                    color="#5fb1e8"
                                     v-if="checkUserAction(props.item)"
                                     @click="removeObject(props.item)"
                                     >mdi-delete</v-icon
@@ -408,6 +409,7 @@
                             </template>
                             <template v-slot:[`item.remove`]="props">
                                 <v-icon
+                                    color="#5fb1e8"
                                     v-if="checkUserActionInAnswer(props.item)"
                                     @click="removeAnswerObject(props.item)"
                                     >mdi-delete</v-icon
@@ -524,7 +526,14 @@ export default Vue.extend({
             colors: ["#00BCD4", "#FF9800", "#FFEB3B", "#795548", "#9C27B0", "#4CAF50", "#2196F3",],
 
             dataLabels: {
-                enabled: true
+                enabled: true,
+                style: {
+                    fontSize: '12px'
+                },
+                background: {
+                    borderRadius: 10,
+                    padding: 6
+                }
             },
             stroke: {
                 curve: 'smooth'
@@ -860,31 +869,19 @@ export default Vue.extend({
 
         },
         modifyData(arr: any[]) {
-            // const modifiedArr = arr.map((item) => {
-            //     const modifiedData = [] as any[];
-            //     const { name, data, categories } = item;
-            //     superCategories.forEach((category) => {
-            //         const index = categories.indexOf(category);
-            //         if (index === -1) {
-            //             modifiedData.push(0);
-            //         } else {
-            //             modifiedData.push(data[index]);
-            //         }
-            //     });
-            //     return {
-            //         name,
-            //         data: modifiedData,
-            //     };
-            // });
-            // return modifiedArr;
+            // 
             // Find the largest categories array from every object in the arr array
-            const superCategories: any[] = arr.reduce((acc, curr) => {
-                if (curr.categories.length > acc.length) {
-                    return curr.categories;
-                } else {
-                    return acc;
-                }
-            }, []);
+            //create a supercategory array with alla the different dates of all the obejcts
+            // const superCategories: any[] = arr.reduce((acc, curr) => {
+            //     if (curr.categories.length > acc.length) {
+            //         return curr.categories;
+            //     } else {
+            //         return acc;
+            //     }
+            // }, []);
+            // Find all the unique dates from the objects in the arr array
+            const superCategories: any[] = [...new Set(arr.flatMap(item => item.categories))];
+
 
             const modifiedArr = arr.map((item) => {
                 const modifiedData: any[] = [];
@@ -929,33 +926,7 @@ export default Vue.extend({
                 }
             });
             return Object.values(transformed) as any[];
-            // arr.forEach((item) => {
-            //     const { action, createdAt } = item;
-            //     if (!transformed[action]) {
-            //         transformed[action] = {
-            //             name: action,
-            //             data: [],
-            //             categories: [],
-            //         };
-            //     }
-            //     const itemDate = createdAt.split("T")[0];
-            //     const existingCategoryIndex = transformed[action].categories.indexOf(
-            //         itemDate
-            //     );
-            //     if (existingCategoryIndex === -1) {
-            //         transformed[action].categories.push(itemDate);
-            //         transformed[action].data.push(
-            //             Number.isInteger(item.data.value) ? item.data.value : 0
-            //         );
-            //     } else {
-            //         transformed[action].data[existingCategoryIndex] += Number.isInteger(
-            //             item.data.value
-            //         )
-            //             ? item.data.value
-            //             : 0;
-            //     }
-            // });
-            // return Object.values(transformed);
+            // 
         },
         ensureArrayLength(arr: any[], datesLength: number) {
             // to 0 den mapinei se swsth thesh, prepei na mpainei stin idia thesi pou moainei kai 

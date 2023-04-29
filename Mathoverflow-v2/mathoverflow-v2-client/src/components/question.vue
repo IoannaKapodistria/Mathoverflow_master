@@ -28,7 +28,15 @@
                         </v-row>
                     </v-card-text>
                 </v-card>
-                <v-card v-if="editing" flat style="border: 2px dashed #b39ddb">
+                <v-card v-if="editing" flat style="border: 2px dotted #b39ddb">
+                    <!-- <v-progress-linear
+                        rounded
+                        height="5"
+                        indeterminate
+                        color="#b39ddb"
+                        reverse
+                    >
+                    </v-progress-linear> -->
                     <v-card-text v-if="editing" class="pb-0">
                         <v-textarea
                             color="#b39ddb"
@@ -103,7 +111,7 @@
                             <v-card
                                 v-if="editing"
                                 flat
-                                style="border: 2px dashed #b39ddb"
+                                style="border: 2px dotted #b39ddb"
                             >
                                 <v-card-text>
                                     <vue-editor
@@ -116,7 +124,7 @@
                                 <v-card-actions>
                                     <v-row justify="center" align="center">
                                         <v-col justify="center" align="center">
-                                            <v-btn
+                                            <!-- <v-btn
                                                 class="me-3"
                                                 small
                                                 dark
@@ -124,14 +132,40 @@
                                                 @click="editing = false"
                                             >
                                                 cancel
-                                            </v-btn>
+                                            </v-btn> -->
                                             <v-btn
+                                                class="me-2 pa-3"
+                                                small
+                                                dark
+                                                color="#b39ddb"
+                                                @click="editing = false"
+                                                style="
+                                                    text-transform: none !important;
+                                                    font-size: 15px !important;
+                                                "
+                                            >
+                                                Cancel
+                                            </v-btn>
+                                            <!-- <v-btn
                                                 small
                                                 outlined
                                                 color="#b39ddb"
                                                 @click="updateQuestion"
                                             >
                                                 save</v-btn
+                                            > -->
+                                            <v-btn
+                                                class="pa-3"
+                                                small
+                                                outlined
+                                                color="#b39ddb"
+                                                @click="updateQuestion"
+                                                style="
+                                                    text-transform: none !important;
+                                                    font-size: 15px !important;
+                                                "
+                                            >
+                                                Save</v-btn
                                             >
                                         </v-col>
                                     </v-row>
@@ -416,7 +450,9 @@
                             </v-card>
                         </template>
                         <template v-slot:[`item.edit`]="props">
-                            <v-icon @click="showAnswerEdit(props.item)"
+                            <v-icon
+                                color="#5fb1e8"
+                                @click="showAnswerEdit(props.item)"
                                 >mdi-pencil</v-icon
                             >
                             <v-dialog
@@ -425,8 +461,25 @@
                                 height="auto"
                             >
                                 <v-card>
-                                    <v-card-text class="pa-4">
+                                    <v-toolbar flat>
+                                        <v-icon size="29px" color="#32325d">
+                                            mdi-chat-plus
+                                        </v-icon>
+                                        <span
+                                            class="titleClass font-weight-medium ms-2 mt-0"
+                                        >
+                                            Update answer
+                                        </span>
+                                        <v-spacer></v-spacer>
+                                        <v-icon>mdi-icon</v-icon>
+                                    </v-toolbar>
+                                    <v-card-text class="px-4 pb-4 pt-2">
+                                        <h4>
+                                            Please edit the answer body in the
+                                            editor below.
+                                        </h4>
                                         <vue-editor
+                                            class="mt-4"
                                             v-model="editedAnswerBody"
                                             :editorOptions="toolbarOpts_old"
                                         ></vue-editor>
@@ -448,17 +501,22 @@
                                                 cancel
                                             </v-btn> -->
                                                 <v-btn
-                                                    class="me-3"
+                                                    class="me-2 pa-3"
                                                     small
                                                     dark
                                                     color="#b39ddb"
                                                     @click="
                                                         answerEditing = false
                                                     "
+                                                    style="
+                                                        text-transform: none !important;
+                                                        font-size: 15px !important;
+                                                    "
                                                 >
-                                                    cancel
+                                                    Cancel
                                                 </v-btn>
                                                 <v-btn
+                                                    class="pa-3"
                                                     small
                                                     outlined
                                                     color="#b39ddb"
@@ -467,8 +525,12 @@
                                                             props.item.body
                                                         )
                                                     "
+                                                    style="
+                                                        text-transform: none !important;
+                                                        font-size: 15px !important;
+                                                    "
                                                 >
-                                                    save</v-btn
+                                                    Save</v-btn
                                                 >
                                             </v-col>
                                         </v-row>
@@ -477,7 +539,9 @@
                             </v-dialog>
                         </template>
                         <template v-slot:[`item.remove`]="props">
-                            <v-icon @click="removeObject(props.item)"
+                            <v-icon
+                                color="#5fb1e8"
+                                @click="removeObject(props.item)"
                                 >mdi-delete</v-icon
                             >
                         </template>
@@ -667,7 +731,7 @@ export default Vue.extend({
                     container: [
                         [{ 'font': [] }],
                         [{ 'header': [false, 1, 2, 3, 4, 5, 6,] }],
-                        [{ 'size': ['small', false, 'large', 'huge'] }],
+                        // [{ 'size': ['small', false, 'large', 'huge'] }],
                         ['bold', 'italic', 'underline', 'strike'],
                         [{ 'align': '' }, { 'align': 'center' }, { 'align': 'right' }, { 'align': 'justify' }],
                         [{ 'header': 1 }, { 'header': 2 }],
@@ -804,7 +868,7 @@ export default Vue.extend({
                         container: [
                             [{ 'font': [] }],
                             [{ 'header': [false, 1, 2, 3, 4, 5, 6,] }],
-                            [{ 'size': ['small', false, 'large', 'huge'] }],
+                            // [{ 'size': ['small', false, 'large', 'huge'] }],
                             ['bold', 'italic', 'underline', 'strike'],
                             [{ 'align': '' }, { 'align': 'center' }, { 'align': 'right' }, { 'align': 'justify' }],
                             [{ 'header': 1 }, { 'header': 2 }],
@@ -1281,5 +1345,11 @@ export default Vue.extend({
 
 .answersTable > .v-data-table__wrapper > table > tbody > tr:hover {
     background: inherit !important;
+}
+.titleClass {
+    font-size: 20px !important;
+    color: #32325d !important;
+    font-weight: 500;
+    color: #5fb1e8;
 }
 </style>

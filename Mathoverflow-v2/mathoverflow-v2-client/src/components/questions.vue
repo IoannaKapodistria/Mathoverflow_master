@@ -235,6 +235,7 @@
                     </template>
                     <template v-slot:[`item.remove`]="props" v-if="admin">
                         <v-icon
+                            color="#5fb1e8"
                             v-if="checkUserAction(props.item)"
                             @click="removeObject(props.item)"
                             >mdi-delete</v-icon
