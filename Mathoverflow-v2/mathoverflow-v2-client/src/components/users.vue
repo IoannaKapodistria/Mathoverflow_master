@@ -181,6 +181,16 @@ export default Vue.extend({
             //and then delete user
             const deleteUserObject = await removeUser(value.user_id);
             await this.$nextTick()
+            const userIndex = this.users.findIndex((el: any) => el.user_id === value.user_id)
+            const userIndex2 = this.historyList.findIndex((el: any) => el.user_id === value.user_id)
+            console.log(userIndex, 'the user index!')
+            console.log(this.historyList, 'the user history list!')
+            if (userIndex !== -1) {
+                this.users.splice(userIndex, 1)
+            }
+            if (userIndex2 !== -1) {
+                this.historyList.splice(userIndex, 1)
+            }
             this.forceUpdateUsers();
         },
         async forceUpdateUsers() {
@@ -191,7 +201,6 @@ export default Vue.extend({
             // this.$router.push('/').catch((err: any) => {
             //     console.warn('error in redirect to /users :', err)
             // });
-
             this.$router.push('/users').catch((err: any) => {
                 console.warn('error in redirect to /users :', err)
             });
