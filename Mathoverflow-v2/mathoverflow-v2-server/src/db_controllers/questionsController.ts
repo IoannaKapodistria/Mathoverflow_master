@@ -465,3 +465,65 @@ export function deleteAnswerVote(req: any, res: any) {
             });
         });
 }
+
+//update answer-vote
+export function updateAnswerVote(req: any, res: any) {
+    const id = req.params.id;
+    AnswerVote.update(
+        { value: req.body.value },
+        {
+            where: { vote_id: id },
+        }
+    )
+        .then(async (data) => {
+            if (data) {
+                res.send({
+                    message: "Answer-Vote with id=" + id + " has been updated successfully",
+                });
+            } else {
+                res.status(404).send({
+                    message: `Cannot update Answer-Vote with id=${id}.`,
+                });
+            }
+        })
+        .catch((err) => {
+            console.log(err, "this is the error");
+            res.status(500).send({
+                message: "Error retrieving Answer-Vote with id=" + id,
+            });
+        });
+}
+
+//get one question
+export async function getUserAnswerVote(req: any, res: any) {
+    const userId = req.params.id;
+    // const id = 1;
+    await AnswerVote.findAll()
+        .then(async (data) => {
+            if (data) {
+                const userVotes = await AnswerVote.findAll({ where: { UserUserId: userId, AnswerAnswerId: req.body.answer_id } });
+                console.log(userVotes, "the get question value votes in server");
+
+                // na ftiaxtei na epistrefetai kai to athroisma twn votes
+                // const value = {
+                //     data,
+                //     answers: answers,
+                //     votes: votes,
+                //     // votes2: votes,
+                // };
+                // console.log(value, "the get question value in server");
+                res.send(userVotes);
+                // res.send(votes);
+            } else {
+                res.status(404).send({
+                    message: `Cannot find w with id=${userId}.`,
+                });
+            }
+        })
+        .catch((err) => {
+            console.log(err, "this is teh error");
+            res.status(500).send({
+                message: "Error retrieving w with id=" + userId,
+            });
+        });
+}

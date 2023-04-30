@@ -1013,15 +1013,12 @@ export default Vue.extend({
                 const getQue = await getQuestion(value.question_id)
                 console.log(getQue, 'skata mpika edw the get que')
                 console.log('skata mpika edw')
-                console.log(this.getQuestionData.answers, "the ansers in teh ques that i want to delete")
-                console.log(this.getQuestionData, "the ansers in teh ques that i want to delete")
-                // for (const answer of this.getQuestionData.answers) {
                 //mipwsw prepei na diagrafontai kai ta votes?
                 for (const answer of getQue.answers) {
                     const deleteAnswerObject = await deleteAnswer(answer.answer_id);
                     const historicalData = {
                         action: 'delete-answer',
-                        data: value
+                        data: answer//value
                     }
                     await createHistorical(historicalData)
                 }
@@ -1056,7 +1053,6 @@ export default Vue.extend({
                 data: value
             }
             await createHistorical(historicalData)
-
             // this.fu = !this.fu
             console.log(this.answerObjects, 'the answersss index in remove')
             const answerIndex = this.answerObjects.findIndex((el: any) => el.answer_id === value.answer_id)

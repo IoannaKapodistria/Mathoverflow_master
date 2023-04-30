@@ -324,4 +324,50 @@ export function deleteAnswerVote(req, res) {
         });
     });
 }
+export function updateAnswerVote(req, res) {
+    const id = req.params.id;
+    AnswerVote.update({ value: req.body.value }, {
+        where: { vote_id: id },
+    })
+        .then(async (data) => {
+        if (data) {
+            res.send({
+                message: "Answer-Vote with id=" + id + " has been updated successfully",
+            });
+        }
+        else {
+            res.status(404).send({
+                message: `Cannot update Answer-Vote with id=${id}.`,
+            });
+        }
+    })
+        .catch((err) => {
+        console.log(err, "this is the error");
+        res.status(500).send({
+            message: "Error retrieving Answer-Vote with id=" + id,
+        });
+    });
+}
+export async function getUserAnswerVote(req, res) {
+    const userId = req.params.id;
+    await AnswerVote.findAll()
+        .then(async (data) => {
+        if (data) {
+            const userVotes = await AnswerVote.findAll({ where: { UserUserId: userId, AnswerAnswerId: req.body.answer_id } });
+            console.log(userVotes, "the get question value votes in server");
+            res.send(userVotes);
+        }
+        else {
+            res.status(404).send({
+                message: `Cannot find w with id=${userId}.`,
+            });
+        }
+    })
+        .catch((err) => {
+        console.log(err, "this is teh error");
+        res.status(500).send({
+            message: "Error retrieving w with id=" + userId,
+        });
+    });
+}
 //# sourceMappingURL=questionsController.js.map

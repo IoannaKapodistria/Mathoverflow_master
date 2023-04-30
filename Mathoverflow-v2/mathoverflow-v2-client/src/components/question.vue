@@ -302,25 +302,23 @@
                                     lg="3"
                                     class="pa-0"
                                 >
-                                    <v-btn right x-large icon>
-                                        <v-icon
-                                            size="26px"
-                                            :color="
-                                                props.item.userAnswerVote ===
-                                                true
-                                                    ? 'green'
-                                                    : '#78909C'
-                                            "
-                                            @click="
-                                                props.item.userAnswerVote !==
-                                                true
-                                                    ? upVoteAnswer(props.item)
-                                                    : doNothing()
-                                            "
-                                            class="mt-3"
-                                            >mdi-plus</v-icon
-                                        >
-                                    </v-btn>
+                                    <!-- <v-btn right x-large icon> -->
+                                    <v-icon
+                                        size="19px"
+                                        :color="
+                                            props.item.userAnswerVote === true
+                                                ? '#53DFD1'
+                                                : '#78909C'
+                                        "
+                                        @click="
+                                            props.item.userAnswerVote !== true
+                                                ? upVoteAnswer(props.item)
+                                                : doNothing()
+                                        "
+                                        class="mt-3 me-2"
+                                        >mdi-thumb-up</v-icon
+                                    >
+                                    <!-- </v-btn> -->
                                 </v-col>
                                 <v-col
                                     cols="4"
@@ -329,7 +327,7 @@
                                     lg="4"
                                     class="pa-0"
                                 >
-                                    <v-chip color="teal" dark class="mt-4">
+                                    <v-chip color="teal" dark class="mt-2">
                                         {{ props.item.votes }}
                                     </v-chip>
                                 </v-col>
@@ -340,26 +338,24 @@
                                     lg="3"
                                     class="pa-0"
                                 >
-                                    <v-btn right x-large icon>
-                                        <v-icon
-                                            @click="
-                                                props.item.userAnswerVote !==
-                                                false
-                                                    ? downVoteAnswer(props.item)
-                                                    : doNothing()
-                                            "
-                                            :color="
-                                                props.item.userAnswerVote ===
-                                                false
-                                                    ? 'green'
-                                                    : '#78909C'
-                                            "
-                                            dark
-                                            size="26px"
-                                            class="mt-3"
-                                            >mdi-minus</v-icon
-                                        >
-                                    </v-btn>
+                                    <!-- <v-btn right x-large icon> -->
+                                    <v-icon
+                                        @click="
+                                            props.item.userAnswerVote !== false
+                                                ? downVoteAnswer(props.item)
+                                                : doNothing()
+                                        "
+                                        :color="
+                                            props.item.userAnswerVote === false
+                                                ? '#53DFD1'
+                                                : '#78909C'
+                                        "
+                                        dark
+                                        size="19px"
+                                        class="mt-3 ms-2"
+                                        >mdi-thumb-down</v-icon
+                                    >
+                                    <!-- </v-btn> -->
                                 </v-col>
                             </v-row>
 
@@ -648,7 +644,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex';
-import { checkSession, createHistorical, deleteAnswer, getAnswer, getQuestion, getUser, getUserReputation, getUsers, postAnswer, updateAnswer1, updateQuestion1, updateReputation1, updateVote1, voteAnswer, voteQuestion } from './functions';
+import { checkSession, createHistorical, deleteAnswer, getAnswer, getQuestion, getUser, getUserAnswerVotes, getUserReputation, getUsers, postAnswer, updateAnswer1, updateAnswerVote1, updateQuestion1, updateReputation1, updateVote1, voteAnswer, voteQuestion } from './functions';
 import { question1 } from './types';
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
@@ -910,7 +906,7 @@ export default Vue.extend({
             return userRep.value;
         },
         async removeObject(value: any) {
-            console.log(value, "th evalue of delete question")
+            // console.log(value, "th evalue of delete question")
             //
             console.log(value, "the value of remove object")
             const deleteAnswerObject = await deleteAnswer(value.answer_id);
@@ -972,16 +968,20 @@ export default Vue.extend({
             return votesSum;
         },
         async getUserAnswerVote(value: any) {
+            console.log(value, 'the value in get user answer vote')
             const answerVotesArray: any[] = []
             const answerData = await getAnswer(value.answer_id)
-            console.log(answerData, "THE ANSWER DATA")
-            // 
-            console.log(this.getLoggedUser, 'this.getLoggedUser!!')
+            // console.log(answerData, "THE ANSWER DATA")
+            // console.log(this.getLoggedUser, 'this.getLoggedUser!!')
             const userVote = answerData.answerVotes.find((el: any) => el.UserUserId === this.getLoggedUser.user_id)
+            const userVote2 = answerData.answerVotes
+                .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // sort by createdAt in descending order
+                .find((el: any) => el.UserUserId === this.getLoggedUser.user_id);
             console.log(userVote, 'user answer vote')
-            if (userVote !== undefined) {
-                if (userVote.value === 1) return true
-                else if (userVote.value === -1) return false
+            console.log(userVote2, 'user answer vote2')
+            if (userVote2 !== undefined) {
+                if (userVote2.value === 1) return true
+                else if (userVote2.value === -1) return false
             }
             else return null
             // 
@@ -1025,7 +1025,7 @@ export default Vue.extend({
             //
             const data = { value: 1, QuestionQuestionId: this.getQuestionData.data.question_id }
             if (this.queVotedUp === false) {
-                const userVote = this.getQuestionData.votes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
+                const userVote = this.getQuestionData.votes.find((el: any) => el.UserUserId === this.getLoggedUser.user_id)
                 if (userVote !== undefined) {
                     await this.updateQuestionVote(userVote.vote_id, { value: 1 })
                 }
@@ -1061,6 +1061,10 @@ export default Vue.extend({
         async updateQuestionVote(voteId: number, data: any) {
             await updateVote1(voteId, data)
         },
+        async updateAnswerVote(voteId: number, data: any) {
+            await updateAnswerVote1(voteId, data)
+
+        },
         async downVoteQuestion() {
             //if not logged in
             const sessionCheck = await checkSession()
@@ -1081,14 +1085,12 @@ export default Vue.extend({
             const data = { value: -1, QuestionQuestionId: this.getQuestionData.data.question_id }
             if (this.queVotedUp === true) {
                 console.log('mpika edw 1')
-
-                const userVote = this.getQuestionData.votes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
+                const userVote = this.getQuestionData.votes.find((el: any) => el.UserUserId === this.getLoggedUser.user_id)
                 if (userVote !== undefined) {
                     await this.updateQuestionVote(userVote.vote_id, { value: -1 })
                 }
             } else if (this.queVotedUp === null) {
                 console.log('mpika edw 2')
-
                 await voteQuestion(data);
             }
             //first get the reps and then update question'user's rep & upvoter rep
@@ -1173,10 +1175,24 @@ export default Vue.extend({
                 this.checkRepDialog = true
                 return;
             }
-            console.log(value, "value of up vote answer");
             const data = { value: 1, AnswerAnswerId: value.answer_id }
-            await voteAnswer(data);
-            // 
+            console.log(value, "value of up vote answer");
+            //
+            if (value.userAnswerVote === false) {
+                // const
+                const userAnswerVotes = await getUserAnswerVotes(this.getLoggedUser.user_id, { answer_id: value.answer_id }) as any//this.getQuestionData.votes.find((el: any) => el.UserUserId === this.getLoggedUser.user_id)
+                console.log(userAnswerVotes, 'THE IUSER ANSWER VOTES')
+                if (userAnswerVotes.length !== 0) {
+                    // const answerVote = userAnswerVotes.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                    // console.log(answerVote, 'THE latest answerVote')
+                    const answerVote = this.getMostRecentVote(userAnswerVotes)
+                    await this.updateAnswerVote(answerVote.vote_id, { value: 1 })
+                }
+            } else if (value.userAnswerVote === null) {
+                await voteAnswer(data);
+            }
+            // await voteAnswer(data);
+            //
             //first get the reps and then update question'user's rep & upvoter rep
             console.log(this.getLoggedUser, "the getLoggedUser in upvote")
             // const userRep = await getUserReputation(this.getLoggedUser.user_id)
@@ -1203,6 +1219,15 @@ export default Vue.extend({
             // this.$router.go(0);
             this.forceUpdateQuestion();
         },
+        getMostRecentVote(votes: any[]) {
+            const sortedVotes = votes.sort((a, b) => {
+                const dateA = new Date(a.createdAt);
+                const dateB = new Date(b.createdAt);
+                return dateB.getTime() - dateA.getTime();
+            });
+
+            return sortedVotes[0];
+        },
         async downVoteAnswer(value: any) {
             //if not logged in
             const sessionCheck = await checkSession()
@@ -1213,6 +1238,7 @@ export default Vue.extend({
             //if logged in
             const userRep = await getUserReputation(this.getLoggedUser.user_id)
             console.log(userRep, 'the user reputation!!')
+            //to be restored
             if (+userRep.value < 125) {
                 this.repLimit = 125
                 this.checkRepDialog = true
@@ -1221,8 +1247,23 @@ export default Vue.extend({
             console.log(value, "value of down vote answer")
             // console.log(value, "value of up vote answer");
             const data = { value: -1, AnswerAnswerId: value.answer_id }
-            await voteAnswer(data);
-            // 
+            //
+            if (value.userAnswerVote === true) {
+                console.log('mpika edw 1')
+                // const userVote = this.getQuestionData.votes.find((el: any) => el.UserUserId === this.getLoggedUser.user_id)
+                const userAnswerVotes = await getUserAnswerVotes(this.getLoggedUser.user_id, { answer_id: value.answer_id }) as any//this.getQuestionData.votes.find((el: any) => el.UserUserId === this.getLoggedUser.user_id)
+                console.log(userAnswerVotes, 'THE IUSER ANSWER VOTES')
+                if (userAnswerVotes.length !== 0) {
+                    // const answerVote = userAnswerVotes.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                    // console.log(answerVote, 'THE latest answerVote')
+                    const answerVote = this.getMostRecentVote(userAnswerVotes)
+                    await this.updateAnswerVote(answerVote.vote_id, { value: -1 })
+                }
+            } else if (value.userAnswerVote === null) {
+                await voteAnswer(data);
+            }
+            // await voteAnswer(data);
+            //
             //first get the reps and then update question'user's rep & upvoter rep
             // const userRep = await getUserReputation(this.getLoggedUser.user_id)
             let oldRep = +userRep.value
@@ -1230,7 +1271,6 @@ export default Vue.extend({
             // console.log(data2, 'the update data')
             await updateReputation1(userRep.reputation_id, data2);
             // update writers reputation
-            // console.log(this.getQuestionData.data.UserUserId, 'the question data33')
             const writerId = this.getQuestionData.data.UserUserId
             const userRep2 = await getUserReputation(writerId)
             // console.log(userRep, 'the user reputation!!')

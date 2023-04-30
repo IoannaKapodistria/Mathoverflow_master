@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createHistorical, createReputation, createUser, deleteReputation, deleteUser, getHistorical, getReputation, getUser, getUsers, isLogged, sessionChecker, signIn, signOut, updateReputation, updateUser } from "~/db_controllers/usersController";
-import { createAnswer, createAnswerVote, createQuestion, createVote, deleteAllAnswers, deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getQuestions, updateAnswer, updateQuestion, updateVote } from "../db_controllers/questionsController";
+import { createAnswer, createAnswerVote, createQuestion, createVote, deleteAllAnswers, deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getQuestions, getUserAnswerVote, updateAnswer, updateAnswerVote, updateQuestion, updateVote } from "../db_controllers/questionsController";
 const mathOverflowRouter = Router();
 mathOverflowRouter.get("/", function (req, res) {
     res.render("hey this worked");
@@ -28,7 +28,9 @@ mathOverflowRouter.post("/vote", createVote);
 mathOverflowRouter.put("/update_vote/:id", updateVote);
 mathOverflowRouter.delete("/delete_vote/:id", deleteVote);
 mathOverflowRouter.post("/answer_vote", createAnswerVote);
+mathOverflowRouter.put("/update_answer_vote/:id", updateAnswerVote);
 mathOverflowRouter.delete("/delete_answer_vote/:id", deleteAnswerVote);
+mathOverflowRouter.post("/get_user_answer_vote/:id", getUserAnswerVote);
 mathOverflowRouter.post("/signup", createUser);
 mathOverflowRouter.post("/signout", signOut);
 mathOverflowRouter.post("/signin", signIn);

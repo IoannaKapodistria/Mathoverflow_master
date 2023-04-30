@@ -367,7 +367,7 @@ export default Vue.extend({
                     //
                     const historicalData = {
                         action: 'delete-answer',
-                        data: value
+                        data: answer//value
                     }
                     await createHistorical(historicalData)
                     //

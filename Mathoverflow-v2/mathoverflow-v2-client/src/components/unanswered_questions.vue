@@ -377,12 +377,12 @@ export default Vue.extend({
             const answers = value.answers
             if (answers !== 0) {
                 console.log('skata mpika edw')
-
-                for (const answer of this.getQuestionData.answers) {
+                const question = await getQuestion(value.question_id)
+                for (const answer of question.answers) {
                     const deleteAnswerObject = await deleteAnswer(answer.answer_id);
                     const historicalData = {
                         action: 'delete-answer',
-                        data: value
+                        data: answer//value
                     }
                     await createHistorical(historicalData)
                 }

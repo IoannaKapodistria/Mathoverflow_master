@@ -480,3 +480,40 @@ export async function updateVote1(id: number, value: any) {
             console.log("this is the value:", value);
         });
 }
+
+export async function updateAnswerVote1(id: number, value: any) {
+    let response = await ky
+        .put(`http://localhost:3000/update_answer_vote/${id}`, {
+            mode: "cors",
+            body: JSON.stringify(value),
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then((value: any) => {
+            console.log("this is the value:", value);
+        });
+}
+
+export async function getUserAnswerVotes(id: number, data: any) {
+    console.log(data, " these are data");
+    let response = await ky
+        .post(`http://localhost:3000/get_user_answer_vote/${id}`, {
+            mode: "cors",
+            credentials: "include",
+            body: JSON.stringify(data),
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then(async (value: any) => {
+            console.log("this is the value:", value);
+            const a = await value;
+            console.log("this is the get user historical value:", a);
+            return a.json();
+        });
+    return response;
+}
