@@ -661,7 +661,6 @@ declare global {
 }
 //
 export default Vue.extend({
-
     components: { VueEditor, progressCircular },
     props: {
         question: {
@@ -699,12 +698,7 @@ export default Vue.extend({
                 value: 'user',
                 class: 'title text-caption font-weight-medium'
             },
-            //  {
-            //     text: 'Id',
-            //     align: 'start',
-            //     sortable: true,
-            //     value: 'answer_id'
-            // },
+            //
             { text: "Timestamp", align: 'center', sortable: true, value: 'created', class: 'title text-caption font-weight-medium' },
             { text: "", align: 'center', sortable: true, value: 'edit', width: '1%', class: 'title text-caption font-weight-medium' },
             { text: "", align: 'center', sortable: true, value: 'remove', width: '1%', class: 'title text-caption font-weight-medium' }
@@ -717,9 +711,7 @@ export default Vue.extend({
             modules: {
                 toolbar: false,
             },
-            //
         },
-        // toolbarOpts: {
         toolbarOpts_old: {
             modules: {
                 toolbar: {
@@ -783,9 +775,7 @@ export default Vue.extend({
         sessionCheckDialog: false,
         checkRepDialog: false,
         repLimit: 15 as 15 | number
-
     }),
-
     watch: {
         question() {
             this.questionExample = this.question;
@@ -805,7 +795,7 @@ export default Vue.extend({
             //
             console.log(value, "the value of question data")
             this.questionExample = {
-                uid: this.getQuestionData.data.question_id,//"",
+                uid: this.getQuestionData.data.question_id,
                 title: this.getQuestionData.data.title,
                 body: this.getQuestionData.data.body,
                 userId: this.getQuestionData.data.UserUserId
@@ -815,8 +805,6 @@ export default Vue.extend({
                 //
                 for (const user of users) {
                     if (user.user_id === answer.UserUserId) {
-                        // const questionObject = { answers: answersNumber, votes: votesSum, title: question.title, user: user.username, question_id: question.question_id };
-                        // questionsArray.push(questionObject);
                         const answerObject = {
                             ...answer,
                             votes: await this.getAnswerVotes(answer),
@@ -828,26 +816,19 @@ export default Vue.extend({
                     }
                 }
                 //*
-                const div = document.getElementById("myDiv");
-                const width = div?.offsetWidth;
-                const height = div?.offsetHeight;
-                console.log(`The width of myDiv is: ${width}px`);
-                console.log(`The height of myDiv is: ${height}px`);
+                // const div = document.getElementById("myDiv");
+                // const width = div?.offsetWidth;
+                // const height = div?.offsetHeight;
+                // console.log(`The width of myDiv is: ${width}px`);
+                // console.log(`The height of myDiv is: ${height}px`);
                 //*
             }
             // this.answers = this.getQuestionData.answers;
             console.log(this.answers, "THE ANSWERS1")
-
             const votesSum = this.getVotes();
-            //console.log('')
-            //
-            //
             this.questionSumVotes = votesSum;
-            //
             await this.getUserVote()
-            //
             this.editedQuestionTitle = this.questionExample.title
-            //
             this.progressCircular = false
         },
 
@@ -874,10 +855,8 @@ export default Vue.extend({
                             [{ 'direction': 'rtl' }],
                             ['clean'],
                         ],
-                        // 
                     }
                 }
-                // }
             }
             return a;
         },
@@ -907,10 +886,8 @@ export default Vue.extend({
         },
         async removeObject(value: any) {
             // console.log(value, "th evalue of delete question")
-            //
             console.log(value, "the value of remove object")
             const deleteAnswerObject = await deleteAnswer(value.answer_id);
-            //
             const historicalData = {
                 action: 'delete-answer',
                 data: value
@@ -922,9 +899,7 @@ export default Vue.extend({
         },
         async forceUpdateQuestion() {
             const questionId = this.getQuestionData.data.question_id;
-            // this.$router.push('/question').catch((err: any) => {
-            //     console.warn('error in redirect to /question :', err)
-            // });
+            //
             this.$router.push(`/questions/${questionId}`).catch((err: any) => {
                 console.warn('error in redirect to /questions/${questionId} :', err)
             });
@@ -947,16 +922,12 @@ export default Vue.extend({
             const votesSum = votesArray.reduce((a, b) => a + b, 0)
             return votesSum;
         },
-        // getAnswerVotes0(value: any) {
-        //     const votes = await this.getAnswerVotes(value)
-        // },
+        //
         async getAnswerVotes(value: any) {
             const answerVotesArray: any[] = []
             const answerData = await getAnswer(value.answer_id)
             console.log(answerData, "THE ANSWER DATA")
-            // const votes = this.getQuestionData.votes
             //calculate votes
-            // if(answerData.UserUserId !==null){}
             for (const vote of answerData.answerVotes) {
                 const value = vote.value;
                 answerVotesArray.push(value)
@@ -984,7 +955,6 @@ export default Vue.extend({
                 else if (userVote2.value === -1) return false
             }
             else return null
-            // 
         },
         async postAnswer1() {
             const sessionCheck = await checkSession()
@@ -992,9 +962,6 @@ export default Vue.extend({
                 this.sessionCheckDialog = true
                 return;
             }
-            //if not logged in
-
-            //if logged in
             const data = { body: this.answerBody, QuestionQuestionId: this.getQuestionData.data.question_id }
             await postAnswer(data); // den ananewnetai amesws h selida na fanei h apantish kai stelnei mono periorismeno airthmo leksewn,  vgazei error 500 meta
             const historicalData = {
@@ -1004,7 +971,6 @@ export default Vue.extend({
             await createHistorical(historicalData)
             this.forceUpdateQuestion();
             this.answerBody = ""
-
         },
         async upVoteQuestion() {
             //if not logged in
@@ -1063,7 +1029,6 @@ export default Vue.extend({
         },
         async updateAnswerVote(voteId: number, data: any) {
             await updateAnswerVote1(voteId, data)
-
         },
         async downVoteQuestion() {
             //if not logged in
@@ -1081,7 +1046,6 @@ export default Vue.extend({
                 this.checkRepDialog = true
                 return;
             }
-            console.log('mpika edw0')
             const data = { value: -1, QuestionQuestionId: this.getQuestionData.data.question_id }
             if (this.queVotedUp === true) {
                 console.log('mpika edw 1')
@@ -1094,13 +1058,11 @@ export default Vue.extend({
                 await voteQuestion(data);
             }
             //first get the reps and then update question'user's rep & upvoter rep
-            // const userRep = await getUserReputation(this.getLoggedUser.user_id)
             let oldRep = +userRep.value
             const data2 = { value: oldRep -= 1 }
             // console.log(data2, 'the update data')
             await updateReputation1(userRep.reputation_id, data2);
             // update writers reputation
-            // console.log(this.getQuestionData.data.UserUserId, 'the question data33')
             const writerId = this.getQuestionData.data.UserUserId
             const userRep2 = await getUserReputation(writerId)
             // console.log(userRep, 'the user reputation!!')
@@ -1136,10 +1098,7 @@ export default Vue.extend({
                 data: value
             }
             await createHistorical(historicalData)
-            //
             this.editing = false;
-            // 
-            // this.$router.go(0);
             this.forceUpdateQuestion();
         },
         formulaOff() {
@@ -1192,7 +1151,6 @@ export default Vue.extend({
                 await voteAnswer(data);
             }
             // await voteAnswer(data);
-            //
             //first get the reps and then update question'user's rep & upvoter rep
             console.log(this.getLoggedUser, "the getLoggedUser in upvote")
             // const userRep = await getUserReputation(this.getLoggedUser.user_id)
@@ -1254,8 +1212,6 @@ export default Vue.extend({
                 const userAnswerVotes = await getUserAnswerVotes(this.getLoggedUser.user_id, { answer_id: value.answer_id }) as any//this.getQuestionData.votes.find((el: any) => el.UserUserId === this.getLoggedUser.user_id)
                 console.log(userAnswerVotes, 'THE IUSER ANSWER VOTES')
                 if (userAnswerVotes.length !== 0) {
-                    // const answerVote = userAnswerVotes.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                    // console.log(answerVote, 'THE latest answerVote')
                     const answerVote = this.getMostRecentVote(userAnswerVotes)
                     await this.updateAnswerVote(answerVote.vote_id, { value: -1 })
                 }
@@ -1263,9 +1219,7 @@ export default Vue.extend({
                 await voteAnswer(data);
             }
             // await voteAnswer(data);
-            //
             //first get the reps and then update question'user's rep & upvoter rep
-            // const userRep = await getUserReputation(this.getLoggedUser.user_id)
             let oldRep = +userRep.value
             const data2 = { value: oldRep -= 1 }
             // console.log(data2, 'the update data')
