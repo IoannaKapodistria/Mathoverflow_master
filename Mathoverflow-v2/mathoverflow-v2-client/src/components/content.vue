@@ -5,13 +5,25 @@
                 permanent
                 :expand-on-hover="$vuetify.breakpoint.smAndDown"
             >
-                <v-row class="mt-3 mb-7 me-8" justify="center" align="center">
+                <v-row
+                    v-if="this.getLoggedUser.user_id !== undefined"
+                    class="mt-3 mb-7 me-8"
+                    justify="center"
+                    align="center"
+                >
                     <user-avatar @profileClicked="profileClicked"></user-avatar>
                     <span class="blue--text text-body-1 mt-1">{{
                         this.getLoggedUser.username
                     }}</span>
                 </v-row>
-                <v-list flat>
+                <v-list
+                    flat
+                    :class="
+                        this.getLoggedUser.user_id === undefined
+                            ? 'mt-12 mb-7'
+                            : ''
+                    "
+                >
                     <v-list-item-group
                         color="primary"
                         v-for="(buttonObject, i) in buttonObjects"
@@ -105,7 +117,7 @@ import store from '@/store';
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex';
 import userAvatar from '../tools/user_avatar/user_avatar.vue'
-import { getUser } from './functions';
+import { checkSession, getUser } from './functions';
 export default Vue.extend({
     components: { userAvatar },
     props: {
@@ -125,6 +137,14 @@ export default Vue.extend({
         ...mapGetters(["getLoggedUser"])
     },
     methods: {
+        async checkUserSession() {
+            // 
+            const sessionCheck = await checkSession()
+            console.log(sessionCheck, 'THE SESION CHECK IN AVATAR')
+            if (sessionCheck.userSid === undefined && sessionCheck.message === 'user is not logged in') {
+                return false;
+            } else return true;
+        },
         clicked(value: buttonObj) {
             console.log(value, "the value of button")
             this.$emit("buttonClicked", value);

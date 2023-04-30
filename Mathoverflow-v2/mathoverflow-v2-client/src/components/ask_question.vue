@@ -160,7 +160,7 @@ export default Vue.extend({
                 // [{ 'size': ['small', false, 'large', 'huge'] }],
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'align': '' }, { 'align': 'center' }, { 'align': 'right' }, { 'align': 'justify' }],
-                [{ 'header': 1 }, { 'header': 2 }],
+                // [{ 'header': 1 }, { 'header': 2 }],
                 ['blockquote', 'code-block'],
                 [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
                 [{ 'script': 'sub' }, { 'script': 'super' }],

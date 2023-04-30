@@ -1010,8 +1010,14 @@ export default Vue.extend({
             //when delete question delete all its answers
             const answers = value.answers
             if (answers !== 0) {
+                const getQue = await getQuestion(value.question_id)
+                console.log(getQue, 'skata mpika edw the get que')
                 console.log('skata mpika edw')
-                for (const answer of this.getQuestionData.answers) {
+                console.log(this.getQuestionData.answers, "the ansers in teh ques that i want to delete")
+                console.log(this.getQuestionData, "the ansers in teh ques that i want to delete")
+                // for (const answer of this.getQuestionData.answers) {
+                //mipwsw prepei na diagrafontai kai ta votes?
+                for (const answer of getQue.answers) {
                     const deleteAnswerObject = await deleteAnswer(answer.answer_id);
                     const historicalData = {
                         action: 'delete-answer',
@@ -1031,11 +1037,16 @@ export default Vue.extend({
             }
             await createHistorical(historicalData)
             //
-            // this.$router.go(0);
-            // this.$router.push(`/users/${this.getLoggedUser.user_id}`);
-            setTimeout(async () => {
-                await this.profileClicked()
-            }, 500)
+            console.log(this.questions, 'the questions index in remove')
+            const queIndex = this.questions.findIndex((el: any) => el.question_id === value.question_id)
+            console.log(queIndex, 'the queIndex index in remove')
+            if (queIndex !== -1) {
+                this.questions.splice(queIndex, 1)
+            }
+            //
+            // setTimeout(async () => {
+            //     await this.profileClicked();
+            // }, 500)
         },
         async removeAnswerObject(value: any) {
             console.log(value, "the value of remove object answer")
@@ -1045,37 +1056,17 @@ export default Vue.extend({
                 data: value
             }
             await createHistorical(historicalData)
-            //when delete question delete all its answers
-            // const answers = value.answers
-            // if (answers !== 0) {
-            //     console.log('skata mpika edw')
 
-            //     for (const answer of this.getQuestionData.answers) {
-            //         const deleteAnswerObject = await deleteAnswer(answer.answer_id);
-            //         const historicalData = {
-            //             action: 'delete-answer',
-            //             data: value
-            //         }
-            //         await createHistorical(historicalData)
-            //     }
-            //     const deleteQuestionObject = await deleteQuestion(value.question_id);
-            // } else {
-            //     console.log('mpika edw')
-            //     const deleteQuestionObject = await deleteQuestion(value.question_id);
-            // }
-            // //
-            // const historicalData = {
-            //     action: 'delete-question',
-            //     data: value
-            // }
-            // await createHistorical(historicalData)
-            //
-            // this.$router.go(0);
-            // this.$router.push(`/users/${this.getLoggedUser.user_id}`);
-            // setTimeout(async () => {
-            //     await this.profileClicked()
-            // }, 500)
-            this.fu = !this.fu
+            // this.fu = !this.fu
+            console.log(this.answerObjects, 'the answersss index in remove')
+            const answerIndex = this.answerObjects.findIndex((el: any) => el.answer_id === value.answer_id)
+            console.log(answerIndex, 'the answer index in remove')
+            if (answerIndex !== -1) {
+                this.answerObjects.splice(answerIndex, 1)
+            }
+            setTimeout(async () => {
+                await this.profileClicked();
+            }, 700)
         },
         async profileClicked() {
             console.log(this.getLoggedUser, "the value of click user");

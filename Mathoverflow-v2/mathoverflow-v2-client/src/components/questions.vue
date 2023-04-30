@@ -113,29 +113,8 @@
                                 >
                                     {{ item.title.title }}
                                 </span>
-                                <!-- <span
-                                    @click="handleClick(item)"
-                                    class="d-flex text-truncate"
-                                >
-                                    {{ item.title.body }}
-                                </span> -->
                             </v-card-text>
                         </v-card>
-                        <!-- <v-card
-                            flat
-                            class="pb-2 px-0"
-                            color="transparent"
-                            width="370px"
-                        >
-                            <v-card-text class="pa-0 ms-3 text-truncate">
-                                <span
-                                    @click="handleClick(item)"
-                                    class="text-truncate"
-                                >
-                                    {{ item.title.body }}
-                                </span>
-                            </v-card-text>
-                        </v-card> -->
                         <v-card
                             flat
                             class="pb-2 px-0"

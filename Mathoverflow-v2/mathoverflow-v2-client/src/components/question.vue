@@ -366,27 +366,28 @@
                             <!-- </div> -->
                         </template>
                         <template v-slot:[`item.body`]="props">
-                            <v-card
-                                flat
-                                class="py-5 px-0"
-                                color="transparent"
-                                width="400px"
-                                height="250px"
-                            >
-                                <!-- <v-card-text class="text-truncate"> -->
-                                <v-card-text class="answerBody pa-0 ms-3">
-                                    <!-- <span> -->
-                                    <vue-editor
-                                        class="kappa"
-                                        disabled
-                                        v-model="props.item.body"
-                                        :editorOptions="editorOptions"
-                                        :style="editorStyle"
-                                    >
-                                    </vue-editor>
-                                    <!-- </span> -->
-                                </v-card-text>
-                            </v-card>
+                            <div id="myDiv">
+                                <v-card
+                                    flat
+                                    class="py-5 px-0"
+                                    color="transparent"
+                                    width="400px"
+                                    height="250px"
+                                >
+                                    <!-- <v-card flat class="px-0" color="transparent"> -->
+                                    <v-card-text class="answerBody pa-0 ms-3">
+                                        <vue-editor
+                                            class="kappa"
+                                            disabled
+                                            v-model="props.item.body"
+                                            :editorOptions="editorOptions"
+                                            :style="editorStyle"
+                                        >
+                                        </vue-editor>
+                                        <!-- </span> -->
+                                    </v-card-text>
+                                </v-card>
+                            </div>
                         </template>
                         <template v-slot:[`item.user`]="props">
                             <v-card
@@ -451,6 +452,7 @@
                         </template>
                         <template v-slot:[`item.edit`]="props">
                             <v-icon
+                                v-if="checkUserAction(props.item)"
                                 color="#5fb1e8"
                                 @click="showAnswerEdit(props.item)"
                                 >mdi-pencil</v-icon
@@ -540,6 +542,7 @@
                         </template>
                         <template v-slot:[`item.remove`]="props">
                             <v-icon
+                                v-if="checkUserAction(props.item)"
                                 color="#5fb1e8"
                                 @click="removeObject(props.item)"
                                 >mdi-delete</v-icon
@@ -718,11 +721,7 @@ export default Vue.extend({
             modules: {
                 toolbar: false,
             },
-            // handlers: {
-            //     customControl: () => {
-            //         console.log("customControl was clicked");
-            //     }
-            // },
+            //
         },
         // toolbarOpts: {
         toolbarOpts_old: {
@@ -734,7 +733,7 @@ export default Vue.extend({
                         // [{ 'size': ['small', false, 'large', 'huge'] }],
                         ['bold', 'italic', 'underline', 'strike'],
                         [{ 'align': '' }, { 'align': 'center' }, { 'align': 'right' }, { 'align': 'justify' }],
-                        [{ 'header': 1 }, { 'header': 2 }],
+                        // [{ 'header': 1 }, { 'header': 2 }],
                         ['blockquote', 'code-block'],
                         [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
                         [{ 'script': 'sub' }, { 'script': 'super' }],
@@ -747,17 +746,9 @@ export default Vue.extend({
                         // [{ 'customBtn': 'formula' }]
                         // ['customBtn222']
                     ],
-                    // "#customToolbar",
-                    // handlers: {
-                    //     formula:
-                    //         () => {
-                    //             console.log("formula was clicked222");
-
-                    //         }
-                    // }
+                    //
                 }
             }
-            // }
         },
         customToolbar: [
             [{ 'font': [] }],
@@ -765,7 +756,7 @@ export default Vue.extend({
             [{ 'size': ['small', false, 'large', 'huge'] }],
             ['bold', 'italic', 'underline', 'strike'],
             [{ 'align': '' }, { 'align': 'center' }, { 'align': 'right' }, { 'align': 'justify' }],
-            [{ 'header': 1 }, { 'header': 2 }],
+            // [{ 'header': 1 }, { 'header': 2 }],
             ['blockquote', 'code-block'],
             [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
             [{ 'script': 'sub' }, { 'script': 'super' }],
@@ -778,7 +769,6 @@ export default Vue.extend({
         ],
         editorStyle: {
             "height": '60px',
-            // "border": "1px solid transparent"
 
         },
         formulaOn: false,
@@ -841,10 +831,17 @@ export default Vue.extend({
                         this.answers.push(answerObject)
                     }
                 }
+                //*
+                const div = document.getElementById("myDiv");
+                const width = div?.offsetWidth;
+                const height = div?.offsetHeight;
+                console.log(`The width of myDiv is: ${width}px`);
+                console.log(`The height of myDiv is: ${height}px`);
+                //*
             }
             // this.answers = this.getQuestionData.answers;
             console.log(this.answers, "THE ANSWERS1")
-            //
+
             const votesSum = this.getVotes();
             //console.log('')
             //
@@ -871,7 +868,7 @@ export default Vue.extend({
                             // [{ 'size': ['small', false, 'large', 'huge'] }],
                             ['bold', 'italic', 'underline', 'strike'],
                             [{ 'align': '' }, { 'align': 'center' }, { 'align': 'right' }, { 'align': 'justify' }],
-                            [{ 'header': 1 }, { 'header': 2 }],
+                            // [{ 'header': 1 }, { 'header': 2 }],
                             ['blockquote', 'code-block'],
                             [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
                             [{ 'script': 'sub' }, { 'script': 'super' }],
@@ -881,14 +878,7 @@ export default Vue.extend({
                             [{ 'direction': 'rtl' }],
                             ['clean'],
                         ],
-                        // "#customToolbar",
-                        // handlers: {
-                        //     formula:
-                        //         () => {
-                        //             console.log("formula was clicked222");
-                        //             this.formulaOn = true;
-                        //         }
-                        // }
+                        // 
                     }
                 }
                 // }
@@ -897,6 +887,12 @@ export default Vue.extend({
         },
     },
     methods: {
+        checkUserAction(item: any) {
+            console.log(item, 'the item in check user acctions in user profile')
+            console.log(this.getLoggedUser, 'the get logged user')
+            if (item.user.user_id === this.getLoggedUser.user_id) return true;
+            else false;
+        },
         doNothing() {
             console.log('do nothing')
         },
@@ -979,13 +975,7 @@ export default Vue.extend({
             const answerVotesArray: any[] = []
             const answerData = await getAnswer(value.answer_id)
             console.log(answerData, "THE ANSWER DATA")
-            // const votes = this.getQuestionData.votes
-            //calculate votes
-            // if(answerData.UserUserId !==null){}
-            // for (const vote of answerData.answerVotes) {
-            //     const value = vote.value;
-            //     answerVotesArray.push(value)
-            // }
+            // 
             console.log(this.getLoggedUser, 'this.getLoggedUser!!')
             const userVote = answerData.answerVotes.find((el: any) => el.UserUserId === this.getLoggedUser.user_id)
             console.log(userVote, 'user answer vote')
@@ -994,11 +984,7 @@ export default Vue.extend({
                 else if (userVote.value === -1) return false
             }
             else return null
-            // //get the sum
-            // const votesSum = answerVotesArray.reduce((a, b) => a + b, 0)
-            // console.log(votesSum, 'teh votes of answer')
-            // // this.answerVotes = votesSum;
-            // return votesSum;
+            // 
         },
         async postAnswer1() {
             const sessionCheck = await checkSession()

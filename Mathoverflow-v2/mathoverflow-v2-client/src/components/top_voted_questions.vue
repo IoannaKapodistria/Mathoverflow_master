@@ -87,103 +87,11 @@
                     :headers="computedHeaders"
                     :items="this.questions"
                     :search="search"
-                    @click:row="handleClick"
                     style="cursor: pointer"
                     :sort-by="questionsSortType"
                     :sort-desc="true"
                     :custom-filter="customSearch"
                 >
-                    <!-- <template v-slot:[`item.title`]="{ item }">
-                        <v-card
-                            flat
-                            class="py-11 px-0"
-                            color="transparent"
-                            width="370px"
-                        >
-                            <v-card-text class="pa-0 ms-3">
-                                <span
-                                    @click="handleClick(item)"
-                                    class="qTittle"
-                                >
-                                    {{ item.title }}
-                                </span>
-                            </v-card-text>
-                        </v-card>
-                    </template>
-                    <template v-slot:[`item.answers`]="{ item }">
-                        <v-chip color="#F06292" class="px-4" dark>
-                            {{ item.answers }}
-                        </v-chip>
-                    </template>
-                    <template v-slot:[`item.votes`]="{ item }">
-                        <v-chip color="#26A69A" class="px-4" dark>
-                            {{ item.votes }}
-                        </v-chip>
-                    </template>
-                    <template v-slot:[`item.created`]="{ item }">
-                        {{ getCreationDate(item.created) }}
-                    </template>
-                    <template v-slot:[`item.user`]="props">
-                        <v-card
-                            flat
-                            class="py-0 px-0"
-                            color="transparent"
-                            width="100px"
-                        >
-                            <v-card-text class="pa-0">
-                                <v-row justify="center" align="center">
-                                    <v-col
-                                        cols="5"
-                                        class="pa-0"
-                                        justify="center"
-                                        align="center"
-                                    >
-                                        <v-img
-                                            contain
-                                            src="/prof_photo.png"
-                                            height="40"
-                                        ></v-img>
-                                    </v-col>
-                                    <v-col
-                                        cols="7"
-                                        class="pa-0"
-                                        justify="center"
-                                        align="center"
-                                    >
-                                        <v-row
-                                            class="ms-0 me-0"
-                                            justify="center"
-                                            align="center"
-                                        >
-                                            <span>{{
-                                                props.item.user.username
-                                            }}</span>
-                                        </v-row>
-                                        <v-row
-                                            class="ms-1"
-                                            justify="center"
-                                            align="center"
-                                        >
-                                            <span class="font-weight-medium">{{
-                                                props.item.user.reputation
-                                            }}</span>
-                                            <v-icon
-                                                size="20px"
-                                                color="#FBC02D"
-                                                class="ms-1"
-                                                >mdi-trophy</v-icon
-                                            >
-                                        </v-row>
-                                    </v-col>
-                                </v-row>
-                            </v-card-text>
-                        </v-card>
-                    </template>
-                    <template v-slot:[`item.remove`]="props" v-if="admin">
-                        <v-icon @click="removeObject(props.item)"
-                            >mdi-delete</v-icon
-                        >
-                    </template> -->
                     <template v-slot:[`item.title`]="{ item }">
                         <v-card
                             flat
@@ -226,17 +134,29 @@
                         </v-card>
                     </template>
                     <template v-slot:[`item.answers`]="{ item }">
-                        <v-chip color="#F06292" class="px-4" dark>
+                        <v-chip
+                            @click="handleClick(item)"
+                            color="#F06292"
+                            class="px-4"
+                            dark
+                        >
                             {{ item.answers }}
                         </v-chip>
                     </template>
                     <template v-slot:[`item.votes`]="{ item }">
-                        <v-chip color="#26A69A" class="px-4" dark>
+                        <v-chip
+                            @click="handleClick(item)"
+                            color="#26A69A"
+                            class="px-4"
+                            dark
+                        >
                             {{ item.votes }}
                         </v-chip>
                     </template>
                     <template v-slot:[`item.created`]="{ item }">
-                        {{ getCreationDate(item.created) }}
+                        <div @click="handleClick(item)">
+                            {{ getCreationDate(item.created) }}
+                        </div>
                     </template>
                     <template v-slot:[`item.user`]="props">
                         <v-card
@@ -244,6 +164,7 @@
                             class="py-0 px-0"
                             color="transparent"
                             width="100px"
+                            @click="handleClick(props.item)"
                         >
                             <v-card-text class="pa-0">
                                 <v-row justify="center" align="center">
