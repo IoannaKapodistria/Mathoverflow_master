@@ -644,7 +644,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex';
-import { checkSession, createHistorical, deleteAnswer, getAnswer, getQuestion, getUser, getUserAnswerVotes, getUserReputation, getUsers, postAnswer, updateAnswer1, updateAnswerVote1, updateQuestion1, updateReputation1, updateVote1, voteAnswer, voteQuestion } from './functions';
+import { checkSession, createHistorical, deleteAnswer, deleteAnswerVote, getAnswer, getQuestion, getUser, getUserAnswerVotes, getUserReputation, getUsers, postAnswer, updateAnswer1, updateAnswerVote1, updateQuestion1, updateReputation1, updateVote1, voteAnswer, voteQuestion } from './functions';
 import { question1 } from './types';
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
@@ -887,6 +887,14 @@ export default Vue.extend({
         async removeObject(value: any) {
             // console.log(value, "th evalue of delete question")
             console.log(value, "the value of remove object")
+            //delete answer-vote
+            const answerData = await getAnswer(value.answer_id)
+            console.log(answerData, 'the answer data')
+            if (answerData.answerVotes.length !== 0) {
+                for (const answerVote of answerData.answerVotes) {
+                    await deleteAnswerVote(answerVote.vote_id)
+                }
+            }
             const deleteAnswerObject = await deleteAnswer(value.answer_id);
             const historicalData = {
                 action: 'delete-answer',

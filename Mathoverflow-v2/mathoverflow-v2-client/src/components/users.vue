@@ -115,7 +115,7 @@
 import store from '@/store';
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
-import { deleteAnswer, deleteQuestion, getQuestion, getUser, getUserReputation, getUsers, removeUser } from './functions';
+import { deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getUser, getUserReputation, getUsers, removeUser } from './functions';
 export default Vue.extend({
     data: () => ({
         users: [] as any[],
@@ -167,9 +167,24 @@ export default Vue.extend({
             for (const question of questions) {
                 if (question.UserUserId === value.user_id) {
                     const questionData = await getQuestion(question.question_id);
+                    //
+                    const vot = questionData.votes
+                    if (vot.length !== 0) {
+                        for (const vote of vot) {
+                            await deleteVote(vote.vote_id)
+                        }
+                    }
+                    //delete answers
                     const answers = questionData.answers;
                     if (answers.length !== 0) {
                         for (const answer of questionData.answers) {
+                            const answerData = await getAnswer(answer.answer_id)
+                            console.log(answerData, 'the answer data')
+                            if (answerData.answerVotes.length !== 0) {
+                                for (const answerVote of answerData.answerVotes) {
+                                    await deleteAnswerVote(answerVote.vote_id)
+                                }
+                            }
                             //delete user's answers
                             const deleteAnswerObject = await deleteAnswer(answer.answer_id);
                         }

@@ -235,7 +235,7 @@ import Vue from 'vue'
 import { mapGetters } from 'vuex';
 import { VueEditor } from "vue2-editor";
 import progressCircular from "@/tools/circular_loading/circular_loading.vue"
-import { checkSession, createHistorical, deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
+import { checkSession, createHistorical, deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
 export default Vue.extend({
     components: { VueEditor, progressCircular },
     data: () => ({
@@ -354,20 +354,36 @@ export default Vue.extend({
         },
         async removeObject(value: any) {
             console.log(value, "the value of remove object")
-            console.log(this.getQuestionData, "the question data2")
+            //delete votes
+            const qData = await getQuestion(value.question_id)
+            console.log(qData, 'THE QDATA222')
+            const vot = qData.votes
+            if (vot.length !== 0) {
+                for (const vote of vot) {
+                    await deleteVote(vote.vote_id)
+                }
+            }
             //when delete question delete all its answers
             const answers = value.answers
             if (answers !== 0) {
                 console.log('skata mpika edw')
-                const question = await getQuestion(value.question_id)
-                console.log(question, 'the clicked question')
+                // const question = await getQuestion(value.question_id)
+                // console.log(question, 'the clicked question')
                 // for (const answer of this.getQuestionData.answers) {
-                for (const answer of question.answers) {
+                for (const answer of qData.answers) {
+                    //delete answer-vote
+                    const answerData = await getAnswer(answer.answer_id)
+                    console.log(answerData, 'the answer data')
+                    if (answerData.answerVotes.length !== 0) {
+                        for (const answerVote of answerData.answerVotes) {
+                            await deleteAnswerVote(answerVote.vote_id)
+                        }
+                    }
                     const deleteAnswerObject = await deleteAnswer(answer.answer_id);
                     //
                     const historicalData = {
                         action: 'delete-answer',
-                        data: answer//value
+                        data: answer
                     }
                     await createHistorical(historicalData)
                     //
@@ -384,6 +400,8 @@ export default Vue.extend({
             await createHistorical(historicalData)
             //
             this.$router.go(0);
+            console.log(vot, "the vots of remove object in remove que")
+
 
         },
         forceUpdate2() {

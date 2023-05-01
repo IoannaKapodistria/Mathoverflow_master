@@ -1,6 +1,5 @@
 import store from "@/store";
 import ky from "ky";
-import { responseTypes } from "ky/distribution/core/constants";
 
 export async function postQuestion(data: any) {
     console.log(data, " these are data");
@@ -516,4 +515,38 @@ export async function getUserAnswerVotes(id: number, data: any) {
             return a.json();
         });
     return response;
+}
+
+//delete vote
+export async function deleteVote(id: any) {
+    let response = await ky
+        .delete(`http://localhost:3000/delete_vote/${id}`, {
+            mode: "cors",
+            // body: JSON.stringify(data),
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then((value: any) => {
+            console.log("this is the value:", value);
+        });
+}
+
+//delete answer-vote
+export async function deleteAnswerVote(id: any) {
+    let response = await ky
+        .delete(`http://localhost:3000/delete_answer_vote/${id}`, {
+            mode: "cors",
+            // body: JSON.stringify(data),
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+            },
+            timeout: false,
+        })
+        .then((value: any) => {
+            console.log("this is the value:", value);
+        });
 }

@@ -236,7 +236,7 @@ import store from '@/store';
 import dayjs from 'dayjs';
 import Vue from 'vue'
 import { mapGetters } from 'vuex';
-import { createHistorical, deleteAnswer, deleteQuestion, getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
+import { createHistorical, deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getQuestions, getUserReputation, getUsers } from './functions'
 import progressCircular from "@/tools/circular_loading/circular_loading.vue"
 import { VueEditor } from "vue2-editor";
 export default Vue.extend({
@@ -373,12 +373,28 @@ export default Vue.extend({
         },
         async removeObject(value: any) {
             console.log(value, "the value of remove object")
+            //delete votes
+            const qData = await getQuestion(value.question_id)
+            console.log(qData, 'THE QDATA222')
+            const vot = qData.votes
+            if (vot.length !== 0) {
+                for (const vote of vot) {
+                    await deleteVote(vote.vote_id)
+                }
+            }
             //when delete question delete all its answers
             const answers = value.answers
             if (answers !== 0) {
                 console.log('skata mpika edw')
-                const question = await getQuestion(value.question_id)
-                for (const answer of question.answers) {
+                // const question = await getQuestion(value.question_id)
+                for (const answer of qData.answers) {
+                    const answerData = await getAnswer(answer.answer_id)
+                    console.log(answerData, 'the answer data')
+                    if (answerData.answerVotes.length !== 0) {
+                        for (const answerVote of answerData.answerVotes) {
+                            await deleteAnswerVote(answerVote.vote_id)
+                        }
+                    }
                     const deleteAnswerObject = await deleteAnswer(answer.answer_id);
                     const historicalData = {
                         action: 'delete-answer',

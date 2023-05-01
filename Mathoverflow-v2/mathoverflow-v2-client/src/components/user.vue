@@ -425,7 +425,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { createHistorical, deleteAnswer, deleteQuestion, getAnswer, getQuestion, getUser, getUserHistorical, getUserReputation, isLogged, removeUser } from './functions';
+import { createHistorical, deleteAnswer, deleteAnswerVote, deleteQuestion, deleteVote, getAnswer, getQuestion, getUser, getUserHistorical, getUserReputation, isLogged, removeUser } from './functions';
 import { mapGetters } from 'vuex';
 import store from '@/store';
 import { VueEditor } from "vue2-editor";
@@ -750,9 +750,24 @@ export default Vue.extend({
             for (const question of questions) {
                 if (question.UserUserId === this.user.uid) {
                     const questionData = await getQuestion(question.question_id);
+                    //delete votes
+                    const vot = questionData.votes
+                    if (vot.length !== 0) {
+                        for (const vote of vot) {
+                            await deleteVote(vote.vote_id)
+                        }
+                    }
+                    //delete answers
                     const answers = questionData.answers;
                     if (answers.length !== 0) {
                         for (const answer of questionData.answers) {
+                            const answerData = await getAnswer(answer.answer_id)
+                            console.log(answerData, 'the answer data')
+                            if (answerData.answerVotes.length !== 0) {
+                                for (const answerVote of answerData.answerVotes) {
+                                    await deleteAnswerVote(answerVote.vote_id)
+                                }
+                            }
                             //delete user's answers
                             const deleteAnswerObject = await deleteAnswer(answer.answer_id);
                         }
@@ -1047,6 +1062,13 @@ export default Vue.extend({
         },
         async removeAnswerObject(value: any) {
             console.log(value, "the value of remove object answer")
+            const answerData = await getAnswer(value.answer_id)
+            console.log(answerData, 'the answer data')
+            if (answerData.answerVotes.length !== 0) {
+                for (const answerVote of answerData.answerVotes) {
+                    await deleteAnswerVote(answerVote.vote_id)
+                }
+            }
             const deleteAnswerObject = await deleteAnswer(value.answer_id);
             const historicalData = {
                 action: 'delete-answer',
