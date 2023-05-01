@@ -28,25 +28,44 @@
                         </v-row>
                     </v-card-text>
                 </v-card>
-                <v-card v-if="editing" flat style="border: 2px dotted #b39ddb">
-                    <!-- <v-progress-linear
-                        rounded
-                        height="5"
-                        indeterminate
-                        color="#b39ddb"
-                        reverse
-                    >
-                    </v-progress-linear> -->
-                    <v-card-text v-if="editing" class="pb-0">
-                        <v-textarea
-                            color="#b39ddb"
-                            rows="2"
-                            v-model="editedQuestionTitle"
-                        ></v-textarea>
+                <v-card
+                    v-if="editing"
+                    flat
+                    style="
+                        border: 2.5px dotted #b39ddb;
+                        border-bottom: none !important;
+                    "
+                    class="mx-4"
+                >
+                    <v-card-text v-if="editing" class="pb-0 pt-0">
+                        <v-card flat class="pa-0">
+                            <v-toolbar flat class="ps-0">
+                                <v-icon size="29px" color="#32325d">
+                                    mdi-puzzle-edit
+                                </v-icon>
+                                <span
+                                    class="titleClass font-weight-medium ms-2 mt-0"
+                                >
+                                    Update question
+                                </span>
+                                <v-spacer></v-spacer>
+                                <v-icon>mdi-icon</v-icon>
+                            </v-toolbar>
+                            <v-card-text class="px-0 pb-4 pt-2">
+                                <h4>Please edit the title below.</h4>
+
+                                <v-textarea
+                                    outlined
+                                    color="#b39ddb"
+                                    rows="1"
+                                    v-model="editedQuestionTitle"
+                                ></v-textarea>
+                            </v-card-text>
+                        </v-card>
                     </v-card-text>
                 </v-card>
-                <v-divider></v-divider>
-                <v-card-text>
+                <v-divider v-if="!editing"></v-divider>
+                <v-card-text :class="editing ? 'pt-0' : ''">
                     <v-row>
                         <v-col
                             v-if="!editing"
@@ -99,7 +118,7 @@
                             :sm="editing ? 12 : 9"
                             :md="editing ? 12 : 10"
                             :lg="editing ? 12 : 11"
-                            class="mt-2"
+                            class="mt-0 pt-0"
                         >
                             <vue-editor
                                 v-if="!editing"
@@ -111,15 +130,40 @@
                             <v-card
                                 v-if="editing"
                                 flat
-                                style="border: 2px dotted #b39ddb"
+                                style="
+                                    border: 2.5px dotted #b39ddb;
+                                    border-top: none !important;
+                                "
                             >
-                                <v-card-text>
-                                    <vue-editor
-                                        class="pt-0"
-                                        v-model="editedQuestionBody"
-                                        :editorOptions="toolbarOpts_old"
-                                    >
-                                    </vue-editor>
+                                <v-card-text class="pt-0 px-0">
+                                    <!--  -->
+                                    <v-card flat class="pa-0">
+                                        <!-- <v-toolbar flat>
+                                            <v-icon size="29px" color="#32325d">
+                                                mdi-tooltip-edit
+                                            </v-icon>
+                                            <span
+                                                class="titleClass font-weight-medium ms-2 mt-0"
+                                            >
+                                                Update question body
+                                            </span>
+                                            <v-spacer></v-spacer>
+                                            <v-icon>mdi-icon</v-icon>
+                                        </v-toolbar> -->
+                                        <v-card-text class="px-4 pb-4 pt-0">
+                                            <h4>
+                                                Please edit the body in the
+                                                editor below.
+                                            </h4>
+                                            <vue-editor
+                                                class="pt-0 mt-2"
+                                                v-model="editedQuestionBody"
+                                                :editorOptions="toolbarOpts_old"
+                                            >
+                                            </vue-editor>
+                                        </v-card-text>
+                                    </v-card>
+                                    <!--  -->
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-row justify="center" align="center">
