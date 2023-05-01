@@ -40,7 +40,7 @@
                     <v-card-text v-if="editing" class="pb-0 pt-0">
                         <v-card flat class="pa-0">
                             <v-toolbar flat class="ps-0">
-                                <v-icon size="29px" color="#32325d">
+                                <v-icon size="30px" color="#32325d">
                                     mdi-puzzle-edit
                                 </v-icon>
                                 <span
@@ -55,6 +55,7 @@
                                 <h4>Please edit the title below.</h4>
 
                                 <v-textarea
+                                    class="mt-2"
                                     outlined
                                     color="#b39ddb"
                                     rows="1"

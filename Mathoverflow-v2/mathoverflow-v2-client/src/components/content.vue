@@ -106,6 +106,9 @@
                         </v-list-item>
                     </v-list-item-group>
                 </v-list>
+                <v-card v-if="showLatex" class="mt-16" elevation="2">
+                    <v-card-text> LATEX FORMULA SYMBOLS HEREEEEEEE</v-card-text>
+                </v-card>
             </v-navigation-drawer>
         </v-card>
     </v-container>
@@ -131,10 +134,25 @@ export default Vue.extend({
     },
     data: () => ({
         selectedItem: 1,
-        buttonObject1: {}
+        buttonObject1: {},
+        showLatex: false
     }),
+    watch: {
+        $route(value: any) {
+            console.log(value, "the router value")
+            if (value.path.includes('questions/') || value.path === '/ask') {
+                this.showLatex = true
+            } else {
+                this.showLatex = false
+
+            }
+        }
+    },
     computed: {
-        ...mapGetters(["getLoggedUser"])
+        ...mapGetters(["getLoggedUser"]),
+        // showLatex() {
+        //     this.$router.currentRoute.path.includes('questions/') ? true : false
+        // }
     },
     methods: {
         async checkUserSession() {
@@ -167,6 +185,9 @@ export default Vue.extend({
     },
     mounted() {
         console.log(this.getLoggedUser, "the logged user")
+        if (this.$router.currentRoute.path.includes('questions/') || this.$router.currentRoute.path === '/ask') {
+            this.showLatex = true
+        } else this.showLatex = false
     }
 })
 </script>

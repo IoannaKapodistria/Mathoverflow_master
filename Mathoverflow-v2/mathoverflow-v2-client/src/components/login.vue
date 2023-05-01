@@ -321,7 +321,7 @@ export default Vue.extend({
             this.inLogIn = true;
             //
             this.$router.push('/login');
-            // console.log(this.$router.match(), 'router matching')
+            // console.log(this.$.match(), 'router matching')
         },
 
         clickSnackbar() {
