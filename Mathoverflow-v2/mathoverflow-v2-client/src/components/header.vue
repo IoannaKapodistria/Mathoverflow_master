@@ -62,7 +62,7 @@
                             style="cursor: pointer"
                             @click="signup"
                         >
-                            <v-icon dark size="22px"
+                            <v-icon class="font-weight-bold" dark size="18px"
                                 >mdi-progress-pencil</v-icon
                             >
                             Sign up
@@ -73,8 +73,10 @@
                             style="cursor: pointer"
                             @click="login"
                         >
-                            <v-icon dark size="21px">mdi-login-variant</v-icon>
-                            <!-- <v-icon dark size="21px">mdi-login</v-icon> -->
+                            <!-- <v-icon dark size="21px">mdi-login-variant</v-icon> -->
+                            <v-icon dark class="font-weight-bold" size="18px"
+                                >mdi-power</v-icon
+                            >
                             Log in
                         </span>
                         <span
@@ -84,7 +86,9 @@
                             @click="logout"
                         >
                             <!-- <v-icon dark size="21px">mdi-logout-variant</v-icon> -->
-                            <v-icon dark size="21px">mdi-run</v-icon>
+                            <v-icon dark size="18px" class="font-weight-bold"
+                                >mdi-run</v-icon
+                            >
                             Log out
                         </span>
                     </div>
@@ -419,7 +423,9 @@ export default Vue.extend({
     top: 3% !important;
     left: 32% !important;
     color: #fff;
-    font-family: "Courier New", Courier, monospace !important; /* "Garamond" !important; /* !important;*/
+    font-family: "Courier New", Courier, monospace !important;
+    /* "Modern Light Serif" !important; */
+    /* "Courier New", Courier, monospace !important; /* "Garamond" !important; !important; */
     /* "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
         "Lucida Sans Unicode", Geneva, Verdana, sans-serif;*/
     font-size: 53px !important;

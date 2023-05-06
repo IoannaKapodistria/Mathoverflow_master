@@ -158,9 +158,15 @@ export default Vue.extend({
     /* background-color: rgb(250, 250, 250) !important; */
 }
 #particles-js {
-    background: #98cbec;
+    background: linear-gradient(
+        to right,
+        rgba(81, 226, 195, 1) 0%,
+        rgba(131, 188, 253, 1) 100%
+    );
+    /* background: linear-gradient(to right, #5fc3e4 0%, #e55d87 100%);
     height: 100%;
-    width: 100%;
+    width: 100%; */
+    /* background: linear-gradient(to right, #f15f79 0%, #b24592 100%); */
 }
 /* canvas {
     display: block;

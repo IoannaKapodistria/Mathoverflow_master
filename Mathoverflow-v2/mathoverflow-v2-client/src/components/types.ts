@@ -14,3 +14,4 @@ export type buttonObj = {
 };
 
 export type buttons = buttonObj[];
+//  export const a = "\\left\\{\\sum_{n=1}^{\\infty} x^n : |x|<1\\right\\}";

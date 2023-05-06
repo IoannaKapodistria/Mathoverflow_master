@@ -11,7 +11,8 @@
                     size="60"
                     class="ma-3"
                     indeterminate
-                    color="blue"
+                    width="6"
+                    color="#51e2c3"
                 ></v-progress-circular>
             </div>
             <!-- </v-card-text>
@@ -42,4 +43,9 @@ export default Vue.extend({
     }
 })
 </script>
+<style scoped>
+.circle {
+    color: linear-gradient(to right, #51e2c3 0%, #83bcfd 100%);
+}
+</style>
 

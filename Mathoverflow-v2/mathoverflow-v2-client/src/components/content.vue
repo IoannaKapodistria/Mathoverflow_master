@@ -107,7 +107,31 @@
                     </v-list-item-group>
                 </v-list>
                 <v-card v-if="showLatex" class="mt-16" elevation="2">
-                    <v-card-text> LATEX FORMULA SYMBOLS HEREEEEEEE</v-card-text>
+                    <v-card-text class="pa-0">
+                        <!-- LATEX FORMULA SYMBOLS HEREEEEEEE -->
+                        <v-data-table
+                            :headers="latexHeaders"
+                            :items="commands"
+                            style="cursor: pointer"
+                            :items-per-page="5"
+                            :hide-default-footer="true"
+                        >
+                            <template v-slot:[`item.symbol`]="props">
+                                <!-- <v-img
+                                    contain
+                                    :src="props.item.symbol"
+                                    height="50"
+                                ></v-img> -->
+                                <vue-editor
+                                    disabled
+                                    v-model="props.item.symbol"
+                                    :editorOptions="editorOptions"
+                                    :style="editorStyle"
+                                >
+                                </vue-editor>
+                            </template>
+                        </v-data-table>
+                    </v-card-text>
                 </v-card>
             </v-navigation-drawer>
         </v-card>
@@ -121,8 +145,9 @@ import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex';
 import userAvatar from '../tools/user_avatar/user_avatar.vue'
 import { checkSession, getUser } from './functions';
+import { VueEditor } from "vue2-editor";
 export default Vue.extend({
-    components: { userAvatar },
+    components: { userAvatar, VueEditor },
     props: {
         buttonObjects: {
             type: Array as PropType<buttons>,
@@ -135,7 +160,24 @@ export default Vue.extend({
     data: () => ({
         selectedItem: 1,
         buttonObject1: {},
-        showLatex: false
+        showLatex: false,
+        latexHeaders: [
+            { text: "Symbol", align: 'center', sortable: true, value: 'symbol', class: 'title text-caption font-weight-medium' },
+            { text: "LaTeX", align: 'center', sortable: true, value: 'latex', class: 'title text-caption font-weight-medium' },
+        ] as any[],
+        commands: [
+            { symbol: String.raw`\left\{\sum_{n=1}^{\infty} x^n : |x|<1\right\}`, latex: '\left\{\sum_{n=1}^{\infty} x^n : |x|<1\right\}' },
+            { symbol: '', latex: '' },
+            { symbol: '', latex: '' },
+        ] as any[],
+        editorOptions: {
+            modules: {
+                toolbar: false,
+            },
+        },
+        editorStyle: {
+            "height": '40px',
+        },
     }),
     watch: {
         $route(value: any) {
