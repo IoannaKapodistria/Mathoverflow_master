@@ -280,7 +280,7 @@ export default Vue.extend({
 
                 "particles": {
                     "number": {
-                        "value": 230,
+                        "value": 400,
                         "density": {
                             "enable": true,
                             "value_area": 800
@@ -305,7 +305,7 @@ export default Vue.extend({
                         }
                     },
                     "opacity": {
-                        "value": 0.5,
+                        "value": 0.6,
                         "random": false,
                         "anim": {
                             "enable": false,
@@ -315,7 +315,7 @@ export default Vue.extend({
                         }
                     },
                     "size": {
-                        "value": 4,
+                        "value": 5,
                         "random": true,
                         "anim": {
                             "enable": false,
