@@ -110,11 +110,11 @@
                     <v-card-text class="pa-0">
                         <!-- LATEX FORMULA SYMBOLS HEREEEEEEE -->
                         <v-data-table
+                            class="latexTable"
                             :headers="latexHeaders"
                             :items="commands"
                             style="cursor: pointer"
-                            :items-per-page="5"
-                            :hide-default-footer="true"
+                            :items-per-page="10"
                         >
                             <template v-slot:[`item.symbol`]="props">
                                 <!-- <v-img
@@ -123,6 +123,7 @@
                                     height="50"
                                 ></v-img> -->
                                 <vue-editor
+                                    class="latexEditor"
                                     disabled
                                     v-model="props.item.symbol"
                                     :editorOptions="editorOptions"
@@ -146,6 +147,8 @@ import { mapGetters } from 'vuex';
 import userAvatar from '../tools/user_avatar/user_avatar.vue'
 import { checkSession, getUser } from './functions';
 import { VueEditor } from "vue2-editor";
+import katex from 'katex';
+import { latexCommands } from "@/components/latex_symbols"
 export default Vue.extend({
     components: { userAvatar, VueEditor },
     props: {
@@ -162,21 +165,18 @@ export default Vue.extend({
         buttonObject1: {},
         showLatex: false,
         latexHeaders: [
-            { text: "Symbol", align: 'center', sortable: true, value: 'symbol', class: 'title text-caption font-weight-medium' },
-            { text: "LaTeX", align: 'center', sortable: true, value: 'latex', class: 'title text-caption font-weight-medium' },
+            { text: "Symbol", align: 'center', sortable: true, value: 'symbol', class: 'title text-caption light-green--text font-weight-medium', },
+            { text: "LaTeX", align: 'center', sortable: true, value: 'latex', class: 'title text-caption light-green--text font-weight-medium' },
         ] as any[],
-        commands: [
-            { symbol: String.raw`\left\{\sum_{n=1}^{\infty} x^n : |x|<1\right\}`, latex: '\left\{\sum_{n=1}^{\infty} x^n : |x|<1\right\}' },
-            { symbol: '', latex: '' },
-            { symbol: '', latex: '' },
-        ] as any[],
+        commands: latexCommands,
         editorOptions: {
             modules: {
                 toolbar: false,
             },
         },
         editorStyle: {
-            "height": '40px',
+            // "border":,
+            "height": '55px',
         },
     }),
     watch: {
@@ -226,6 +226,7 @@ export default Vue.extend({
         }
     },
     mounted() {
+        window.katex = katex;
         console.log(this.getLoggedUser, "the logged user")
         if (this.$router.currentRoute.path.includes('questions/') || this.$router.currentRoute.path === '/ask') {
             this.showLatex = true
@@ -240,4 +241,14 @@ export default Vue.extend({
 .menuCard {
     color: #f5f5f5 !important;
 }
+.latexTable {
+    border-bottom: none !important;
+}
+.latexEditor > .ql-container.ql-snow {
+    border: none !important;
+    /* font-size: 10px !important; */
+}
+/* .latexEditor.ql-editor {
+    font-size: 10px !important;
+} */
 </style>

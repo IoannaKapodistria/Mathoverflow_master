@@ -153,10 +153,10 @@ export default Vue.extend({
 });
 </script>
 <style>
-.v-application {
-    /* font-family: Arial, Helvetica, sans-serif !important; */
-    /* background-color: rgb(250, 250, 250) !important; */
-}
+/* .v-application { */
+/* font-family: Arial, Helvetica, sans-serif !important; */
+/* background-color: rgb(250, 250, 250) !important; */
+/* } */
 #particles-js {
     background: linear-gradient(
         to right,
