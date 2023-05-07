@@ -1,53 +1,4 @@
 <template>
-    <!-- <v-app-bar app dense clipped left>
-        <v-btn rounded depressed text @click="open">
-            <div class="d-flex align-center">
-                <v-img contain transition="scale-transition" width="69" />
-                <h2 class="ml-4 text-none">
-                    {{ logoName }}
-                </h2>
-            </div>
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn fab small depressed @click="toggle">
-            <v-icon>{{ icon }}</v-icon>
-        </v-btn>
-        <v-menu
-            bottom
-            min
-            max-width="200px"
-            rounded
-            offset-y
-            :close-on-content-click="false"
-        >
-            <template v-slot:activator="{ on }">
-                <v-btn icon x-large v-on="on" to="/user">
-                    <v-avatar> <v-icon> mdi-account-circle</v-icon></v-avatar>
-                </v-btn>
-            </template>
-            <v-card class="text-center">
-                <v-card-text>
-                    <div>
-                        <h3 class="mx-2">
-                            {{ displayName }}
-                        </h3>
-                        <p class="caption mt-1">
-                            {{ username }}
-                        </p>
-                        <v-chip color="#FBC02D"></v-chip>
-                    </div>
-                    <v-divider class="my-3"></v-divider>
-                    <v-btn depressed rounded text @click="logout">
-                        <v-icon left @click="logout">mdi-logout-variant</v-icon>
-                        Log Out
-                    </v-btn>
-                </v-card-text>
-            </v-card>
-        </v-menu>
-        <v-btn x-small outlined color="primary" @click="login">
-            Log In
-        </v-btn>
-    </v-app-bar> -->
     <v-row>
         <v-col cols="12">
             <div class="particles">
@@ -73,7 +24,6 @@
                             style="cursor: pointer"
                             @click="login"
                         >
-                            <!-- <v-icon dark size="21px">mdi-login-variant</v-icon> -->
                             <v-icon dark class="font-weight-bold" size="18px"
                                 >mdi-power</v-icon
                             >
@@ -85,7 +35,6 @@
                             style="cursor: pointer"
                             @click="logout"
                         >
-                            <!-- <v-icon dark size="21px">mdi-logout-variant</v-icon> -->
                             <v-icon dark size="18px" class="font-weight-bold"
                                 >mdi-run</v-icon
                             >
@@ -93,9 +42,6 @@
                         </span>
                     </div>
                     <span class="logo" style="cursor: pointer" @click="goHome">
-                        <!-- <v-icon x-large color="white" class="me-3 mb-2"
-                            >mdi-android-studio</v-icon
-                        > -->
                         <v-icon size="64px" color="white" class="me-0 mb-2"
                             >mdi-all-inclusive</v-icon
                         >
@@ -170,117 +116,11 @@ export default Vue.extend({
             this.$router.push('/')
         },
         initParticles() {
-
             window.particlesJS("particles-js", {
-                //     particles: {
-                //         number: {
-                //             value: 80,
-                //             density: {
-                //                 enable: true,
-                //                 value_area: 700,
-                //             },
-                //         },
-                //         color: {
-                //             value: "#ffffff",
-                //         },
-                //         shape: {
-                //             type: "circle",
-                //             stroke: {
-                //                 width: 0,
-                //                 color: "#000000",
-                //             },
-                //             polygon: {
-                //                 nb_sides: 5,
-                //             },
-                //         },
-                //         opacity: {
-                //             value: 0.5,
-                //             random: false,
-                //             anim: {
-                //                 enable: false,
-                //                 speed: 1,
-                //                 opacity_min: 0.1,
-                //                 sync: false,
-                //             },
-                //         },
-                //         size: {
-                //             value: 3,
-                //             random: true,
-                //             anim: {
-                //                 enable: false,
-                //                 speed: 40,
-                //                 size_min: 0.1,
-                //                 sync: false,
-                //             },
-                //         },
-                //         line_linked: {
-                //             enable: true,
-                //             distance: 150,
-                //             color: "#ffffff",
-                //             opacity: 0.4,
-                //             width: 1,
-                //         },
-                //         move: {
-                //             enable: true,
-                //             speed: 1,
-                //             direction: "none",
-                //             random: false,
-                //             straight: false,
-                //             out_mode: "out",
-                //             bounce: false,
-                //             attract: {
-                //                 enable: false,
-                //                 rotateX: 600,
-                //                 rotateY: 1200,
-                //             },
-                //         },
-                //     },
-                //     interactivity: {
-                //         detect_on: "canvas",
-                //         events: {
-                //             onhover: {
-                //                 enable: true,
-                //                 mode: "grab",
-                //             },
-                //             onclick: {
-                //                 enable: true,
-                //                 mode: "push",
-                //             },
-                //             resize: true,
-                //         },
-                //         modes: {
-                //             grab: {
-                //                 distance: 140,
-                //                 line_linked: {
-                //                     opacity: 1,
-                //                 },
-                //             },
-                //             bubble: {
-                //                 distance: 400,
-                //                 size: 40,
-                //                 duration: 2,
-                //                 opacity: 8,
-                //                 speed: 3,
-                //             },
-                //             repulse: {
-                //                 distance: 200,
-                //                 duration: 0.4,
-                //             },
-                //             push: {
-                //                 particles_nb: 4,
-                //             },
-                //             remove: {
-                //                 particles_nb: 2,
-                //             },
-                //         },
-                //     },
-                //     retina_detect: true,
-                // });
-
-
+                //
                 "particles": {
                     "number": {
-                        "value": 400,
+                        "value": 440,
                         "density": {
                             "enable": true,
                             "value_area": 800

@@ -106,9 +106,29 @@
                         </v-list-item>
                     </v-list-item-group>
                 </v-list>
-                <v-card v-if="showLatex" class="mt-16" elevation="2">
+                <v-card
+                    v-if="showLatex"
+                    class="latexCard mt-16 px-2 py-0"
+                    rounded="lg"
+                    flat
+                >
                     <v-card-text class="pa-0">
-                        <!-- LATEX FORMULA SYMBOLS HEREEEEEEE -->
+                        <div class="text-caption">
+                            MathOverflow uses
+                            <span
+                                class="light-green--text"
+                                style="cursor: pointer"
+                                @click="goMathJax"
+                                >MathJax</span
+                            >
+                            to render LaTeX syntax. Learn more:
+                            <span
+                                class="light-green--text"
+                                style="cursor: pointer"
+                                @click="goMathJaxHelp"
+                                >MathJax help</span
+                            >.
+                        </div>
                         <v-data-table
                             class="latexTable"
                             :headers="latexHeaders"
@@ -165,7 +185,7 @@ export default Vue.extend({
         buttonObject1: {},
         showLatex: false,
         latexHeaders: [
-            { text: "Symbol", align: 'center', sortable: true, value: 'symbol', class: 'title text-caption light-green--text font-weight-medium', },
+            { text: "Example symbol", align: 'center', sortable: true, value: 'symbol', class: 'title text-caption light-green--text font-weight-medium', },
             { text: "LaTeX", align: 'center', sortable: true, value: 'latex', class: 'title text-caption light-green--text font-weight-medium' },
         ] as any[],
         commands: latexCommands,
@@ -223,6 +243,12 @@ export default Vue.extend({
             console.log(userData, "the card data");
             store.commit("setUserData", userData);
             this.$router.push(`/users/${userId}`);
+        },
+        goMathJaxHelp() {
+            window.open('https://legacy-www.math.harvard.edu/texman/')
+        },
+        goMathJax() {
+            window.open('https://www.mathjax.org/')
         }
     },
     mounted() {
@@ -248,7 +274,8 @@ export default Vue.extend({
     border: none !important;
     /* font-size: 10px !important; */
 }
-/* .latexEditor.ql-editor {
-    font-size: 10px !important;
-} */
+.latexCard {
+    /* border: 2.5px solid #dce52e !important; */
+    /* border: 1px dotted rgb(226, 226, 226) !important; */
+}
 </style>

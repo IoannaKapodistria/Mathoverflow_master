@@ -216,6 +216,9 @@
                         ></apexchart>
                     </v-card-text>
                 </v-card>
+                <progress-circular
+                    :progressCircular="progressCircular"
+                ></progress-circular>
             </v-tab-item>
             <v-tab-item class="mt-2">
                 <v-card
@@ -434,11 +437,13 @@ import 'katex/dist/katex.min.css';
 import { ApexOptions } from "apexcharts";
 import Apexchart from "vue-apexcharts";
 import dayjs from 'dayjs';
-import utc from "dayjs/plugin/utc"
+import utc from "dayjs/plugin/utc";
+import progressCircular from "@/tools/circular_loading/circular_loading.vue"
+
 
 dayjs.extend(utc)
 export default Vue.extend({
-    components: { VueEditor, Apexchart },
+    components: { VueEditor, Apexchart, progressCircular },
     data: () => ({
         answersCols: [
             {
@@ -655,11 +660,8 @@ export default Vue.extend({
                 borderColor: '#f1f1f1',
             }
         } as ApexOptions,
-        fu: false
-
-
-
-
+        fu: false,
+        progressCircular: false
     }),
     watch: {
         getUserData(value: any) {
@@ -1096,6 +1098,7 @@ export default Vue.extend({
         }
     },
     async mounted() {
+        this.progressCircular = true
         window.katex = katex;
         this.questionsSortType = 'created'
         this.answersSortType = 'created'
@@ -1112,7 +1115,7 @@ export default Vue.extend({
         await this.getUserAnswers()
         await this.getUserStats()
         await this.getUserHistorical1()
-
+        this.progressCircular = false
     }
 })
 </script>

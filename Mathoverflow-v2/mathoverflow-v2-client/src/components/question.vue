@@ -217,22 +217,29 @@
                                 </v-card-actions>
                             </v-card>
                             <v-row class="mt-15">
-                                <!-- <v-btn right x-large icon>
-                                <v-icon @click="upVoteQuestion"
-                                    >mdi-menu-up</v-icon
-                                >
-                            </v-btn>
-                            <v-chip color="deep-orange lighten-2" class="mt-3">
-                                {{ this.questionSumVotes }}
-                            </v-chip>
-                            <v-btn right x-large icon>
-                                <v-icon @click="downVoteQuestion"
-                                    >mdi-menu-down</v-icon
-                                >
-                            </v-btn> -->
-                                <v-spacer></v-spacer>
-                                <span class="me-9">
-                                    <v-btn
+                                <span class="mt-16">
+                                    <!-- <v-icon class="me-5">mdi-delete</v-icon> -->
+                                    <span
+                                        class="me-3 text-caption"
+                                        style="
+                                            cursor: pointer !important;
+                                            font-size: 13px !important;
+                                        "
+                                        @click="editQuestion"
+                                        >Edit</span
+                                    >
+                                    <span
+                                        class="text-caption"
+                                        style="
+                                            cursor: pointer !important;
+                                            font-size: 13px !important;
+                                        "
+                                        >Delete</span
+                                    >
+                                    <!-- <v-icon @click="editQuestion"
+                                        >mdi-pencil</v-icon
+                                    > -->
+                                    <!-- <v-btn
                                         small
                                         outlined
                                         rounded
@@ -240,13 +247,111 @@
                                         @click="editQuestion"
                                     >
                                         EDIT Question
-                                    </v-btn>
+                                    </v-btn> -->
                                 </span>
-                                <span class="me-9" v-if="admin">
-                                    <v-btn small outlined rounded text>
+                                <v-spacer></v-spacer>
+                                <!-- <span class="me-0"> -->
+                                <!-- <v-btn small outlined rounded text>
                                         Delete Question
-                                    </v-btn>
-                                </span>
+                                    </v-btn> -->
+                                <v-card
+                                    flat
+                                    class="userCard"
+                                    :width="
+                                        $vuetify.breakpoint.smAndDown
+                                            ? '50%'
+                                            : '27%'
+                                    "
+                                    rounded="md"
+                                >
+                                    <v-card-text>
+                                        <v-row>
+                                            <v-col cols="12" class="pt-0">
+                                                asked
+                                                {{ getQuestionTimestamp }}
+                                            </v-col>
+                                            <v-col cols="12" class="pb-4">
+                                                <v-row
+                                                    justify="start"
+                                                    align="center"
+                                                >
+                                                    <v-col
+                                                        cols="4"
+                                                        class="pa-0"
+                                                        justify="start"
+                                                        align="center"
+                                                    >
+                                                        <v-img
+                                                            @click="
+                                                                goOwnerProfile
+                                                            "
+                                                            style="
+                                                                cursor: pointer;
+                                                            "
+                                                            contain
+                                                            src="/prof_photo.png"
+                                                            height="50"
+                                                        ></v-img>
+                                                    </v-col>
+                                                    <v-col
+                                                        cols="6"
+                                                        class="pa-0 mb-3"
+                                                        justify="center"
+                                                        align="center"
+                                                    >
+                                                        <v-row
+                                                            class="ms-0 me-0"
+                                                            justify="center"
+                                                            align="center"
+                                                        >
+                                                            <span
+                                                                @click="
+                                                                    goOwnerProfile
+                                                                "
+                                                                style="
+                                                                    cursor: pointer !important;
+                                                                    font-size: 16px !important;
+                                                                "
+                                                                class="blue--text"
+                                                                >{{
+                                                                    questionOwnerData
+                                                                        .data
+                                                                        .username
+                                                                }}</span
+                                                            >
+                                                        </v-row>
+                                                        <v-row
+                                                            class="ms-1"
+                                                            justify="center"
+                                                            align="center"
+                                                        >
+                                                            <span
+                                                                @click="
+                                                                    goOwnerProfile
+                                                                "
+                                                                style="
+                                                                    cursor: pointer;
+                                                                "
+                                                                class="font-weight-medium"
+                                                            >
+                                                                {{
+                                                                    questionOwnerReputation
+                                                                }}
+                                                            </span>
+                                                            <v-icon
+                                                                size="20px"
+                                                                color="#FBC02D"
+                                                                class="ms-1"
+                                                                >mdi-trophy</v-icon
+                                                            >
+                                                        </v-row>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-col>
+                                        </v-row>
+                                    </v-card-text>
+                                </v-card>
+                                <!-- </span> -->
                             </v-row>
                         </v-col>
                     </v-row>
@@ -697,6 +802,7 @@ import 'katex/dist/katex.min.css';
 import progressCircular from "@/tools/circular_loading/circular_loading.vue"
 import Quill from 'quill';
 import dayjs from 'dayjs';
+import store from '@/store';
 // Vue.use(mathLive);
 //declaration for katex
 declare global {
@@ -819,7 +925,11 @@ export default Vue.extend({
         queVotedUp: null as null | boolean,
         sessionCheckDialog: false,
         checkRepDialog: false,
-        repLimit: 15 as 15 | number
+        repLimit: 15 as 15 | number,
+        questionOwnerName: '',
+        questionOwnerReputation: '',
+        questionOwnerData: {} as any
+
     }),
     watch: {
         question() {
@@ -874,12 +984,20 @@ export default Vue.extend({
             this.questionSumVotes = votesSum;
             await this.getUserVote()
             this.editedQuestionTitle = this.questionExample.title
+            //
+            await this.getQuestionOwner();
+            //
             this.progressCircular = false
         },
 
     },
     computed: {
         ...mapGetters(["getQuestionData", "getLoggedUser"]),
+        getQuestionTimestamp() {
+            const date = dayjs(this.getQuestionData.data.createdAt).format("DD MMM. YYYY | HH:mm:ss");
+            return date;
+
+        },
         toolbarOpts(): any {
             const a = {
                 modules: {
@@ -922,6 +1040,7 @@ export default Vue.extend({
                 reputation: await this.getUserRep(user.user_id)
             }
             console.log(userObject, 'the user object')
+            // this.userObject= userObject
             return userObject;
         },
         async getUserRep(userId: number) {
@@ -1324,9 +1443,7 @@ export default Vue.extend({
             const qData = await getQuestion(this.getQuestionData.data.question_id)
             console.log(qData, 'THE QDATA222')
             const vot = qData.votes
-            console.log(vot, 'THE QDATA222 vot')
-
-            // const userVote = this.getQuestionData.votes.find((el: any) => el.UserUserId = this.getLoggedUser.user_id)
+            // console.log(vot, 'THE QDATA222 vot')
             const userVote = vot.find((el: any) => el.UserUserId === this.getLoggedUser.user_id)
             if (userVote !== undefined) {
                 console.log(userVote, 'the logged in user vote in this question')
@@ -1335,14 +1452,30 @@ export default Vue.extend({
                 else if (userVote.value === -1) this.queVotedUp = false
             }
 
+        },
+        async getQuestionOwner() {
+            const ownerId = this.questionExample.userId
+            const owner = await getUser(ownerId);
+            const rep = await this.getUserRep(ownerId);
+            this.questionOwnerReputation = rep;
+            // this.questionOwnerName = owner.data.username
+            this.questionOwnerData = owner
+            console.log(owner, 'the question owner')
+        },
+        goOwnerProfile() {
+            // const userData = await getUser(userId);
+            // console.log(userData, "the card data");
+            store.commit("setUserData", this.questionOwnerData);
+            this.$router.push(`/users/${this.questionOwnerData.data.user_id}`);
         }
     },
     beforeDestroy() {
         this.queVotedUp = null
     },
-    mounted() {
+    async mounted() {
         window.katex = katex;
         // this.getQuestionData;
+        // await this.getUserObject()
         console.log(this.getQuestionData, "the QUESTION NDATA");
         // this.getUserVote()
     }
@@ -1384,5 +1517,8 @@ export default Vue.extend({
     color: #32325d !important;
     font-weight: 500;
     color: #5fb1e8;
+}
+.userCard {
+    background-color: rgba(255, 167, 38, 0.3) !important;
 }
 </style>

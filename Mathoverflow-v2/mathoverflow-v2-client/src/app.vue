@@ -10,19 +10,6 @@
                 @logout="logout"
                 @signup="signup"
             ></mo-header>
-            <!-- the login/signup page -->
-            <!-- <login></login> -->
-            <!-- <v-row>
-                <v-col cols="12">
-                    <div class="particles">
-                        <div id="particles-js">
-                            <span class="logo" style="z-index: 20067"
-                                >MathOverflow</span
-                            >
-                        </div>
-                    </div>
-                </v-col>
-            </v-row> -->
             <v-card
                 flat
                 rounded="lg"
@@ -31,7 +18,6 @@
             >
                 <v-card-text>
                     <v-row justify="center">
-                        <!-- na ftiaxtei n amn einai hardcoded 3 ta cols g na mn exei toso keno ta votes tis erwthshs me to menu aristera -->
                         <v-col cols="3" v-if="getContent">
                             <mo-content
                                 :buttonObjects="buttonObjects"
@@ -41,16 +27,12 @@
                             <router-view></router-view>
                             <!-- ask a question page NA MPEI PADOU ENA BUTTON ASK QUESTION-->
                             <!-- <ask-question></ask-question> -->
-
                             <!--a question page -->
                             <!-- <mo-question></mo-question> -->
-
                             <!-- questions page -->
                             <!-- <mo-questions></mo-questions> -->
-
                             <!-- users page -->
                             <!-- <users></users> -->
-
                             <!-- a user's page -->
                             <!-- <user></user> -->
                         </v-col>
@@ -160,7 +142,7 @@ export default Vue.extend({
 #particles-js {
     background: linear-gradient(
         to right,
-        rgba(81, 226, 195, 1) 0%,
+        #51e2c3 0%,
         rgba(131, 188, 253, 1) 100%
     );
     /* background: linear-gradient(to right, #5fc3e4 0%, #e55d87 100%);
