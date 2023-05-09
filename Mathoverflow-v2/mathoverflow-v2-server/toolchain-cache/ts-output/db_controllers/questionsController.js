@@ -39,6 +39,7 @@ export async function getQuestion(req, res) {
             const answers = await Answer.findAll({ where: { QuestionQuestionId: id } });
             const votes = await Vote.findAll({ where: { QuestionQuestionId: id } });
             console.log(votes, "the get question value votes in server");
+            console.log(data, "the data get question");
             const value = {
                 data,
                 answers: answers,

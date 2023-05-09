@@ -42,6 +42,7 @@ export async function getQuestion(req, res) {
         }
       });
       console.log(votes, "the get question value votes in server");
+      console.log(data, "the data get question");
       const value = {
         data,
         answers: answers,

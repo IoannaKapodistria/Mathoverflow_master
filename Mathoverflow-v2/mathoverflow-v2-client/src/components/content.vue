@@ -31,10 +31,16 @@
                         :to="buttonObject.url"
                     >
                         <v-list-group
+                            color="primary"
+                            :active-class="
+                                selectedButton.title === buttonObject.title
+                                    ? 'active'
+                                    : ''
+                            "
                             v-if="buttonObject.content !== undefined"
-                            :value="true"
                             @click="clicked2(buttonObject)"
                             :to="buttonObject.url"
+                            :value="true"
                         >
                             <template v-slot:activator>
                                 <v-list-item-icon>
@@ -80,7 +86,16 @@
                                         </v-list-item-icon>
                                     </v-list-item>
                                 </v-list-group>
-                                <v-list-item v-else :to="item.url">
+                                <v-list-item
+                                    v-else
+                                    :to="item.url"
+                                    :class="
+                                        selectedButton.title === item.title
+                                            ? 'active'
+                                            : ''
+                                    "
+                                    @click="clicked(item)"
+                                >
                                     <v-list-item-icon>
                                         <v-icon>{{ item.icon }}</v-icon>
                                     </v-list-item-icon>
@@ -94,6 +109,11 @@
                             v-else
                             @click="clicked(buttonObject)"
                             :to="buttonObject.url"
+                            :class="
+                                selectedButton.title === buttonObject.title
+                                    ? 'active'
+                                    : ''
+                            "
                         >
                             <v-list-item-icon>
                                 <v-icon>{{ buttonObject.icon }}</v-icon>
@@ -137,11 +157,6 @@
                             :items-per-page="10"
                         >
                             <template v-slot:[`item.symbol`]="props">
-                                <!-- <v-img
-                                    contain
-                                    :src="props.item.symbol"
-                                    height="50"
-                                ></v-img> -->
                                 <vue-editor
                                     class="latexEditor"
                                     disabled
@@ -183,6 +198,7 @@ export default Vue.extend({
     data: () => ({
         selectedItem: 1,
         buttonObject1: {},
+        selectedButton: {} as any,
         showLatex: false,
         latexHeaders: [
             { text: "Example symbol", align: 'center', sortable: true, value: 'symbol', class: 'title text-caption light-green--text font-weight-medium', },
@@ -198,6 +214,7 @@ export default Vue.extend({
             // "border":,
             "height": '55px',
         },
+        listGroupIsActive: false
     }),
     watch: {
         $route(value: any) {
@@ -226,11 +243,16 @@ export default Vue.extend({
             } else return true;
         },
         clicked(value: buttonObj) {
+            this.listGroupIsActive = false
             console.log(value, "the value of button")
+            this.selectedButton = value
             this.$emit("buttonClicked", value);
         },
         clicked2(buttonObject: buttonObj) {
+            this.listGroupIsActive = true
             console.log(buttonObject, "the item1")
+            this.selectedButton = buttonObject
+
             this.$router.push(buttonObject.url).catch((err: any) => {
                 console.warn(`error in redirect to ${buttonObject.url} :`, err)
             });
@@ -274,8 +296,16 @@ export default Vue.extend({
     border: none !important;
     /* font-size: 10px !important; */
 }
-.latexCard {
-    /* border: 2.5px solid #dce52e !important; */
-    /* border: 1px dotted rgb(226, 226, 226) !important; */
+/* .latexCard { */
+/* border: 2.5px solid #dce52e !important; */
+/* border: 1px dotted rgb(226, 226, 226) !important; */
+/* } */
+.active {
+    color: #1976d2 !important;
+    background-color: #60d7c34d !important;
 }
+/* .v-list-group__header:active {
+    color: #1976d2 !important;
+    background-color: #60d7c34d !important;
+} */
 </style>

@@ -124,6 +124,7 @@ export async function getQuestion(req: any, res: any) {
                 const answers = await Answer.findAll({ where: { QuestionQuestionId: id } } /*{ include: [{ model: Question, as: "Question", where: { QuestionQuestionId: id } }] }*/);
                 const votes = await Vote.findAll({ where: { QuestionQuestionId: id } });
                 console.log(votes, "the get question value votes in server");
+                console.log(data, "the data get question");
 
                 // na ftiaxtei na epistrefetai kai to athroisma twn votes
                 const value = {

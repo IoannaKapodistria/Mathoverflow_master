@@ -1440,6 +1440,7 @@ export default Vue.extend({
             this.editedAnswerBody = value.body
         },
         async getUserVote() {
+            console.log(this.getQuestionData, "the get que data 4")
             const qData = await getQuestion(this.getQuestionData.data.question_id)
             console.log(qData, 'THE QDATA222')
             const vot = qData.votes
