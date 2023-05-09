@@ -18,12 +18,13 @@
             >
                 <v-card-text>
                     <v-row justify="center">
-                        <v-col cols="3" v-if="getContent">
+                        <v-col cols="3" v-if="getContent" class="pe-0">
                             <mo-content
                                 :buttonObjects="buttonObjects"
                             ></mo-content>
                         </v-col>
-                        <v-col cols="9">
+                        <v-col cols="9" class="ps-0">
+                            <!-- <v-col cols="9"> -->
                             <router-view></router-view>
                             <!-- ask a question page NA MPEI PADOU ENA BUTTON ASK QUESTION-->
                             <!-- <ask-question></ask-question> -->
