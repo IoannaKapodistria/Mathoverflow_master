@@ -8,11 +8,11 @@
         >
             <div class="text-center">
                 <v-progress-circular
-                    size="60"
+                    size="56"
                     class="ma-3"
                     indeterminate
                     width="6"
-                    color="#51e2c3"
+                    color="#2dcba9"
                 ></v-progress-circular>
             </div>
             <!-- </v-card-text>

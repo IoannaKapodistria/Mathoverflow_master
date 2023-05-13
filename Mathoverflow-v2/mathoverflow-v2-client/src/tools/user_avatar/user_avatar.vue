@@ -1,18 +1,19 @@
 <template>
-    <v-menu
+    <!-- <v-menu
         bottom
         min-width="200px"
         rounded
         offset-y
         :close-on-content-click="false"
     >
-        <template v-slot:activator="{ on }">
-            <v-btn icon x-large v-on="on">
-                <v-avatar>
-                    <v-icon color="blue"> mdi-account-circle </v-icon>
-                </v-avatar>
-            </v-btn>
-        </template>
+        <template v-slot:activator="{ on }"> -->
+    <!-- <v-btn icon x-large v-on="on"> -->
+    <v-btn icon x-large>
+        <v-avatar @click="profileClicked">
+            <v-icon color="#00838f"> mdi-account-circle </v-icon>
+        </v-avatar>
+    </v-btn>
+    <!-- </template>
         <v-card class="text-center">
             <v-card-text>
                 <v-row>
@@ -22,14 +23,11 @@
                         WELCOME!
                     </span>
                 </v-row>
-                <!-- display name -->
                 <div v-if="renderUserAvatarInfoComponents">
                     <h3 class="mx-2">{{ userAvatarInfo.displayName }}</h3>
-                    <!-- username/email -->
                     <p class="caption mt-1">
                         {{ userAvatarInfo.username }}
                     </p>
-                    <!-- admin chip -->
                     <v-chip v-if="userAvatarInfo.admin" color="#FBC02D">
                         Admin
                     </v-chip>
@@ -41,12 +39,12 @@
                         style="cursor: pointer"
                         @click="profileClicked"
                         :style="{
-                            color: hover ? 'teal' : 'grey',
+                            color: hover ? '#51e2c3' : 'grey',
                         }"
                     >
                         <v-icon
                             :style="{
-                                color: hover ? 'teal' : 'grey',
+                                color: hover ? '#51e2c3' : 'grey',
                             }"
                             class="mb-2"
                             >mdi-account</v-icon
@@ -55,22 +53,10 @@
                     </div>
                 </v-hover>
                 <v-divider class="my-2"></v-divider>
-                <!-- <div
-                    v-if="getAdmin"
-                    class="text-subtitle-1"
-                    style="cursor: pointer"
-                    @click="createProject"
-                >
-                    <v-icon class="mb-1">mdi-plus</v-icon>
-                    &nbsp; Create Project
-                    <v-divider class="my-2"></v-divider>
-                </div> -->
-                <!-- feedback -->
-                <!-- logout -->
                 <v-hover v-slot="{ hover }">
                     <v-btn
                         :style="{
-                            color: hover ? 'teal' : 'grey',
+                            color: hover ? '#51e2c3' : 'grey',
                         }"
                         depressed
                         rounded
@@ -83,7 +69,7 @@
                 </v-hover>
             </v-card-text>
         </v-card>
-    </v-menu>
+    </v-menu> -->
 </template>
  
 <script lang="ts">

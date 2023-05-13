@@ -4,17 +4,28 @@
             <v-navigation-drawer
                 permanent
                 :expand-on-hover="$vuetify.breakpoint.smAndDown"
+                width="300"
             >
                 <v-row
                     v-if="this.getLoggedUser.user_id !== undefined"
-                    class="mt-3 mb-7 me-8"
+                    class="mt-3 mb-7 me-12"
                     justify="center"
                     align="center"
                 >
-                    <user-avatar @profileClicked="profileClicked"></user-avatar>
-                    <span class="blue--text text-body-1 mt-1">{{
-                        this.getLoggedUser.username
-                    }}</span>
+                    <user-avatar
+                        v-if="$vuetify.breakpoint.smAndDown ? false : true"
+                        @profileClicked="profileClicked"
+                    ></user-avatar>
+                    <span
+                        v-if="$vuetify.breakpoint.smAndDown ? false : true"
+                        class="text-body-1 mt-1 font-weight-medium"
+                        style="
+                            color: #00838f !important;
+                            cursor: pointer !important;
+                        "
+                        @click="profileClicked"
+                        >{{ this.getLoggedUser.username }}</span
+                    >
                 </v-row>
                 <v-list
                     flat
@@ -25,13 +36,15 @@
                     "
                 >
                     <v-list-item-group
-                        color="primary"
+                        color="#1976d2"
+                        style="color: #00838f"
                         v-for="(buttonObject, i) in buttonObjects"
                         :key="i"
                         :to="buttonObject.url"
                     >
                         <v-list-group
-                            color="primary"
+                            style="color: #00838f"
+                            color="#1976d2"
                             :active-class="
                                 selectedButton.title === buttonObject.title
                                     ? 'active'
@@ -43,10 +56,26 @@
                             :value="true"
                         >
                             <template v-slot:activator>
-                                <v-list-item-icon>
-                                    <v-icon>{{ buttonObject.icon }}</v-icon>
+                                <v-list-item-icon style="color: #00838f">
+                                    <v-icon
+                                        :color="
+                                            selectedButton.title ===
+                                            buttonObject.title
+                                                ? '#1976d2'
+                                                : '#00838F'
+                                        "
+                                        >{{ buttonObject.icon }}</v-icon
+                                    >
                                 </v-list-item-icon>
-                                <v-list-item-title :to="buttonObject.url">
+                                <v-list-item-title
+                                    :to="buttonObject.url"
+                                    :style="
+                                        selectedButton.title ===
+                                        buttonObject.title
+                                            ? 'color: #1976d2'
+                                            : 'color: #00838F'
+                                    "
+                                >
                                     {{ buttonObject.title }}</v-list-item-title
                                 >
                             </template>
@@ -94,10 +123,20 @@
                                             ? 'active'
                                             : ''
                                     "
+                                    color="#00838F"
+                                    style="color: #00838f"
                                     @click="clicked(item)"
                                 >
                                     <v-list-item-icon>
-                                        <v-icon>{{ item.icon }}</v-icon>
+                                        <v-icon
+                                            :color="
+                                                selectedButton.title ===
+                                                item.title
+                                                    ? '#1976d2'
+                                                    : '#00838F'
+                                            "
+                                            >{{ item.icon }}</v-icon
+                                        >
                                     </v-list-item-icon>
                                     <v-list-item-title>
                                         {{ item.title }}
@@ -109,14 +148,24 @@
                             v-else
                             @click="clicked(buttonObject)"
                             :to="buttonObject.url"
+                            style="color: #00838f"
+                            color="#00838F"
                             :class="
                                 selectedButton.title === buttonObject.title
                                     ? 'active'
                                     : ''
                             "
                         >
-                            <v-list-item-icon>
-                                <v-icon>{{ buttonObject.icon }}</v-icon>
+                            <v-list-item-icon style="color: #1976d2">
+                                <v-icon
+                                    :color="
+                                        selectedButton.title ===
+                                        buttonObject.title
+                                            ? '#1976d2'
+                                            : '#00838F'
+                                    "
+                                    >{{ buttonObject.icon }}</v-icon
+                                >
                             </v-list-item-icon>
                             <v-list-item-content>
                                 <v-list-item-title>{{
@@ -283,9 +332,9 @@ export default Vue.extend({
 })
 </script>
 <style>
-.v-navigation-drawer__border {
+/* .v-navigation-drawer__border {
     display: none;
-}
+} */
 .menuCard {
     color: #f5f5f5 !important;
 }
@@ -296,16 +345,8 @@ export default Vue.extend({
     border: none !important;
     /* font-size: 10px !important; */
 }
-/* .latexCard { */
-/* border: 2.5px solid #dce52e !important; */
-/* border: 1px dotted rgb(226, 226, 226) !important; */
-/* } */
 .active {
     color: #1976d2 !important;
     background-color: #60d7c34d !important;
 }
-/* .v-list-group__header:active {
-    color: #1976d2 !important;
-    background-color: #60d7c34d !important;
-} */
 </style>

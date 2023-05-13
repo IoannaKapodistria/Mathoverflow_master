@@ -146,7 +146,7 @@
                         </v-chip>
                     </template>
                     <template v-slot:[`item.votes`]="{ item }">
-                        <v-chip color="#26A69A" class="px-4" dark>
+                        <v-chip color="#2dcba9" class="px-4" dark>
                             {{ item.votes }}
                         </v-chip>
                     </template>

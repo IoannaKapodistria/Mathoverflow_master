@@ -161,10 +161,9 @@ export default Vue.extend({
     /* position: absolute; */
 }
 .logo {
+    /* color: #00838f; */
     z-index: 20004 !important;
-    /* margin-top: 200px; */
     position: absolute;
-    /* display: inline-block; */
     top: 2%;
     left: 34%;
     color: #fff;
@@ -179,6 +178,9 @@ export default Vue.extend({
     display: flex;
     margin-left: 40px;
     margin-right: 40px;
+    flex-direction: column;
+    min-height: 100vh;
+    /* color: #f7fbfa; */
     /* margin-bottom: 30px; */
     /* bottom: 5%; */
 }

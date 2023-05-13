@@ -78,7 +78,7 @@
                                     class="me-6"
                                 >
                                     <v-icon
-                                        color="teal"
+                                        color="#2dcba9"
                                         size="53px"
                                         class="mb-0"
                                         >mdi-google-downasaur</v-icon

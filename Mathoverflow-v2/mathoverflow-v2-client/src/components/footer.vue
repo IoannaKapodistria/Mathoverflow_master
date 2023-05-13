@@ -1,45 +1,54 @@
 <template>
     <v-footer padless>
         <!-- <v-card class="flex footerClass" color="#2D3039" flat tile dark> -->
-        <v-card>
+        <!-- <v-card>
             <v-card-text class="pa-0"> </v-card-text>
-        </v-card>
-        <v-card class="flex footerClass" flat tile dark>
-            <v-card-title class="pb-0 pt-1">
-                <v-btn
-                    v-for="link in links"
-                    :key="link"
-                    text
-                    rounded
-                    class="my-2 white--text"
-                    style="
-                        text-transform: none !important;
-                        font-size: 16px !important;
-                    "
-                >
-                    <v-icon size="18px" class="me-1">{{ link.icon }}</v-icon>
-                    {{ link.title }}
-                </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn
-                    v-for="icon in icons"
-                    :key="icon"
-                    class="mx-4"
-                    icon
-                    outlined
-                    rounded
-                >
-                    <v-icon size="40px" color="white"> {{ icon }} </v-icon>
-                </v-btn>
-                <!-- <v-spacer></v-spacer> -->
-            </v-card-title>
-            <v-card-text class="pt-0 pb-1 text-center">
-                <!-- <v-row> -->
-                <span class="mt-3 ms-3 white--text">
-                    &copy; {{ author }} {{ new Date().getFullYear() }}</span
-                >
-            </v-card-text>
-        </v-card>
+        </v-card> -->
+        <v-row>
+            <v-col cols="12" class="pa-0">
+                <v-card class="footerClass" flat tile dark>
+                    <v-card-title class="pb-0 pt-1">
+                        <v-btn
+                            v-for="link in links"
+                            :key="link"
+                            text
+                            rounded
+                            class="my-2 white--text"
+                            style="
+                                text-transform: none !important;
+                                font-size: 16px !important;
+                            "
+                        >
+                            <v-icon size="18px" class="me-1">{{
+                                link.icon
+                            }}</v-icon>
+                            {{ link.title }}
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            v-for="icon in icons"
+                            :key="icon"
+                            class="mx-4"
+                            icon
+                            outlined
+                            rounded
+                        >
+                            <v-icon size="40px" color="white">
+                                {{ icon }}
+                            </v-icon>
+                        </v-btn>
+                        <!-- <v-spacer></v-spacer> -->
+                    </v-card-title>
+                    <v-card-text class="pt-0 pb-1 text-center">
+                        <!-- <v-row> -->
+                        <span class="mt-3 ms-3 white--text">
+                            &copy; {{ author }}
+                            {{ new Date().getFullYear() }}</span
+                        >
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
     </v-footer>
 </template>
 
@@ -89,5 +98,9 @@ export default Vue.extend({
     text-align: center;
     border: 2px solid;
     border-radius: 25px;
+}
+.footer2 {
+    bottom: 0;
+    position: absolute !important;
 }
 </style>

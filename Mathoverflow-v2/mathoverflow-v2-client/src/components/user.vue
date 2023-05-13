@@ -8,7 +8,10 @@
                 <v-col class="pa-0 ms-7">
                     <v-card-text>
                         <v-row class="mt-3">
-                            <span class="text-h4 font-weight-normal">
+                            <span
+                                class="text-h4 font-weight-normal"
+                                style="color: #32325d !important"
+                            >
                                 {{ user.username }}
                             </span>
                             <v-spacer></v-spacer>
@@ -125,25 +128,19 @@
                                     class="pb-10 pt-2 px-0"
                                     width="65%"
                                     rounded="lg"
-                                    elevation="3"
-                                    :color="
-                                        darkTheme === false
-                                            ? '#F5F5F5'
-                                            : '#121212'
+                                    elevation="2"
+                                    style="
+                                        border: 3px solid #b388ff !important;
+                                        border-radius: 8% !important;
                                     "
+                                    color="#f7fbfa"
                                 >
-                                    <v-toolbar
-                                        dense
-                                        flat
-                                        :color="
-                                            darkTheme === false
-                                                ? '#F5F5F5'
-                                                : '#121212'
-                                        "
-                                    >
+                                    <v-toolbar dense flat color="#f7fbfa">
                                         <v-spacer></v-spacer>
                                         <v-toolbar-title
-                                            class="blue-grey--text text-h6"
+                                            color="#f7fbfa"
+                                            class="text-h6"
+                                            style="color: #32325d !important"
                                         >
                                             <v-icon :color="resource.color">{{
                                                 resource.icon
@@ -152,16 +149,9 @@
                                         </v-toolbar-title>
                                         <v-spacer></v-spacer>
                                     </v-toolbar>
-                                    <v-toolbar
-                                        flat
-                                        :color="
-                                            darkTheme === false
-                                                ? '#F5F5F5'
-                                                : '#121212'
-                                        "
-                                    >
+                                    <v-toolbar flat color="#f7fbfa">
                                         <v-spacer></v-spacer>
-                                        <v-card
+                                        <!-- <v-card
                                             elevation="2"
                                             :color="resource.color"
                                             outlined
@@ -174,10 +164,23 @@
                                             >
                                                 {{ resource.value }}
                                             </v-toolbar>
-                                        </v-card>
+                                        </v-card> -->
+                                        <v-progress-circular
+                                            :width="8"
+                                            :size="85"
+                                            :color="resource.color"
+                                            value="100"
+                                            class="text-h6 ms-2"
+                                            >{{
+                                                resource.value
+                                            }}</v-progress-circular
+                                        >
                                         <v-spacer></v-spacer>
                                     </v-toolbar>
                                 </v-card>
+                                <!--  -->
+
+                                <!--  -->
                             </v-col>
                         </v-row>
                     </v-card-text>
@@ -276,6 +279,7 @@
                             style="cursor: pointer"
                             :sort-by="questionsSortType"
                             :sort-desc="true"
+                            :items-per-page="6"
                         >
                             <template v-slot:[`item.title`]="{ item }">
                                 <v-card
@@ -302,7 +306,7 @@
                                 </v-chip>
                             </template>
                             <template v-slot:[`item.votes`]="{ item }">
-                                <v-chip color="#26A69A" class="px-4" dark>
+                                <v-chip color="#2dcba9" class="px-4" dark>
                                     {{ item.votes }}
                                 </v-chip>
                             </template>
@@ -375,9 +379,10 @@
                             style="cursor: pointer"
                             :sort-by="answersSortType"
                             :sort-desc="true"
+                            :items-per-page="6"
                         >
                             <template v-slot:[`item.votes`]="props">
-                                <v-chip color="teal" dark class="mt-3">
+                                <v-chip color="#2dcba9" dark class="mt-3">
                                     {{ props.item.votes }}
                                 </v-chip>
                             </template>
@@ -585,7 +590,7 @@ export default Vue.extend({
                     fontSize: '16px',
                     fontWeight: 'bold',
                     fontFamily: undefined,
-                    color: '#4527A0'
+                    color: '#32325d'
                 },
             }
         } as ApexOptions,

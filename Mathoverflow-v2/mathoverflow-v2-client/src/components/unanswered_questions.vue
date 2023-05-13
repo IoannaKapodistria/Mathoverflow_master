@@ -90,6 +90,7 @@
                     style="cursor: pointer"
                     :sort-by="questionsSortType"
                     :sort-desc="true"
+                    :items-per-page="5"
                     :custom-filter="customSearch"
                 >
                     <template v-slot:[`item.title`]="{ item }">
@@ -146,7 +147,7 @@
                     <template v-slot:[`item.votes`]="{ item }">
                         <v-chip
                             @click="handleClick(item)"
-                            color="#26A69A"
+                            color="#2dcba9"
                             class="px-4"
                             dark
                         >

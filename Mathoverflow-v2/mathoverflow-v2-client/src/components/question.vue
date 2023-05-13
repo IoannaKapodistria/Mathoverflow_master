@@ -93,7 +93,7 @@
                                 >
                             </v-btn>
                             <span class="d-flex">
-                                <v-chip dark color="#26A69A" class="ms-2">
+                                <v-chip dark color="#2dcba9" class="ms-2">
                                     {{ this.questionSumVotes }}
                                 </v-chip>
                             </span>
@@ -370,7 +370,7 @@
                 <v-card-actions>
                     <v-row justify="center" align="center">
                         <v-col justify="center" align="center">
-                            <v-btn small outlined color="teal"> update</v-btn>
+                            <v-btn small outlined color="#2dcba9"> update</v-btn>
                         </v-col>
                     </v-row>
                 </v-card-actions>
@@ -457,7 +457,7 @@
                                         size="19px"
                                         :color="
                                             props.item.userAnswerVote === true
-                                                ? '#53DFD1'
+                                                ? '#4CAF50'
                                                 : '#78909C'
                                         "
                                         @click="
@@ -477,7 +477,7 @@
                                     lg="4"
                                     class="pa-0"
                                 >
-                                    <v-chip color="teal" dark class="mt-2">
+                                    <v-chip color="#2dcba9" dark class="mt-2">
                                         {{ props.item.votes }}
                                     </v-chip>
                                 </v-col>
@@ -497,7 +497,7 @@
                                         "
                                         :color="
                                             props.item.userAnswerVote === false
-                                                ? '#53DFD1'
+                                                ? '#4CAF50'
                                                 : '#78909C'
                                         "
                                         dark
@@ -643,7 +643,7 @@
                                                 class="me-3"
                                                 small
                                                 dark
-                                                color="teal"
+                                                color="#2dcba9"
                                                 @click="answerEditing = false"
                                             >
                                                 cancel
@@ -697,15 +697,13 @@
                     </v-data-table>
                 </v-card-text>
             </v-card>
-            <!-- <progress-circular
-                :progressCircular="progressCircular"
-            ></progress-circular> -->
+
             <v-dialog v-model="sessionCheckDialog" width="500" persistent>
                 <v-card class="pb-4 pt-4 ps-3" style="border-radius: 16px">
                     <v-toolbar flat class="pt-6">
                         <v-row justify="center" align="center">
                             <v-col justify="center" align="center" class="me-6">
-                                <v-icon color="teal" size="53px" class="mb-0"
+                                <v-icon color="#2dcba9" size="53px" class="mb-0"
                                     >mdi-google-downasaur</v-icon
                                 >
                                 <span
@@ -746,7 +744,7 @@
                     <v-toolbar flat class="pt-6">
                         <v-row justify="center" align="center">
                             <v-col justify="center" align="center" class="me-6">
-                                <v-icon color="teal" size="53px" class="mb-0"
+                                <v-icon color="#2dcba9" size="53px" class="mb-0"
                                     >mdi-trophy</v-icon
                                 >
                                 <span
@@ -787,6 +785,9 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
+            <progress-circular
+                :progressCircular="progressCircular"
+            ></progress-circular>
         </v-card-text>
     </v-card>
 </template>

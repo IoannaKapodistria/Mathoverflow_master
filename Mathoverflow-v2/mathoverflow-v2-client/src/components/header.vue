@@ -1,6 +1,6 @@
 <template>
     <v-row>
-        <v-col cols="12">
+        <v-col cols="12" class="px-0">
             <div class="particles">
                 <div id="particles-js">
                     <div
@@ -20,7 +20,7 @@
                         </span>
                         <span
                             v-if="existSession === false"
-                            class="me-2 mt-1"
+                            class="me-6 mt-1"
                             style="cursor: pointer"
                             @click="login"
                         >
@@ -31,7 +31,7 @@
                         </span>
                         <span
                             v-if="existSession === true"
-                            class="me-2 mt-1"
+                            class="me-6 mt-1"
                             style="cursor: pointer"
                             @click="logout"
                         >
