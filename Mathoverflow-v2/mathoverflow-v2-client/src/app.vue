@@ -107,6 +107,7 @@ export default Vue.extend({
             this.$store.commit("setContent", false)
             this.$store.commit("setUserData", {})
             this.$store.commit("setLoggedUser", {})
+            this.$store.commit("setAdmin", false)
             this.$router.push('/login');
         },
         signup() {
