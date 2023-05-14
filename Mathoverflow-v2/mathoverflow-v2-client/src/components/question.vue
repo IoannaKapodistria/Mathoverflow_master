@@ -226,21 +226,21 @@
                                         :class="
                                             checkUserAction2(
                                                 getQuestionData.data
-                                            )
+                                            ) || getAdmin
                                                 ? 'me-3 text-caption'
                                                 : 'me-3 grey--text text-caption'
                                         "
                                         :style="
                                             checkUserAction2(
                                                 getQuestionData.data
-                                            )
+                                            ) || getAdmin
                                                 ? 'cursor: pointer !important;'
                                                 : ''
                                         "
                                         @click="
                                             checkUserAction2(
                                                 getQuestionData.data
-                                            )
+                                            ) || getAdmin
                                                 ? editQuestion()
                                                 : doNothing()
                                         "
@@ -250,14 +250,14 @@
                                         :class="
                                             checkUserAction2(
                                                 getQuestionData.data
-                                            )
+                                            ) || getAdmin
                                                 ? 'me-3 text-caption'
                                                 : 'me-3 grey--text text-caption'
                                         "
                                         :style="
                                             checkUserAction2(
                                                 getQuestionData.data
-                                            )
+                                            ) || getAdmin
                                                 ? 'cursor: pointer !important;'
                                                 : ''
                                         "
@@ -625,7 +625,7 @@
                         </template>
                         <template v-slot:[`item.edit`]="props">
                             <v-icon
-                                v-if="checkUserAction(props.item)"
+                                v-if="checkUserAction(props.item) || getAdmin"
                                 color="#5fb1e8"
                                 @click="showAnswerEdit(props.item)"
                                 >mdi-pencil</v-icon
@@ -715,7 +715,7 @@
                         </template>
                         <template v-slot:[`item.remove`]="props">
                             <v-icon
-                                v-if="checkUserAction(props.item)"
+                                v-if="checkUserAction(props.item) || getAdmin"
                                 color="#5fb1e8"
                                 @click="removeObject(props.item)"
                                 >mdi-delete</v-icon
@@ -733,7 +733,7 @@
             >
                 <v-card class="pb-0 pt-0 ps-2 mt-15" flat rounded="lg">
                     <v-icon
-                        color="teal"
+                        color="#2dcba9"
                         size="107px"
                         class="oopsCard justify-end mb-0"
                         >mdi-robot-confused</v-icon
@@ -741,7 +741,7 @@
                     <v-card-text class="pt-0">
                         <span
                             class="d-flex justify-start titleClass text-body-1 font-weight-bold ms-0 mb-2"
-                            style="font-size: 19px !important"
+                            style="font-size: 19px !important; color: "
                             >Oops!</span
                         >
                         <span class="mt-0">
@@ -1008,7 +1008,7 @@ export default Vue.extend({
 
     },
     computed: {
-        ...mapGetters(["getQuestionData", "getLoggedUser"]),
+        ...mapGetters(["getQuestionData", "getLoggedUser", "getAdmin"]),
         getQuestionTimestamp() {
             const date = dayjs(this.getQuestionData.data.createdAt).format("DD MMM. YYYY | HH:mm:ss");
             return date;
@@ -1539,7 +1539,7 @@ export default Vue.extend({
     font-size: 20px !important;
     color: #32325d !important;
     font-weight: 500;
-    color: #5fb1e8;
+    /* color: #5fb1e8; */
 }
 .userCard {
     background-color: rgba(255, 167, 38, 0.3) !important;

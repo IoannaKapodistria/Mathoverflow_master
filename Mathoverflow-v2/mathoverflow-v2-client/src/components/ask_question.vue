@@ -100,7 +100,7 @@
         >
             <v-card class="pb-0 pt-0 ps-2 mt-15" flat rounded="lg">
                 <v-icon
-                    color="teal"
+                    color="#2dcba9"
                     size="107px"
                     class="oopsCard justify-end mb-0"
                     >mdi-robot-confused</v-icon

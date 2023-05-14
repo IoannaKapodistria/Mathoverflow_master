@@ -11,6 +11,7 @@ export default new Vuex.Store({
         userData: {},
         content: true,
         loggedUser: {},
+        admin: false,
     },
     mutations: {
         setQuestions(state, value) {
@@ -34,6 +35,9 @@ export default new Vuex.Store({
         setLoggedUser(state, value) {
             state.loggedUser = value;
         },
+        setAdmin(state, value) {
+            state.admin = value;
+        },
     },
     actions: {},
     getters: {
@@ -52,8 +56,11 @@ export default new Vuex.Store({
         getContent(state) {
             return state.content;
         },
-        getLoggedUser(state, value) {
+        getLoggedUser(state) {
             return state.loggedUser;
+        },
+        getAdmin(state) {
+            return state.admin;
         },
     },
     modules: {},

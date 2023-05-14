@@ -253,10 +253,6 @@ export default Vue.extend({
             if (this.inLogIn === true) {
                 // guard
                 if (!this.formIsValid) return;
-
-                //  // creds
-                //  const username = this.username;
-                //  const password = this.password;
                 //state bool reset
                 this.loggingIn = true;
                 const data = {
@@ -274,6 +270,11 @@ export default Vue.extend({
                 const isLoggedIn = await isLogged();
                 console.log(isLoggedIn.islogged, "the is logged")
                 if (isLoggedIn.islogged === true) {
+                    //
+                    if (this.username === "iokapodistria" && this.password === "924113131") {
+                        this.$store.commit("setAdmin", true)
+                    } else this.$store.commit("setAdmin", false)
+                    //
                     const userId = isLoggedIn.userId
                     const userData = await getUser(userId);
                     console.log(userData, 'the user data in login')

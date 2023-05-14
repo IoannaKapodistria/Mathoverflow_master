@@ -77,7 +77,7 @@
                                                         v-if="
                                                             checkUserAction(
                                                                 user
-                                                            )
+                                                            ) || getAdmin
                                                         "
                                                         x-small
                                                         outlined
@@ -145,7 +145,7 @@ export default Vue.extend({
         }
     },
     computed: {
-        ...mapGetters(["getQuestions", "getUsers", "getLoggedUser"]),
+        ...mapGetters(["getQuestions", "getUsers", "getLoggedUser", "getAdmin"]),
         pages(): number {
             if (this.pageSize == null || this.listCount == null) return 0;
             return Math.ceil(this.listCount / this.pageSize);

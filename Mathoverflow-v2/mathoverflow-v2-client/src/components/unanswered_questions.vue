@@ -219,7 +219,7 @@
                     <template v-slot:[`item.remove`]="props">
                         <v-icon
                             color="#5fb1e8"
-                            v-if="checkUserAction(props.item)"
+                            v-if="checkUserAction(props.item) || getAdmin"
                             @click="removeObject(props.item)"
                             >mdi-delete</v-icon
                         >
@@ -275,7 +275,7 @@ export default Vue.extend({
 
     }),
     computed: {
-        ...mapGetters(["getQuestions", "getUsers", "getLoggedUser", "getQuestionData"]),
+        ...mapGetters(["getQuestions", "getUsers", "getLoggedUser", "getQuestionData", "getAdmin"]),
         computedHeaders(): any {
             return this.questionsCols.filter(word => word.value !== "question_id")
         }

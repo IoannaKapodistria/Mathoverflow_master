@@ -17,7 +17,7 @@
                             <v-spacer></v-spacer>
                             <span class="me-9">
                                 <v-btn
-                                    v-if="checkUserAction3(user)"
+                                    v-if="checkUserAction3(user) || getAdmin"
                                     x-small
                                     class="py-3"
                                     outlined
@@ -323,7 +323,9 @@
                             <template v-slot:[`item.remove`]="props">
                                 <v-icon
                                     color="#5fb1e8"
-                                    v-if="checkUserAction(props.item)"
+                                    v-if="
+                                        checkUserAction(props.item) || getAdmin
+                                    "
                                     @click="removeObject(props.item)"
                                     >mdi-delete</v-icon
                                 >
@@ -423,7 +425,10 @@
                             <template v-slot:[`item.remove`]="props">
                                 <v-icon
                                     color="#5fb1e8"
-                                    v-if="checkUserActionInAnswer(props.item)"
+                                    v-if="
+                                        checkUserActionInAnswer(props.item) ||
+                                        getAdmin
+                                    "
                                     @click="removeAnswerObject(props.item)"
                                     >mdi-delete</v-icon
                                 >
@@ -687,7 +692,7 @@ export default Vue.extend({
         },
     },
     computed: {
-        ...mapGetters(["getUserData", "getQuestions", "getLoggedUser", "getQuestionData"]),
+        ...mapGetters(["getUserData", "getQuestions", "getLoggedUser", "getQuestionData", "getAdmin"]),
         getUserRegistration(): string {
             return dayjs(this.user.created).format("DD MMM. YYYY | HH:mm:ss")
         }

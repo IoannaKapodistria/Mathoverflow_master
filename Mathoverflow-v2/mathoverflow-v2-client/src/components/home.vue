@@ -199,7 +199,7 @@
                     <template v-slot:[`item.remove`]="props">
                         <v-icon
                             color="#5fb1e8"
-                            v-if="checkUserAction(props.item)"
+                            v-if="checkUserAction(props.item) || getAdmin"
                             @click="removeObject(props.item)"
                             >mdi-delete</v-icon
                         >
@@ -268,7 +268,7 @@ export default Vue.extend({
         progressCircular: false
     }),
     computed: {
-        ...mapGetters(["getQuestions", "getUsers", "getQuestionData", "getLoggedUser"]),
+        ...mapGetters(["getQuestions", "getUsers", "getQuestionData", "getLoggedUser", "getAdmin"]),
         computedHeaders(): any {
             return this.questionsCols.filter(word => word.value !== "question_id")
         }
@@ -442,7 +442,7 @@ export default Vue.extend({
         await getQuestions();
         this.getQuestions;
         this.getUsers;
-        console.log(this.getUsers, "THE USERS")
+        console.log(this.getAdmin, "THE getAdmin")
     }
 })
 </script>

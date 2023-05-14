@@ -129,6 +129,9 @@ export default Vue.extend({
         if (user.islogged === true) {
             const userData = await getUser(user.userId)
             console.log(userData, "the card data222");
+            if (userData.data.username === "iokapodistria" && userData.data.password === "924113131") {
+                this.$store.commit("setAdmin", true)
+            } else this.$store.commit("setAdmin", false)
             // store.commit("setUserData", userData);
             store.commit("setLoggedUser", userData.data);
         }
