@@ -147,7 +147,7 @@
                     <template v-slot:[`item.votes`]="{ item }">
                         <v-chip
                             @click="handleClick(item)"
-                            color="#2dcba9"
+                            color="#7C4DFF"
                             class="px-4"
                             dark
                         >

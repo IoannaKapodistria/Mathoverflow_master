@@ -20,42 +20,64 @@
         <v-card
             flat
             style="border-top: 2px solid #ffa726"
-            class="px-4"
+            class="pe-4"
             rounded="sm"
         >
-            <v-card-text class="pt-7">
+            <v-card-text class="pt-8 ps-0">
                 <br />
-                <v-form>
-                    <h3>Title</h3>
-                    <div
-                        class="d-flex justify-start my-0 text-caption -darken-1--text"
+                <!-- start of stepper -->
+                <v-timeline dense class="askQueTimeline pt-0">
+                    <v-timeline-item
+                        icon="mdi-numeric-1"
+                        color="#CE93D8"
+                        class="pb-8"
                     >
-                        Be specific and imagine you’re asking a question to
-                        another person
-                    </div>
-                    <v-text-field
-                        outlined
-                        label="What's your mathematics question? Be specific."
-                        v-model="title"
-                    ></v-text-field>
-                    <br />
-                    <h3>Body</h3>
-                    <div
-                        class="d-flex justify-start my-0 text-caption -darken-1--text"
+                        <v-row>
+                            <v-col cols="12">
+                                <h3 style="color: #32325d">Title</h3>
+                                <div
+                                    class="d-flex justify-start my-0 text-caption -darken-1--text"
+                                >
+                                    Be specific and imagine you’re asking a
+                                    question to another person
+                                </div>
+                                <v-text-field
+                                    outlined
+                                    label="What's your mathematics question? Be specific."
+                                    v-model="title"
+                                ></v-text-field>
+                                <br />
+                            </v-col>
+                        </v-row>
+                    </v-timeline-item>
+                    <v-timeline-item
+                        icon="mdi-numeric-2"
+                        color="#2dcba9"
+                        class="pb-1"
                     >
-                        Include all the information someone would need to answer
-                        your question
-                    </div>
-                    <vue-editor
-                        class="mt-1"
-                        v-model="body"
-                        :editorToolbar="customToolbar"
-                    ></vue-editor>
-                </v-form>
+                        <v-row>
+                            <v-col cols="12">
+                                <h3 style="color: #32325d">Body</h3>
+                                <div
+                                    class="d-flex justify-start my-0 text-caption -darken-1--text"
+                                >
+                                    Include all the information someone would
+                                    need to answer your question
+                                </div>
+                                <vue-editor
+                                    class="mt-1"
+                                    v-model="body"
+                                    :editorToolbar="customToolbar"
+                                ></vue-editor>
+                            </v-col>
+                        </v-row>
+                    </v-timeline-item>
+                </v-timeline>
+                <!-- </v-form> -->
+                <!-- end of stepper -->
                 <v-row>
                     <v-icon> mdi-icon </v-icon>
                     <v-spacer></v-spacer>
-                    <!-- <div class="mt-8 me-4"> -->
                     <v-btn
                         small
                         dark
@@ -68,57 +90,43 @@
                         Post Your Question
                     </v-btn>
                 </v-row>
-                <v-dialog v-model="sessionCheckDialog" width="500" persistent>
-                    <v-card class="pb-4 pt-4 ps-3" style="border-radius: 16px">
-                        <v-toolbar flat class="pt-6">
-                            <v-row justify="center" align="center">
-                                <v-col
-                                    justify="center"
-                                    align="center"
-                                    class="me-6"
-                                >
-                                    <v-icon
-                                        color="#2dcba9"
-                                        size="53px"
-                                        class="mb-0"
-                                        >mdi-google-downasaur</v-icon
-                                    >
-                                    <span
-                                        class="d-flex justify-center blue-grey--text text-body-1 font-weight-bold me-2 mb-9"
-                                        style="font-size: 21px !important"
-                                        >Oops!</span
-                                    >
-                                </v-col>
-                            </v-row>
-                        </v-toolbar>
-                        <v-card-text class="mt-6">
-                            <v-row
-                                justify="start"
-                                align="start"
-                                class="text-body-1"
-                            >
-                                <v-col justify="start" align="start">
-                                    It looks like that you're not currently
-                                    logged into our app. To ensure the best
-                                    possible experience, please sign in to your
-                                    account!
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-                        <v-card-actions class="justify-end mb-0">
-                            <span class="d-flex justify-end me-3">
-                                <v-icon
-                                    small
-                                    @click="sessionCheckDialog = false"
-                                    style="cursor: pointer"
-                                    >mdi-close</v-icon
-                                >
-                            </span>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
             </v-card-text>
         </v-card>
+        <v-dialog
+            v-model="sessionCheckDialog"
+            width="500"
+            persistent
+            content-class="elevation-0"
+        >
+            <v-card class="pb-0 pt-0 ps-2 mt-15" flat rounded="lg">
+                <v-icon
+                    color="teal"
+                    size="107px"
+                    class="oopsCard justify-end mb-0"
+                    >mdi-robot-confused</v-icon
+                >
+                <v-card-text class="pt-0">
+                    <span
+                        class="d-flex justify-start titleClass text-body-1 font-weight-bold ms-0 mb-2"
+                        style="font-size: 19px !important"
+                        >Oops!</span
+                    >
+                    <span class="mt-0">
+                        It looks like that you're not currently logged into our
+                        app. To ensure the best possible experience, please sign
+                        in to your account!</span
+                    >
+                    <span class="d-flex justify-end me-3">
+                        <v-icon
+                            small
+                            @click="sessionCheckDialog = false"
+                            style="cursor: pointer"
+                            >mdi-close</v-icon
+                        >
+                    </span>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
     </v-container>
 </template>
 
@@ -206,5 +214,17 @@ export default Vue.extend({
 .overlayAsk {
     top: 16px;
     left: 10px;
+}
+.askQueTimeline {
+    /* top: 100px !important; */
+    padding-top: 0px;
+    height: calc(100% - 50px) !important;
+    align-items: center !important;
+}
+.oopsCard {
+    position: absolute;
+    top: -45px;
+    right: -355px;
+    background-color: transparent;
 }
 </style>

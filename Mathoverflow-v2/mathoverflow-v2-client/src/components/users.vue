@@ -72,10 +72,16 @@
                                                         }}</span
                                                     >
                                                 </div>
-                                                <span v-if="admin">
+                                                <span>
                                                     <v-btn
+                                                        v-if="
+                                                            checkUserAction(
+                                                                user
+                                                            )
+                                                        "
                                                         x-small
                                                         outlined
+                                                        color="#B388FF"
                                                         rounded
                                                         text
                                                         class="mt-5"
@@ -83,9 +89,17 @@
                                                             deleteUser(user)
                                                         "
                                                     >
-                                                        <!-- <v-icon>mdi-delete</v-icon> -->
                                                         Delete User
                                                     </v-btn>
+                                                    <v-icon
+                                                        v-if="
+                                                            !checkUserAction(
+                                                                user
+                                                            )
+                                                        "
+                                                        class="mt-5 mb-5"
+                                                        >mdi-icon</v-icon
+                                                    >
                                                 </span>
                                             </v-card-text>
 
@@ -131,13 +145,19 @@ export default Vue.extend({
         }
     },
     computed: {
-        ...mapGetters(["getQuestions", "getUsers"]),
+        ...mapGetters(["getQuestions", "getUsers", "getLoggedUser"]),
         pages(): number {
             if (this.pageSize == null || this.listCount == null) return 0;
             return Math.ceil(this.listCount / this.pageSize);
         }
     },
     methods: {
+        checkUserAction(item: any) {
+            console.log(item, 'the item in check user acctions in user profile')
+            console.log(this.getLoggedUser, 'the get logged user')
+            if (item.user_id === this.getLoggedUser.user_id) return true;
+            else false;
+        },
         initPage() {
             this.listCount = this.users.length;
             if (this.listCount < this.pageSize) {
@@ -145,6 +165,7 @@ export default Vue.extend({
             } else {
                 this.historyList = this.users.slice(0, this.pageSize);
             }
+            console.log(this.historyList, 'teh hist list')
         },
         updatePage(pageIndex: any) {
             let start = (pageIndex - 1) * this.pageSize;

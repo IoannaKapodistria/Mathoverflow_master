@@ -15,15 +15,20 @@
                                 {{ user.username }}
                             </span>
                             <v-spacer></v-spacer>
-                            <span class="me-9" v-if="admin">
+                            <span class="me-9">
                                 <v-btn
-                                    small
+                                    v-if="checkUserAction3(user)"
+                                    x-small
+                                    class="py-3"
                                     outlined
-                                    rounded
-                                    text
+                                    color="#B388FF"
                                     @click="deleteUser"
+                                    style="
+                                        text-transform: none !important;
+                                        font-size: 14px;
+                                    "
                                 >
-                                    Delete User
+                                    Delete user
                                 </v-btn>
                             </span>
                         </v-row>
@@ -306,7 +311,7 @@
                                 </v-chip>
                             </template>
                             <template v-slot:[`item.votes`]="{ item }">
-                                <v-chip color="#2dcba9" class="px-4" dark>
+                                <v-chip color="#7C4DFF" class="px-4" dark>
                                     {{ item.votes }}
                                 </v-chip>
                             </template>
@@ -382,7 +387,7 @@
                             :items-per-page="6"
                         >
                             <template v-slot:[`item.votes`]="props">
-                                <v-chip color="#2dcba9" dark class="mt-3">
+                                <v-chip color="#7C4DFF" dark class="mt-3">
                                     {{ props.item.votes }}
                                 </v-chip>
                             </template>
@@ -688,6 +693,7 @@ export default Vue.extend({
         }
     },
     methods: {
+
         sortUserQues(value: number) {
             if (value === 1) {
                 this.questionsSortType = 'votes'
@@ -1025,6 +1031,12 @@ export default Vue.extend({
             console.log(item, 'the item in check user acctions')
             console.log(this.getLoggedUser, 'the get logged user')
             if (item.UserUserId === this.getLoggedUser.user_id) return true;
+            else false;
+        },
+        checkUserAction3(item: any) {
+            console.log(item, 'the item in check user acctions')
+            console.log(this.getLoggedUser, 'the get logged user')
+            if (item.uid === this.getLoggedUser.user_id) return true;
             else false;
         },
         async removeObject(value: any) {

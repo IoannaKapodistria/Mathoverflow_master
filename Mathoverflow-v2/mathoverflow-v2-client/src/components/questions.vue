@@ -141,18 +141,30 @@
                         </v-card>
                     </template>
                     <template v-slot:[`item.answers`]="{ item }">
-                        <v-chip color="#F06292" class="px-4" dark>
+                        <v-chip
+                            color="#F06292"
+                            class="px-4"
+                            dark
+                            @click="handleClick(item)"
+                        >
                             {{ item.answers }}
                         </v-chip>
                     </template>
                     <template v-slot:[`item.votes`]="{ item }">
-                        <v-chip color="#2dcba9" class="px-4" dark>
+                        <v-chip
+                            color="#7C4DFF"
+                            class="px-4"
+                            dark
+                            @click="handleClick(item)"
+                        >
                             {{ item.votes }}
                         </v-chip>
                     </template>
                     <template v-slot:[`item.created`]="{ item }">
                         <!-- <v-chip color="grey" class="px-4" dark> -->
-                        {{ getCreationDate(item.created) }}
+                        <div @click="handleClick(item)">
+                            {{ getCreationDate(item.created) }}
+                        </div>
                         <!-- </v-chip> -->
                     </template>
                     <template v-slot:[`item.user`]="props">
@@ -161,6 +173,7 @@
                             class="py-0 px-0"
                             color="transparent"
                             width="100px"
+                            @click="handleClick(props.item)"
                         >
                             <v-card-text class="pa-0">
                                 <v-row justify="center" align="center">

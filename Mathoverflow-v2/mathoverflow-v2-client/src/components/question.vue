@@ -86,14 +86,14 @@
                                     "
                                     :color="
                                         queVotedUp === true
-                                            ? 'green'
+                                            ? '#4dff7c'
                                             : '#78909C'
                                     "
                                     >mdi-menu-up</v-icon
                                 >
                             </v-btn>
                             <span class="d-flex">
-                                <v-chip dark color="#2dcba9" class="ms-2">
+                                <v-chip dark color="#7C4DFF" class="ms-2">
                                     {{ this.questionSumVotes }}
                                 </v-chip>
                             </span>
@@ -107,7 +107,7 @@
                                     "
                                     :color="
                                         queVotedUp === false
-                                            ? 'green'
+                                            ? '#4dff7c'
                                             : '#78909C'
                                     "
                                     >mdi-menu-down</v-icon
@@ -217,22 +217,49 @@
                                 </v-card-actions>
                             </v-card>
                             <v-row class="mt-15">
-                                <span class="mt-16">
+                                <span
+                                    class="mt-16"
+                                    style="font-size: 13px !important"
+                                >
                                     <!-- <v-icon class="me-5">mdi-delete</v-icon> -->
                                     <span
-                                        class="me-3 text-caption"
-                                        style="
-                                            cursor: pointer !important;
-                                            font-size: 13px !important;
+                                        :class="
+                                            checkUserAction2(
+                                                getQuestionData.data
+                                            )
+                                                ? 'me-3 text-caption'
+                                                : 'me-3 grey--text text-caption'
                                         "
-                                        @click="editQuestion"
+                                        :style="
+                                            checkUserAction2(
+                                                getQuestionData.data
+                                            )
+                                                ? 'cursor: pointer !important;'
+                                                : ''
+                                        "
+                                        @click="
+                                            checkUserAction2(
+                                                getQuestionData.data
+                                            )
+                                                ? editQuestion()
+                                                : doNothing()
+                                        "
                                         >Edit</span
                                     >
                                     <span
-                                        class="text-caption"
-                                        style="
-                                            cursor: pointer !important;
-                                            font-size: 13px !important;
+                                        :class="
+                                            checkUserAction2(
+                                                getQuestionData.data
+                                            )
+                                                ? 'me-3 text-caption'
+                                                : 'me-3 grey--text text-caption'
+                                        "
+                                        :style="
+                                            checkUserAction2(
+                                                getQuestionData.data
+                                            )
+                                                ? 'cursor: pointer !important;'
+                                                : ''
                                         "
                                         >Delete</span
                                     >
@@ -457,7 +484,7 @@
                                         size="19px"
                                         :color="
                                             props.item.userAnswerVote === true
-                                                ? '#4CAF50'
+                                                ? '#4dff7c'
                                                 : '#78909C'
                                         "
                                         @click="
@@ -477,7 +504,7 @@
                                     lg="4"
                                     class="pa-0"
                                 >
-                                    <v-chip color="#2dcba9" dark class="mt-2">
+                                    <v-chip color="#7C4DFF" dark class="mt-2">
                                         {{ props.item.votes }}
                                     </v-chip>
                                 </v-col>
@@ -497,7 +524,7 @@
                                         "
                                         :color="
                                             props.item.userAnswerVote === false
-                                                ? '#4CAF50'
+                                                ? '#4dff7c'
                                                 : '#78909C'
                                         "
                                         dark
@@ -698,36 +725,30 @@
                 </v-card-text>
             </v-card>
 
-            <v-dialog v-model="sessionCheckDialog" width="500" persistent>
-                <v-card class="pb-4 pt-4 ps-3" style="border-radius: 16px">
-                    <v-toolbar flat class="pt-6">
-                        <v-row justify="center" align="center">
-                            <v-col justify="center" align="center" class="me-6">
-                                <v-icon color="#2dcba9" size="53px" class="mb-0"
-                                    >mdi-google-downasaur</v-icon
-                                >
-                                <span
-                                    class="d-flex justify-center blue-grey--text text-body-1 font-weight-bold me-2 mb-9"
-                                    style="font-size: 21px !important"
-                                    >Oops!</span
-                                >
-                            </v-col>
-                        </v-row>
-                    </v-toolbar>
-                    <v-card-text class="mt-6">
-                        <v-row
-                            justify="start"
-                            align="start"
-                            class="text-body-1"
+            <v-dialog
+                v-model="sessionCheckDialog"
+                width="500"
+                persistent
+                content-class="elevation-0"
+            >
+                <v-card class="pb-0 pt-0 ps-2 mt-15" flat rounded="lg">
+                    <v-icon
+                        color="teal"
+                        size="107px"
+                        class="oopsCard justify-end mb-0"
+                        >mdi-robot-confused</v-icon
+                    >
+                    <v-card-text class="pt-0">
+                        <span
+                            class="d-flex justify-start titleClass text-body-1 font-weight-bold ms-0 mb-2"
+                            style="font-size: 19px !important"
+                            >Oops!</span
                         >
-                            <v-col justify="start" align="start">
-                                It looks like that you're not currently logged
-                                into our app. To ensure the best possible
-                                experience, please sign in to your account!
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-                    <v-card-actions class="justify-end mb-0">
+                        <span class="mt-0">
+                            It looks like that you're not currently logged into
+                            our app. To ensure the best possible experience,
+                            please sign in to your account!</span
+                        >
                         <span class="d-flex justify-end me-3">
                             <v-icon
                                 small
@@ -736,44 +757,38 @@
                                 >mdi-close</v-icon
                             >
                         </span>
-                    </v-card-actions>
+                    </v-card-text>
                 </v-card>
             </v-dialog>
-            <v-dialog v-model="checkRepDialog" width="500" persistent>
-                <v-card class="pb-4 pt-4 ps-3" style="border-radius: 16px">
-                    <v-toolbar flat class="pt-6">
-                        <v-row justify="center" align="center">
-                            <v-col justify="center" align="center" class="me-6">
-                                <v-icon color="#2dcba9" size="53px" class="mb-0"
-                                    >mdi-trophy</v-icon
-                                >
-                                <span
-                                    class="d-flex justify-center blue-grey--text text-body-1 font-weight-bold me-2 mb-9"
-                                    style="font-size: 21px !important"
-                                    >Thank you!</span
-                                >
-                            </v-col>
-                        </v-row>
-                    </v-toolbar>
-                    <v-card-text class="mt-6">
-                        <v-row
-                            justify="start"
-                            align="start"
-                            class="text-body-1"
+            <v-dialog
+                v-model="checkRepDialog"
+                width="500"
+                persistent
+                content-class="elevation-0"
+            >
+                <v-card class="pb-0 pt-0 ps-2 mt-15" flat rounded="lg">
+                    <v-icon
+                        color="teal"
+                        size="107px"
+                        class="oopsCard justify-end mb-0"
+                        >mdi-trophy</v-icon
+                    >
+                    <v-card-text class="pt-0">
+                        <span
+                            class="d-flex justify-start titleClass text-body-1 font-weight-bold ms-0 mb-2"
+                            style="font-size: 19px !important"
+                            >Thank you!</span
                         >
-                            <v-col justify="start" align="start">
-                                It looks like you don't have enough reputation
-                                to cast a vote yet. You need a minimum of
-                                <span class="blue--text font-weight-medium"
-                                    >{{ repLimit }}
-                                </span>
-                                reputation points to do so. Keep participating
-                                in the community to earn more reputation points
-                                and unlock additional features.
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-                    <v-card-actions class="justify-end mb-0">
+                        <span class="mt-0">
+                            It looks like you don't have enough reputation to
+                            cast a vote yet. You need a minimum of
+                            <span class="blue--text font-weight-medium"
+                                >{{ repLimit }}
+                            </span>
+                            reputation points to do so. Keep participating in
+                            the community to earn more reputation points and
+                            unlock additional features.
+                        </span>
                         <span class="d-flex justify-end me-3">
                             <v-icon
                                 small
@@ -782,7 +797,7 @@
                                 >mdi-close</v-icon
                             >
                         </span>
-                    </v-card-actions>
+                    </v-card-text>
                 </v-card>
             </v-dialog>
             <progress-circular
@@ -1030,6 +1045,12 @@ export default Vue.extend({
             console.log(item, 'the item in check user acctions in user profile')
             console.log(this.getLoggedUser, 'the get logged user')
             if (item.user.user_id === this.getLoggedUser.user_id) return true;
+            else false;
+        },
+        checkUserAction2(item: any) {
+            console.log(item, 'the item in check user acctions in user profile')
+            console.log(this.getLoggedUser, 'the get logged user')
+            if (item.UserUserId === this.getLoggedUser.user_id) return true;
             else false;
         },
         doNothing() {

@@ -136,20 +136,9 @@ export default Vue.extend({
 });
 </script>
 <style>
-/* .v-application { */
-/* font-family: Arial, Helvetica, sans-serif !important; */
-/* background-color: rgb(250, 250, 250) !important; */
-/* } */
 #particles-js {
-    background: linear-gradient(
-        to right,
-        #51e2c3 0%,
-        rgba(131, 188, 253, 1) 100%
-    );
-    /* background: linear-gradient(to right, #5fc3e4 0%, #e55d87 100%);
-    height: 100%;
-    width: 100%; */
-    /* background: linear-gradient(to right, #f15f79 0%, #b24592 100%); */
+    background: linear-gradient(to right, #51e2c3 0%, #83bcfd 100%);
+    /* color: #1cd2cc */
 }
 /* canvas {
     display: block;
@@ -161,7 +150,7 @@ export default Vue.extend({
     /* position: absolute; */
 }
 .logo {
-    /* color: #00838f; */
+    /* color: #939393; */
     z-index: 20004 !important;
     position: absolute;
     top: 2%;

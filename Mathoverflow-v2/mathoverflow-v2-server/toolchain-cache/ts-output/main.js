@@ -17,7 +17,7 @@ sequelize_db
     .catch((err) => console.log("Error: " + err));
 const app = express();
 app.use(cors({
-    origin: "http://192.168.1.3:8080",
+    origin: "http://localhost:8080",
     credentials: true,
 }));
 app.use(bodyParser.json());

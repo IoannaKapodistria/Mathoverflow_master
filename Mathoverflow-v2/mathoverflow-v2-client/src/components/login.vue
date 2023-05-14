@@ -8,17 +8,35 @@
                         :class="[
                             'justify-center',
                             'text-h4',
-                            'font-weight-light',
-                            'blue--text',
+                            'font-weight-medium',
+                            ,
                         ]"
+                        style="
+                            color: #40f0ea !important;
+                            font-family: 'Courier New' Courier, monospace !important;
+                        "
                     >
-                        {{ logInText }}
+                        <span class="title2 font-weight-bold">Welcome!</span>
+                        <br />
                     </v-card-title>
                     <v-card-text>
-                        <v-form>
+                        <span
+                            class="d-flex title2 justify-center"
+                            style="color: #757575 !important"
+                            >The faster you fill up, the faster you level up
+                            your skills!</span
+                        >
+
+                        <v-form class="mt-10">
+                            <!-- <span
+                                class="d-flex justify-center text-body-1 font-weight-medium"
+                                style="color: #32325d"
+                                >{{ logInText }}</span
+                            > -->
                             <v-row justify="center" align="center">
                                 <v-col cols="12" md="4">
                                     <v-text-field
+                                        color="#03e9f4"
                                         required
                                         v-model="username"
                                         :rules="usernameRules"
@@ -31,12 +49,13 @@
                             <v-row justify="center" align="center">
                                 <v-col cols="12" md="4">
                                     <v-text-field
+                                        color="#03e9f4"
                                         v-if="inSignUp"
                                         required
                                         v-model="email"
                                         :rules="emailRules"
                                         label="Email"
-                                        prepend-icon="mdi-email"
+                                        prepend-icon="mdi-at"
                                     >
                                     </v-text-field>
                                 </v-col>
@@ -45,6 +64,7 @@
                                 <v-col cols="12" md="4">
                                     <v-text-field
                                         required
+                                        color="#03e9f4"
                                         v-model="password"
                                         :rules="passwordRules"
                                         label="Password"
@@ -55,9 +75,9 @@
                             </v-row>
                         </v-form>
                     </v-card-text>
-                    <v-card-actions>
+                    <v-card-actions class="mt-15">
                         <v-spacer></v-spacer>
-                        <v-btn
+                        <!-- <v-btn
                             v-if="inLogIn"
                             @click="login"
                             small
@@ -66,44 +86,58 @@
                             color="blue"
                         >
                             Login
-                        </v-btn>
-                        <v-btn
+                        </v-btn> -->
+                        <login-2
+                            v-if="inLogIn"
+                            @emitAction="emitButtonAction($event, value)"
+                            :text="'Login'"
+                        ></login-2>
+                        <login-2
+                            v-if="inSignUp"
+                            @emitAction="emitButtonAction($event, value)"
+                            :text="'Sign Up'"
+                        ></login-2>
+                        <!-- <v-btn
                             v-else-if="inSignUp"
                             @click="signUp"
                             small
                             class="px-11 py-2"
                             outlined
-                            color="blue"
+                            color="#1E88E5"
                         >
                             Sign Up
-                        </v-btn>
+                        </v-btn> -->
                         <v-spacer></v-spacer>
                     </v-card-actions>
                     <!--  -->
-                    <v-row>
-                        <v-col class="text-body-2">
-                            <span v-if="inLogIn">
-                                Don't have an account?
-                                <span
-                                    class="blue--text"
-                                    style="cursor: pointer"
-                                    @click="changeToSignUp"
-                                    >Sign Up</span
-                                >
-                            </span>
-                            <span v-else-if="inSignUp">
-                                Already have an account?
-                                <span
-                                    class="blue--text"
-                                    style="cursor: pointer"
-                                    @click="changeToLogIn"
-                                    >Login</span
-                                >
-                                &nbsp;
-                            </span>
-                        </v-col>
-                    </v-row>
                 </v-card>
+                <v-row class="mt-10">
+                    <v-col class="text-body-2">
+                        <span v-if="inLogIn">
+                            Don't have an account?
+                            <span
+                                style="
+                                    cursor: pointer !important;
+                                    color: #03e9f4 !important;
+                                "
+                                @click="changeToSignUp"
+                                >Sign Up</span
+                            >
+                        </span>
+                        <span v-else-if="inSignUp">
+                            Already have an account?
+                            <span
+                                style="
+                                    cursor: pointer !important;
+                                    color: #03e9f4 !important;
+                                "
+                                @click="changeToLogIn"
+                                >Login</span
+                            >
+                            &nbsp;
+                        </span>
+                    </v-col>
+                </v-row>
             </v-col>
         </v-row>
     </v-container>
@@ -115,10 +149,13 @@ import store from "@/store";
 import Vue, { PropType } from "vue";
 import VueRouter from "vue-router";
 import { getUser, getUsers, isLogged, postUserReputation, signIn, signUp } from "./functions";
+import Login2 from "./login2.vue";
+
 //import User from "../user/user";
 //import { nullObject, isNullObject, nullObjectConst } from "./null_object";
 //import { storeCredentials, clearCredentials, getCredentials } from "./login";
 export default Vue.extend({
+    components: { Login2 },
     props: {
         /*user: {
             type: Object as PropType<User>,
@@ -204,6 +241,14 @@ export default Vue.extend({
         }
     },
     methods: {
+        async emitButtonAction(value: any, event: any) {
+            console.log(value, event, "rthe value and event")
+            if (value === 'Login') {
+                await this.login()
+            } else if (value === 'Sign Up') {
+                await this.signUp()
+            }
+        },
         async login() {
             if (this.inLogIn === true) {
                 // guard
@@ -347,5 +392,9 @@ export default Vue.extend({
 /* .v-input__slot::before {
     border-style: initial !important;
 } */
+.title2 {
+    font-family: "Courier New", Courier, monospace !important;
+    /* font-weight: 500 !important; */
+}
 </style>
 
