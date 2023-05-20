@@ -733,7 +733,7 @@
             >
                 <v-card class="pb-0 pt-0 ps-2 mt-15" flat rounded="lg">
                     <v-icon
-                        color="#2dcba9"
+                        color="#6baefa"
                         size="107px"
                         class="oopsCard justify-end mb-0"
                         >mdi-robot-confused</v-icon
@@ -747,7 +747,8 @@
                         <span class="mt-0">
                             It looks like that you're not currently logged into
                             our app. To ensure the best possible experience,
-                            please sign in to your account!</span
+                            please sign in to your account!
+                            <span class="hand mx-1">🤙</span></span
                         >
                         <span class="d-flex justify-end me-3">
                             <v-icon
@@ -768,7 +769,7 @@
             >
                 <v-card class="pb-0 pt-0 ps-2 mt-15" flat rounded="lg">
                     <v-icon
-                        color="teal"
+                        color="#6baefa"
                         size="107px"
                         class="oopsCard justify-end mb-0"
                         >mdi-trophy</v-icon
@@ -777,7 +778,7 @@
                         <span
                             class="d-flex justify-start titleClass text-body-1 font-weight-bold ms-0 mb-2"
                             style="font-size: 19px !important"
-                            >Thank you!</span
+                            >Thank you!<span class="medal mx-1">🚀</span></span
                         >
                         <span class="mt-0">
                             It looks like you don't have enough reputation to
@@ -941,7 +942,7 @@ export default Vue.extend({
         queVotedUp: null as null | boolean,
         sessionCheckDialog: false,
         checkRepDialog: false,
-        repLimit: 15 as 15 | number,
+        repLimit: 10 as 10 | number,
         questionOwnerName: '',
         questionOwnerReputation: '',
         questionOwnerData: {} as any
@@ -1158,6 +1159,12 @@ export default Vue.extend({
             }
             const data = { body: this.answerBody, QuestionQuestionId: this.getQuestionData.data.question_id }
             await postAnswer(data); // den ananewnetai amesws h selida na fanei h apantish kai stelnei mono periorismeno airthmo leksewn,  vgazei error 500 meta
+            //
+            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            let oldRep = +userRep.value
+            const data2 = { value: oldRep += 8 }
+            await updateReputation1(userRep.reputation_id, data2);
+            //
             const historicalData = {
                 action: 'answer',
                 data: data
@@ -1177,8 +1184,8 @@ export default Vue.extend({
             //check rep
             const userRep = await getUserReputation(this.getLoggedUser.user_id)
             console.log(userRep, 'the user reputation!!')
-            if (+userRep.value < 15) {
-                this.repLimit = 15
+            if (+userRep.value < 10) {
+                this.repLimit = 10
                 this.checkRepDialog = true
                 return;
             }
@@ -1197,7 +1204,7 @@ export default Vue.extend({
             // const userRep = await getUserReputation(this.getLoggedUser.user_id)
             console.log(userRep, 'the user reputation!!')
             let oldRep = +userRep.value
-            const data2 = { value: oldRep += 1 }
+            const data2 = { value: oldRep += 2 }
             console.log(data2, 'the update data')
             await updateReputation1(userRep.reputation_id, data2);
             // update writers reputation
@@ -1235,8 +1242,8 @@ export default Vue.extend({
             //check rep
             const userRep = await getUserReputation(this.getLoggedUser.user_id)
             console.log(userRep, 'the user reputation!!')
-            if (+userRep.value < 125) {
-                this.repLimit = 125
+            if (+userRep.value < 50) {
+                this.repLimit = 50
                 this.checkRepDialog = true
                 return;
             }
@@ -1323,8 +1330,8 @@ export default Vue.extend({
             //check rep
             const userRep = await getUserReputation(this.getLoggedUser.user_id)
             console.log(userRep, 'the user reputation!!')
-            if (+userRep.value < 15) {
-                this.repLimit = 15
+            if (+userRep.value < 10) {
+                this.repLimit = 10
                 this.checkRepDialog = true
                 return;
             }
@@ -1350,7 +1357,7 @@ export default Vue.extend({
             // const userRep = await getUserReputation(this.getLoggedUser.user_id)
             console.log(userRep, 'the user reputation!!')
             let oldRep = +userRep.value
-            const data2 = { value: oldRep += 1 }
+            const data2 = { value: oldRep += 2 }
             console.log(data2, 'the update data')
             await updateReputation1(userRep.reputation_id, data2);
             // update writers reputation
@@ -1391,8 +1398,8 @@ export default Vue.extend({
             const userRep = await getUserReputation(this.getLoggedUser.user_id)
             console.log(userRep, 'the user reputation!!')
             //to be restored
-            if (+userRep.value < 125) {
-                this.repLimit = 125
+            if (+userRep.value < 50) {
+                this.repLimit = 50
                 this.checkRepDialog = true
                 return;
             }
@@ -1543,5 +1550,20 @@ export default Vue.extend({
 }
 .userCard {
     background-color: rgba(255, 167, 38, 0.3) !important;
+}
+.medal {
+    display: inline-block;
+    animation-name: rotate-y;
+    animation-duration: 2.5s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes rotate-y {
+    0% {
+        transform: rotateY(0deg);
+    }
+    100% {
+        transform: rotateY(360deg);
+    }
 }
 </style>

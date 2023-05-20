@@ -261,7 +261,7 @@ export default Vue.extend({
         },
         editorStyle: {
             // "border":,
-            "height": '55px',
+            "height": '59px',
         },
         listGroupIsActive: false
     }),

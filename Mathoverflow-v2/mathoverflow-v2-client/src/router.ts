@@ -9,6 +9,7 @@ import User from "./components/user.vue";
 import AskQuestion from "./components/ask_question.vue";
 import Login from "./components/login.vue";
 import Home from "./components/home.vue";
+import About from "./components/about.vue";
 
 Vue.use(Router);
 
@@ -65,6 +66,11 @@ const router = new Router({
             path: "/login",
             name: "Login",
             component: Login,
+        },
+        {
+            path: "/about",
+            name: "Login",
+            component: About,
         },
     ],
 });

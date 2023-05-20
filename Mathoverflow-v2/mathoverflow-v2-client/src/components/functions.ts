@@ -4,7 +4,7 @@ import ky from "ky";
 export async function postQuestion(data: any) {
     console.log(data, " these are data");
     let respone = await ky
-        .post("http://localhost:3000/ask", {
+        .post(`http://${location.hostname}:${location.port}/ask`, {
             mode: "cors",
             credentials: "include",
             body: JSON.stringify(data),
@@ -21,7 +21,7 @@ export async function postQuestion(data: any) {
 export async function getQuestions() {
     try {
         let response = await ky
-            .get("http://localhost:3000/questions", {
+            .get(`http://${location.hostname}:${location.port}/questions`, {
                 mode: "cors",
                 credentials: "include",
 
@@ -46,7 +46,7 @@ export async function getQuestions() {
 export async function getQuestion(id: any) {
     try {
         let response = await ky
-            .get(`http://localhost:3000/questions/${id}`, {
+            .get(`http://${location.hostname}:${location.port}/questions/${id}`, {
                 mode: "cors",
                 credentials: "include",
 
@@ -73,7 +73,7 @@ export async function getQuestion(id: any) {
 export async function getAnswer(id: any) {
     try {
         let response = await ky
-            .get(`http://localhost:3000/answers/${id}`, {
+            .get(`http://${location.hostname}:${location.port}/answers/${id}`, {
                 mode: "cors",
                 credentials: "include",
 
@@ -99,7 +99,7 @@ export async function getAnswer(id: any) {
 export async function postAnswer(data: any) {
     console.log(data, " these are data");
     let respone = await ky
-        .post("http://localhost:3000/answer", {
+        .post(`http://${location.hostname}:${location.port}/answer`, {
             mode: "cors",
             body: JSON.stringify(data),
             credentials: "include",
@@ -116,7 +116,7 @@ export async function postAnswer(data: any) {
 export async function getUsers() {
     try {
         let response = await ky
-            .get("http://localhost:3000/users", {
+            .get(`http://${location.hostname}:${location.port}/users`, {
                 mode: "cors",
                 credentials: "include",
                 headers: {
@@ -141,7 +141,7 @@ export async function getUsers() {
 export async function getUser(id: any) {
     try {
         let response = await ky
-            .get(`http://localhost:3000/users/${id}`, {
+            .get(`http://${location.hostname}:${location.port}/users/${id}`, {
                 mode: "cors",
                 credentials: "include",
                 headers: {
@@ -166,7 +166,7 @@ export async function getUser(id: any) {
 export async function isLogged() {
     try {
         let response = await ky
-            .get("http://localhost:3000/islogged", {
+            .get(`http://${location.hostname}:${location.port}/islogged`, {
                 mode: "cors",
                 credentials: "include",
                 headers: {
@@ -192,7 +192,7 @@ export async function isLogged() {
 
 export async function signUp(data: any) {
     let response = await ky
-        .post("http://localhost:3000/signup", {
+        .post(`http://${location.hostname}:${location.port}/signup`, {
             mode: "cors",
             body: JSON.stringify(data),
             credentials: "include",
@@ -210,7 +210,7 @@ export async function signUp(data: any) {
 
 export async function signIn(data: any) {
     let response = await ky
-        .post("http://localhost:3000/signin", {
+        .post(`http://${location.hostname}:${location.port}/signin`, {
             mode: "cors",
             body: JSON.stringify(data),
             credentials: "include",
@@ -228,7 +228,7 @@ export async function signIn(data: any) {
 }
 export async function signOut() {
     let response = await ky
-        .post("http://localhost:3000/signout", {
+        .post(`http://${location.hostname}:${location.port}/signout`, {
             mode: "cors",
             credentials: "include",
             headers: {
@@ -245,7 +245,7 @@ export async function signOut() {
 
 export async function checkSession() {
     let response = await ky
-        .post("http://localhost:3000/sessionCheck", {
+        .post(`http://${location.hostname}:${location.port}/sessionCheck`, {
             mode: "cors",
             // credentials: "same-origin",
             credentials: "include",
@@ -266,7 +266,7 @@ export async function checkSession() {
 //upvote question
 export async function voteQuestion(data: any) {
     let response = await ky
-        .post("http://localhost:3000/vote", {
+        .post(`http://${location.hostname}:${location.port}/vote`, {
             mode: "cors",
             body: JSON.stringify(data),
             credentials: "include",
@@ -284,7 +284,7 @@ export async function voteQuestion(data: any) {
 //delete question
 export async function deleteQuestion(id: any) {
     let response = await ky
-        .delete(`http://localhost:3000/delete_question/${id}`, {
+        .delete(`http://${location.hostname}:${location.port}/delete_question/${id}`, {
             mode: "cors",
             // body: JSON.stringify(data),
             credentials: "include",
@@ -293,14 +293,18 @@ export async function deleteQuestion(id: any) {
             },
             timeout: false,
         })
-        .then((value: any) => {
+        .then(async (value: any) => {
             console.log("this is the value:", value);
+            const a = await value.json();
+            return a;
+            // return value.status;
         });
+    return response;
 }
 
 export async function deleteAnswer(id: any) {
     let response = await ky
-        .delete(`http://localhost:3000/delete_answer/${id}`, {
+        .delete(`http://${location.hostname}:${location.port}/delete_answer/${id}`, {
             mode: "cors",
             // body: JSON.stringify(data),
             credentials: "include",
@@ -316,7 +320,7 @@ export async function deleteAnswer(id: any) {
 
 export async function removeUser(id: any) {
     let response = await ky
-        .delete(`http://localhost:3000/delete_user/${id}`, {
+        .delete(`http://${location.hostname}:${location.port}/delete_user/${id}`, {
             mode: "cors",
             // body: JSON.stringify(data),
             credentials: "include",
@@ -333,7 +337,7 @@ export async function removeUser(id: any) {
 //upvote question
 export async function voteAnswer(data: any) {
     let response = await ky
-        .post("http://localhost:3000/answer_vote", {
+        .post(`http://${location.hostname}:${location.port}/answer_vote`, {
             mode: "cors",
             body: JSON.stringify(data),
             credentials: "include",
@@ -349,7 +353,7 @@ export async function voteAnswer(data: any) {
 
 export async function updateQuestion1(id: number, value: any) {
     let response = await ky
-        .put(`http://localhost:3000/update_question/${id}`, {
+        .put(`http://${location.hostname}:${location.port}/update_question/${id}`, {
             mode: "cors",
             body: JSON.stringify(value),
             credentials: "include",
@@ -365,7 +369,7 @@ export async function updateQuestion1(id: number, value: any) {
 
 export async function updateAnswer1(id: number, value: any) {
     let response = await ky
-        .put(`http://localhost:3000/update_answer/${id}`, {
+        .put(`http://${location.hostname}:${location.port}/update_answer/${id}`, {
             mode: "cors",
             body: JSON.stringify(value),
             credentials: "include",
@@ -382,7 +386,7 @@ export async function updateAnswer1(id: number, value: any) {
 export async function postUserReputation(data: any) {
     console.log(data, " these are data");
     let respone = await ky
-        .post("http://localhost:3000/create_reputation", {
+        .post(`http://${location.hostname}:${location.port}/create_reputation`, {
             mode: "cors",
             body: JSON.stringify(data),
             credentials: "include",
@@ -398,7 +402,7 @@ export async function postUserReputation(data: any) {
 
 export async function getUserReputation(id: number) {
     let response = await ky
-        .get(`http://localhost:3000/get_reputation/${id}`, {
+        .get(`http://${location.hostname}:${location.port}/get_reputation/${id}`, {
             mode: "cors",
             credentials: "include",
             headers: {
@@ -416,7 +420,7 @@ export async function getUserReputation(id: number) {
 
 export async function createHistorical(data: any) {
     let response = await ky
-        .post("http://localhost:3000/create_historical", {
+        .post(`http://${location.hostname}:${location.port}/create_historical`, {
             mode: "cors",
             body: JSON.stringify(data),
             credentials: "include",
@@ -432,7 +436,7 @@ export async function createHistorical(data: any) {
 
 export async function getUserHistorical(id: number) {
     let response = await ky
-        .get(`http://localhost:3000/get_historical/${id}`, {
+        .get(`http://${location.hostname}:${location.port}/get_historical/${id}`, {
             mode: "cors",
             credentials: "include",
             headers: {
@@ -450,7 +454,7 @@ export async function getUserHistorical(id: number) {
 
 export async function updateReputation1(id: number, value: any) {
     let response = await ky
-        .put(`http://localhost:3000/update_reputation/${id}`, {
+        .put(`http://${location.hostname}:${location.port}/update_reputation/${id}`, {
             mode: "cors",
             body: JSON.stringify(value),
             credentials: "include",
@@ -466,7 +470,7 @@ export async function updateReputation1(id: number, value: any) {
 
 export async function updateVote1(id: number, value: any) {
     let response = await ky
-        .put(`http://localhost:3000/update_vote/${id}`, {
+        .put(`http://${location.hostname}:${location.port}/update_vote/${id}`, {
             mode: "cors",
             body: JSON.stringify(value),
             credentials: "include",
@@ -482,7 +486,7 @@ export async function updateVote1(id: number, value: any) {
 
 export async function updateAnswerVote1(id: number, value: any) {
     let response = await ky
-        .put(`http://localhost:3000/update_answer_vote/${id}`, {
+        .put(`http://${location.hostname}:${location.port}/update_answer_vote/${id}`, {
             mode: "cors",
             body: JSON.stringify(value),
             credentials: "include",
@@ -499,7 +503,7 @@ export async function updateAnswerVote1(id: number, value: any) {
 export async function getUserAnswerVotes(id: number, data: any) {
     console.log(data, " these are data");
     let response = await ky
-        .post(`http://localhost:3000/get_user_answer_vote/${id}`, {
+        .post(`http://${location.hostname}:${location.port}/get_user_answer_vote/${id}`, {
             mode: "cors",
             credentials: "include",
             body: JSON.stringify(data),
@@ -520,7 +524,7 @@ export async function getUserAnswerVotes(id: number, data: any) {
 //delete vote
 export async function deleteVote(id: any) {
     let response = await ky
-        .delete(`http://localhost:3000/delete_vote/${id}`, {
+        .delete(`http://${location.hostname}:${location.port}/delete_vote/${id}`, {
             mode: "cors",
             // body: JSON.stringify(data),
             credentials: "include",
@@ -537,7 +541,7 @@ export async function deleteVote(id: any) {
 //delete answer-vote
 export async function deleteAnswerVote(id: any) {
     let response = await ky
-        .delete(`http://localhost:3000/delete_answer_vote/${id}`, {
+        .delete(`http://${location.hostname}:${location.port}/delete_answer_vote/${id}`, {
             mode: "cors",
             // body: JSON.stringify(data),
             credentials: "include",

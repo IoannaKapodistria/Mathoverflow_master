@@ -341,6 +341,7 @@ export default Vue.extend({
         },
         async removeObject(value: any) {
             console.log(value, "the value of remove object")
+            let deleteQuestionObject: any;
             const qData = await getQuestion(value.question_id)
             console.log(qData, 'THE QDATA222')
             const vot = qData.votes
@@ -382,7 +383,11 @@ export default Vue.extend({
             }
             await createHistorical(historicalData)
             //
-            this.$router.go(0);
+            // this.$router.go(0);
+            if (deleteQuestionObject.message === 'Question was deleted successfully!') {
+                const queIndex = this.questions.findIndex((el: any) => el.question_id === value.question_id)
+                if (queIndex !== -1) this.questions.splice(queIndex, 1)
+            }
             console.log(value, "the value of remove object in delete que")
 
         },

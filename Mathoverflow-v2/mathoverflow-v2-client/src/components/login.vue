@@ -2,7 +2,7 @@
     <v-container fill-height>
         <v-row justify="center" align="center">
             <v-col justify="center" align="center">
-                <v-card flat class="mt-15">
+                <v-card flat class="mt-15 me-3">
                     <v-img> </v-img>
                     <v-card-title
                         :class="[

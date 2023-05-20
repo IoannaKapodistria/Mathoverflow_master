@@ -6,7 +6,6 @@ import mathOverflowRouter from "./routes/routes";
 import session from "express-session";
 import sequelize_db from "./config/database";
 import connectSessionSequelize from "connect-session-sequelize";
-// import { DataTypes } from "sequelize";
 
 const SequelizeStore = connectSessionSequelize(session.Store); //den dimiourgeitai session
 const myStore = new SequelizeStore({
@@ -15,31 +14,9 @@ const myStore = new SequelizeStore({
     expiration: 86400 * 1000, //60 * 60 * 1000, //86400*1000
     // The maximum age (in milliseconds) of a valid session. = 1 Hour
 });
-// export const sessions = sequelize_db.define("Session", {
-//     sid: {
-//         type: DataTypes.STRING,
-//         primaryKey: true,
-//     },
-//     user_id: DataTypes.STRING,
-//     expires: DataTypes.DATE,
-//     data: DataTypes.TEXT,
-// });
+//
+const port = process.env.PORT || 3000;
 
-// function extendDefaultFields(defaults: any, session: any) {
-//     return {
-//         data: defaults.data,
-//         expires: defaults.expires,
-//         user_id: session.user_id,
-//     };
-// }
-
-// const store = new SequelizeStore({
-//     db: sequelize_db,
-//     table: "Session",
-//     checkExpirationInterval: 15 * 60 * 1000, // The interval at which to cleanup expired sessions in milliseconds. = 15minutes
-//     expiration: 60 * 60 * 1000,
-//     extendDefaultFields: extendDefaultFields,
-// });
 //connection with the database
 sequelize_db
     .authenticate() //eisagw ta stoixeia pu exw dwsei stop config
@@ -50,22 +27,18 @@ const app = express();
 // app.use(cors());
 app.use(
     cors({
-        origin: "http://localhost:8080",
+        origin: `http://localhost:${port}`,
         // origin: "http://192.168.1.3:8080",
         credentials: true,
     })
 );
 
-// app.use(express.static(nodePath.resolve("./public")));
-// parse requests of content-type - application/json
+app.use(express.static("dist"));
+//
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-// define router
 //
-// app.get("/", function (req, res) {
-//     res.send("hey this worked");
-// });
 app.use(
     session({
         secret: process.env.secret || "PynOjAuHetAuWawtinAytVunarAcjeBlybEshkEjVudyelwa",
@@ -85,8 +58,6 @@ app.use(
 myStore.sync();
 
 app.use("/", mathOverflowRouter);
-
-const port = process.env.PORT || 3000;
 
 //start the Express server
 const server = app.listen(port, () => {

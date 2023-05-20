@@ -11,15 +11,17 @@ const myStore = new SequelizeStore({
     checkExpirationInterval: 15 * 60 * 1000,
     expiration: 86400 * 1000,
 });
+const port = process.env.PORT || 3000;
 sequelize_db
     .authenticate()
     .then(() => console.log("Database connected..."))
     .catch((err) => console.log("Error: " + err));
 const app = express();
 app.use(cors({
-    origin: "http://localhost:8080",
+    origin: `http://localhost:${port}`,
     credentials: true,
 }));
+app.use(express.static("dist"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
@@ -36,7 +38,6 @@ app.use(session({
 }));
 myStore.sync();
 app.use("/", mathOverflowRouter);
-const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
     console.log(`HTTP server started at http://localhost:${port} !!!!`);
 });

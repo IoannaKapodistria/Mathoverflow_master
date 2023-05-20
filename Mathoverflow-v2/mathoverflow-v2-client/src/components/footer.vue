@@ -18,6 +18,15 @@
                                 text-transform: none !important;
                                 font-size: 16px !important;
                             "
+                            @click="
+                                link.title === 'Contact us'
+                                    ? getLinkedIn()
+                                    : link.title === 'Home'
+                                    ? goHome()
+                                    : link.title === 'About us'
+                                    ? goAbout()
+                                    : doNothing()
+                            "
                         >
                             <v-icon size="18px" class="me-1">{{
                                 link.icon
@@ -32,6 +41,11 @@
                             icon
                             outlined
                             rounded
+                            @click="
+                                icon === 'mdi-linkedin'
+                                    ? getLinkedIn()
+                                    : doNothing()
+                            "
                         >
                             <v-icon size="40px" color="white">
                                 {{ icon }}
@@ -73,7 +87,21 @@ export default Vue.extend({
             { icon: 'mdi-shield-half-full', title: 'About us' },
             { icon: 'mdi-email', title: 'Contact us' }
         ],
-    })
+    }),
+    methods: {
+        doNothing() {
+            //
+        },
+        getLinkedIn() {
+            window.open('https://www.linkedin.com/in/ioanna-kapodistria-24055a1bb/')
+        },
+        goHome() {
+            this.$router.push('/');
+        },
+        goAbout() {
+            this.$router.push('/about');
+        }
+    }
 })
 </script>
 <style>

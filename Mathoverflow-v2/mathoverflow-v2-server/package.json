@@ -7,7 +7,7 @@
     "main": "kernel/js/main.js",
     "scripts": {
         ".": "node kernel/js/main.js",
-        "dev": "npx nodemon kernel/js/main.js",
+        "start": "npx nodemon kernel/js/main.js",
         "trace": "npx nodemon --trace-warnings kernel/js/main.js",
         "inspect": "npx nodemon --inspect kernel/js/main.js",
         "tw": "npx tsc -w",

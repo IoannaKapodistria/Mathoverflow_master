@@ -100,7 +100,7 @@
         >
             <v-card class="pb-0 pt-0 ps-2 mt-15" flat rounded="lg">
                 <v-icon
-                    color="#2dcba9"
+                    color="#6baefa"
                     size="107px"
                     class="oopsCard justify-end mb-0"
                     >mdi-robot-confused</v-icon
@@ -114,7 +114,8 @@
                     <span class="mt-0">
                         It looks like that you're not currently logged into our
                         app. To ensure the best possible experience, please sign
-                        in to your account!</span
+                        in to your account!
+                        <span class="hand mx-1">🤙</span></span
                     >
                     <span class="d-flex justify-end me-3">
                         <v-icon
@@ -132,13 +133,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { checkSession, createHistorical, postQuestion } from "../components/functions";
+import { checkSession, createHistorical, getUserReputation, postQuestion, updateReputation1 } from "../components/functions";
 // import VueQuillEditor from 'vue-quill-editor'
 import Quill from "quill"
 // import Delta from "quill-delta"
 import { VueEditor } from "vue2-editor";
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
+import { mapGetters } from 'vuex';
 export default Vue.extend({
     components: { VueEditor },
     data: () => ({
@@ -185,23 +187,27 @@ export default Vue.extend({
             console.log(value, "the quill value")
         }
     },
+    computed: {
+        ...mapGetters(["getLoggedUser"])
+    },
     methods: {
         async postQuestion() {
-            //if not logged in
             const sessionCheck = await checkSession()
             if (sessionCheck.userSid === undefined && sessionCheck.message === 'user is not logged in') {
                 this.sessionCheckDialog = true
                 return;
             }
-            //if logged in
             const data = { title: this.title, body: this.body }
             await postQuestion(data);
+            const userRep = await getUserReputation(this.getLoggedUser.user_id)
+            let oldRep = +userRep.value
+            const data2 = { value: oldRep += 5 }
+            await updateReputation1(userRep.reputation_id, data2);
             const historicalData = {
                 action: 'ask',
                 data: data
             }
             await createHistorical(historicalData)
-            //
             this.$router.push('/questions');
         }
     },
@@ -214,6 +220,7 @@ export default Vue.extend({
 .overlayAsk {
     top: 16px;
     left: 10px;
+    /* color: #6baefa; */
 }
 .askQueTimeline {
     /* top: 100px !important; */
@@ -226,5 +233,40 @@ export default Vue.extend({
     top: -45px;
     right: -355px;
     background-color: transparent;
+}
+.hand {
+    /* transform: rotate(-50deg); */
+    animation-name: wave-animation; /* Refers to the name of your @keyframes element below */
+    animation-duration: 2.5s; /* Change to speed up or slow down */
+    animation-iteration-count: infinite; /* Never stop waving :) */
+    transform-origin: 49% 49%; /* Pivot around the bottom-left palm */
+    display: inline-block;
+}
+
+@keyframes wave-animation {
+    0% {
+        transform: rotate(0deg);
+    }
+    10% {
+        transform: rotate(14deg);
+    } /* The following five values can be played with to make the waving more or less extreme */
+    20% {
+        transform: rotate(-8deg);
+    }
+    30% {
+        transform: rotate(14deg);
+    }
+    40% {
+        transform: rotate(-4deg);
+    }
+    50% {
+        transform: rotate(10deg);
+    }
+    60% {
+        transform: rotate(0deg);
+    } /* Reset for the last half to pause */
+    100% {
+        transform: rotate(0deg);
+    }
 }
 </style>

@@ -374,6 +374,7 @@ export default Vue.extend({
         },
         async removeObject(value: any) {
             console.log(value, "the value of remove object")
+            let deleteQuestionObject: any;
             //delete votes
             const qData = await getQuestion(value.question_id)
             console.log(qData, 'THE QDATA222')
@@ -403,10 +404,10 @@ export default Vue.extend({
                     }
                     await createHistorical(historicalData)
                 }
-                const deleteQuestionObject = await deleteQuestion(value.question_id);
+                deleteQuestionObject = await deleteQuestion(value.question_id);
             } else {
                 console.log('mpika edw')
-                const deleteQuestionObject = await deleteQuestion(value.question_id);
+                deleteQuestionObject = await deleteQuestion(value.question_id);
             }
             //
             const historicalData = {
@@ -415,13 +416,17 @@ export default Vue.extend({
             }
             await createHistorical(historicalData)
             //
-            this.$router.go(0);
+            if (deleteQuestionObject.message === 'Question was deleted successfully!') {
+                const queIndex = this.questions.findIndex((el: any) => el.question_id === value.question_id)
+                if (queIndex !== -1) this.questions.splice(queIndex, 1)
+            }
+            // this.$router.go(0);
 
         },
     },
     async mounted() {
         this.questionsSortType = 'votes'
-        getQuestions();
+        await getQuestions();
         this.getQuestions;
         this.getUsers;
         console.log(this.getUsers, "THE USERS")
