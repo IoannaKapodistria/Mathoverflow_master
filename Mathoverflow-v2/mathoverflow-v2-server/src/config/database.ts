@@ -7,12 +7,19 @@ import { Question } from "../db_models/question_model";
 import { User } from "../db_models/user_model";
 
 //Option 2: Passing parameters separately (other dialects)
+// const sequelize_db: Sequelize = new Sequelize("math_3", "postgres", "924113131", {
+//     host: "localhost",
+//     dialect: "postgres",
+//     logging: console.log,
+// });
+
+//Option 2: Passing parameters separately (other dialects)
+// const sequelize_db: Sequelize = new Sequelize("mathoverflow_v2", "postgres", "1234", {
 const sequelize_db: Sequelize = new Sequelize("math_3", "postgres", "924113131", {
     host: "localhost",
     dialect: "postgres",
     logging: console.log,
 });
-
 // const modelDefiners = [
 //     require("../db_models/question_model"),
 //     require("../db_models/answer_model"),
